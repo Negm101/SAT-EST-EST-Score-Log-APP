@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:score_log_app/screen/sat1/sat1.dart';
+
 class Scores extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

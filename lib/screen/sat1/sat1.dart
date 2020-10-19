@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
+import 'package:score_log_app/model/scoreSAT1.dart';
 import 'package:score_log_app/screen/sat1/addSat1.dart';
-
+import 'package:delayed_display/delayed_display.dart';
 class ScoreSat1 extends StatefulWidget {
   const ScoreSat1({Key key}) : super(key: key);
 
@@ -41,9 +42,9 @@ class _ScoreSat1State extends State<ScoreSat1> {
                 ListView(
                   children: [
                     SAT1ListItem(
-                      englishScore: 460,
-                      mathScore: 690,
-                      dateDay: 18,
+                      englishScore: 880,
+                      mathScore: 800,
+                      dateDay: 08,
                       dateMonth: 12,
                       dateYear: 2020,
                       onPressedDelete: () {},
@@ -79,7 +80,7 @@ class _ScoreSat1State extends State<ScoreSat1> {
                 ),
                 closedColor: Colors.blue,
                 openBuilder: (_, closeContainer){
-                  return AddSAT1();
+                  return AddSAT1(ScoreI(englishScore: 0, mathScore: 0, date: "0000-00-00", note: null, testType: null));
                 }
             ),),
       ),
