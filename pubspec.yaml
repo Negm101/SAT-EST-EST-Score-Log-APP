@@ -39,6 +39,7 @@ dependencies:
   flutter_widget_from_html: 0.4.3
   sqflite: any
   path_provider: ^1.6.21
+  date_format: ^1.0.9
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -12,10 +12,13 @@ class AddSAT1 extends StatefulWidget {
   final ScoreI scoreI;
   AddSAT1(this.scoreI);
   @override
-  _AddSAT1State createState() => new _AddSAT1State();
+  State<StatefulWidget> createState() {
+    return _AddSAT1State(this.scoreI);
+  }
 }
 
 class _AddSAT1State extends State<AddSAT1> {
+  _AddSAT1State(this.scoreI);
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 /*
   void _handleSubmitted() {
@@ -35,23 +38,18 @@ class _AddSAT1State extends State<AddSAT1> {
   }*/
 
   // controllers for form text controllers
-  final TextEditingController _englishScoreController =
-      new TextEditingController();
-
-  // String firstName = User.instance.first_name;
-  final TextEditingController _mathScoreController =
-      new TextEditingController();
-  final TextEditingController _noteController = new TextEditingController();
-  final TextEditingController _scoreTypeController =
-      new TextEditingController();
+  TextEditingController _englishScoreController = new TextEditingController();
+  TextEditingController _mathScoreController = new TextEditingController();
+  TextEditingController _noteController = new TextEditingController();
+  TextEditingController _scoreTypeController = new TextEditingController();
   TextEditingController _scoreDateController = new TextEditingController();
   String scoreType = 'Practice';
   bool isPracticeSelected = true;
   bool isRealSelected = false;
   int _state = 0;
 
-
-
+  DatabaseHelper databaseHelper = DatabaseHelper();
+  ScoreI scoreI;
   @override
   /*void initState() {
     _firstNameController.text = firstName;
@@ -107,7 +105,7 @@ class _AddSAT1State extends State<AddSAT1> {
                               maxLength: 4,
                               controller: _englishScoreController,
                               onChanged: (String value) {
-                                // firstName = value;
+                                setEnglishScore();
                               },
                             ),
                           ),
@@ -122,7 +120,7 @@ class _AddSAT1State extends State<AddSAT1> {
                               autocorrect: false,
                               controller: _mathScoreController,
                               onChanged: (String value) {
-                                //lastName = value;
+                                setMathScore();
                               },
                             ),
                           ),
@@ -136,7 +134,7 @@ class _AddSAT1State extends State<AddSAT1> {
                           maxLength: 32,
                           controller: _noteController,
                           onChanged: (String value) {
-                            //lastName = value;
+                            setNote();
                           },
                         ),
                       ),
@@ -149,7 +147,7 @@ class _AddSAT1State extends State<AddSAT1> {
                           enabled: false,
                           controller: _scoreDateController,
                           onChanged: (String value) {
-                            //lastName = value;
+                            setDate();
                           },
                         ),
                       ),
@@ -187,6 +185,7 @@ class _AddSAT1State extends State<AddSAT1> {
                                 isPracticeSelected = false;
                                 isRealSelected = true;
                                 scoreType = 'Real';
+                                setTestType();
                                 debugPrint(scoreType);
                               });
                             },
@@ -215,7 +214,7 @@ class _AddSAT1State extends State<AddSAT1> {
                     setState(() {
                       _scoreDateController.value = TextEditingValue(
                           text:
-                          "${dateTime.day}-${dateTime.month}-${dateTime.year}");
+                          "${dateTime.year}${dateTime.month}${dateTime.day}");
                     });
                     print("dateTime: $dateTime");
                   },
@@ -228,6 +227,7 @@ class _AddSAT1State extends State<AddSAT1> {
                   child: setUpButtonChild(),
                   onPressed: () {
                     setState(() {
+                      databaseHelper.insertScore(scoreI);
                       animateButton();
                     });
                   },
@@ -289,5 +289,37 @@ class _AddSAT1State extends State<AddSAT1> {
 
   double getHeightSize(double factor) {
     return MediaQuery.of(context).size.height * factor;
+  }
+  void setEnglishScore(){
+    scoreI.englishScore = int.parse(_englishScoreController.text);
+  }
+  void setMathScore(){
+    scoreI.mathScore = int.parse(_mathScoreController.text);
+  }
+  void setDate(){
+    scoreI.date = _scoreDateController.text;
+  }
+  void setTestType(){
+    scoreI.type = _scoreTypeController.text;
+  }
+  void setNote(){
+    scoreI.note = _noteController.text;
+  }
+  void _save() async {
+    int result;
+    if (scoreI.id != null) {
+      // Case 1: Update operation
+      result = await databaseHelper.updateScore(scoreI);
+    } else {
+      // Case 2: Insert Operation
+      result = await databaseHelper.insertScore(scoreI);
+    }
+
+    if (result != 0) {
+      debugPrint('Inserted successfully');
+    } else {
+      // Failure
+     debugPrint('error');
+    }
   }
 }

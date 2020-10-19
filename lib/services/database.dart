@@ -1,88 +1,130 @@
+import 'package:flutter/cupertino.dart';
+import 'package:score_log_app/model/scoreSAT1.dart';
+import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'dart:io';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:score_log_app/model/scoreSAT1.dart';
 
+class DatabaseHelper {
 
-class ScoreDatabase {
-  // ignore: non_constant_identifier_names
-  static final ScoreDatabase _ScoreIDatabase = new ScoreDatabase._internal();
+  static DatabaseHelper _databaseHelper;    // Singleton DatabaseHelper
+  static Database _database;                // Singleton Database
 
-  final String tableName = "Books";
+  String scores1Table = 'scores_sat1';
+  String dbId = 'id';
+  String dbEnglishScore = 'english_score';
+  String dbMathScore = 'math_score';
+  String dbDate = 'date';
+  String dbTestType = 'test_type';
+  String dbNote = 'note';
+  DatabaseHelper._createInstance(); // Named constructor to create instance of DatabaseHelper
 
-  Database db;
+  factory DatabaseHelper() {
 
-  bool didInit = false;
-
-  static ScoreDatabase get() {
-    return _ScoreIDatabase;
+    if (_databaseHelper == null) {
+      _databaseHelper = DatabaseHelper._createInstance(); // This is executed only once, singleton object
+    }
+    return _databaseHelper;
   }
 
-  ScoreDatabase._internal();
+  Future<Database> get database async {
 
-
-  /// Use this method to access the database, because initialization of the database (it has to go through the method channel)
-  Future<Database> _getDb() async{
-    if(!didInit) await _init();
-    return db;
+    if (_database == null) {
+      _database = await initializeDatabase();
+    }
+    return _database;
   }
 
-  Future init() async {
-    return await _init();
+  Future<Database> initializeDatabase() async {
+    // Get the directory path for both Android and iOS to store database.
+    Directory directory = await getApplicationDocumentsDirectory();
+    String path = directory.path + 'notes.db';
+
+    // Open/create the database at a given path
+    var scoreDatabase = await openDatabase(path, version: 1, onCreate: _createDb);
+    return scoreDatabase;
   }
 
-  Future _init() async {
-    // Get a location using path_provider
-    Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "demo.db");
-    db = await openDatabase(path, version: 1,
-        onCreate: (Database db, int version) async {
-          // When creating the db, create the table
-          await db.execute(
-              "CREATE TABLE $tableName ("
-                  "${ScoreI.dbID} int unique not null auto_increment primary key,"
-                  "${ScoreI.dbEnglishScore} int not null check (english_score >= 200 and english_score <= 800),"
-                  "${ScoreI.dbMathScore} int not null check ( math_score >= 200 and math_score <= 800 ),"
-                  "${ScoreI.dbDate} date not null,"
-                  "${ScoreI.dbNote}  varchar(34) not null default 'No note for this test',"
-                  "${ScoreI.dbTestType} enum ('practice', 'real') not null default 'practice',"
-                  ")");
-        });
-    didInit = true;
+  void _createDb(Database db, int newVersion) async {
 
+    await db.execute(
+        "CREATE TABLE $scores1Table"
+            "("
+            "$dbId INTEGER UNIQUE NOT NULL PRIMARY KEY AUTOINCREMENT,"
+            "$dbEnglishScore INTEGER NOT NULL CHECK (english_score >= 200 and english_score <= 800),"
+            "$dbMathScore INTEGER NOT NULL CHECK ( math_score >= 200 and math_score <= 800 ),"
+            "$dbDate DATE NOT NULL,"
+            "$dbTestType	VARCHAR(10),"
+            "$dbNote VARCHAR(34)  NOT NULL DEFAULT 'No note for this test'"
+            ")"
+    );
+  }
+/*
+create table score_sat1
+(
+    id            int unique                not null auto_increment primary key,
+    english_score int                       not null check (english_score >= 200 and english_score <= 800),
+    math_score    int                       not null check ( math_score >= 200 and math_score <= 800 ),
+    date          date                      not null,
+    note          varchar(34)               not null default 'No note for this test',
+    test_type     enum ('practice', 'real') not null default 'practice'
+);
+ */
+  // Fetch Operation: Get all note objects from database
+  Future<List<Map<String, dynamic>>> getScoreMapList() async {
+    Database db = await this.database;
 
+//		var result = await db.rawQuery('SELECT * FROM $noteTable order by $colPriority ASC');
+    var result = await db.query(scores1Table, orderBy: '$dbId ASC');
+    return result;
   }
 
-  /// Get a book by its id, if there is not entry for that ID, returns null.
-  Future<ScoreI> getScoreI(String id) async{
-    var db = await _getDb();
-    var result = await db.rawQuery('SELECT * FROM $tableName WHERE ${ScoreI.dbID} = "$id"');
-    if(result.length == 0)return null;
-    return new ScoreI.fromMap(result[0]);
+  // Insert Operation: Insert a Note object to database
+  Future<int> insertScore(ScoreI score) async {
+    Database db = await this.database;
+    var result = await db.insert(scores1Table, score.toMap());
+    debugPrint('saved');
+    return result;
   }
 
-  Future<List> getAllScoresI(String dbTable) async {
-    var dbClient = db;
-    var result = await dbClient.rawQuery("SELECT * FROM $dbTable");
-
-    return result.toList();
+  // Update Operation: Update a Note object and save it to database
+  Future<int> updateScore(ScoreI score) async {
+    var db = await this.database;
+    var result = await db.update(scores1Table, score.toMap(), where: '$dbId = ?', whereArgs: [score.id]);
+    return result;
   }
 
-  Future insertScoreI(ScoreI score) async {
-    var db = await _getDb();
-    await db.rawInsert(
-        'INSERT INTO '
-            '$tableName(${ScoreI.dbEnglishScore}, ${ScoreI.dbMathScore}, ${ScoreI.dbDate}, ${ScoreI.dbNote}, ${ScoreI.dbTestType})'
-            ' VALUES(?, ?, ?, ?, ?)',
-        [score.englishScore, score.mathScore, score.date, score.note, score.date]);
-
+  // Delete Operation: Delete a Note object from database
+  Future<int> deleteScore(int id) async {
+    var db = await this.database;
+    int result = await db.rawDelete('DELETE FROM $scores1Table WHERE $dbId = $id');
+    return result;
   }
 
-  Future close() async {
-    var db = await _getDb();
-    return db.close();
+  // Get number of Note objects in database
+  Future<int> getCount() async {
+    Database db = await this.database;
+    List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) from $scores1Table');
+    int result = Sqflite.firstIntValue(x);
+    return result;
+  }
+
+  // Get the 'Map List' [ List<Map> ] and convert it to 'Note List' [ List<Note> ]
+  Future<List<ScoreI>> getScoreIList() async {
+
+    var scoreMapList = await getScoreMapList(); // Get 'Map List' from database
+    int count = scoreMapList.length;         // Count the number of map entries in db table
+
+    List<ScoreI> scoreList = List<ScoreI>();
+    // For loop to create a 'Note List' from a 'Map List'
+    for (int i = 0; i < count; i++) {
+      scoreList.add(ScoreI.fromMapObject(scoreMapList[i]));
+    }
+
+    return scoreList;
   }
 
 }
+
+
+

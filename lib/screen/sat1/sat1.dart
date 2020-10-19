@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:score_log_app/model/scoreSAT1.dart';
 import 'package:score_log_app/screen/sat1/addSat1.dart';
 import 'package:delayed_display/delayed_display.dart';
+import 'package:score_log_app/services/database.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:date_format/date_format.dart';
 class ScoreSat1 extends StatefulWidget {
-  const ScoreSat1({Key key}) : super(key: key);
-
+  ScoreSat1({Key key}) : super(key: key);
+  int position;
   @override
   _ScoreSat1State createState() => _ScoreSat1State();
 }
 
 class _ScoreSat1State extends State<ScoreSat1> {
+  DatabaseHelper databaseHelper = DatabaseHelper();
+  List<ScoreI> scoreIList;
+  int count = 0;
   @override
   Widget build(BuildContext context) {
+    if (scoreIList == null) {
+      scoreIList = List<ScoreI>();
+      updateListView();
+    }
     return Scaffold(
       body: DefaultTabController(
         length: 2,
@@ -39,28 +50,7 @@ class _ScoreSat1State extends State<ScoreSat1> {
             body: TabBarView(
               physics: NeverScrollableScrollPhysics(),
               children: [
-                ListView(
-                  children: [
-                    SAT1ListItem(
-                      englishScore: 880,
-                      mathScore: 800,
-                      dateDay: 08,
-                      dateMonth: 12,
-                      dateYear: 2020,
-                      onPressedDelete: () {},
-                      note: 'This is a mini note...hello there',
-                    ),
-                    SAT1ListItem(
-                      englishScore: 460,
-                      mathScore: 690,
-                      dateDay: 18,
-                      dateMonth: 12,
-                      dateYear: 2020,
-                      onPressedDelete: () {},
-                      note: 'This is a mini note...hello there',
-                    ),
-                  ],
-                ),
+                getScoreIItem(),
                 Icon(Icons.directions_transit),
               ],
             ),
@@ -80,11 +70,59 @@ class _ScoreSat1State extends State<ScoreSat1> {
                 ),
                 closedColor: Colors.blue,
                 openBuilder: (_, closeContainer){
-                  return AddSAT1(ScoreI(englishScore: 0, mathScore: 0, date: "0000-00-00", note: null, testType: null));
+                  return AddSAT1(ScoreI(0, 0, '', '', ''));
                 }
             ),),
       ),
     );
+  }
+  ListView getScoreIItem(){
+    return ListView.builder(
+      itemCount: scoreIList.length,
+      itemBuilder: (BuildContext context, position){
+        position = position;
+        return SAT1ListItem(
+          englishScore: scoreIList[position].englishScore,
+          mathScore: scoreIList[position].mathScore,
+          // TODO: solve invalid format conversation
+          /*dateDay: DateTime.parse(scoreIList[position].date.toString()).day.toInt(),
+          dateMonth: getDateMonth(scoreIList[position].date.toString()),
+          dateYear: getDateYear(scoreIList[position].date.toString()),*/
+          onPressedDelete: () {},
+          note: scoreIList[position].note,
+        );
+      },
+    );
+  }
+  int getDateDay(String date){
+    debugPrint(date);
+    debugPrint(date);
+    return DateTime.parse(date).day.toInt();
+  }
+  int getDateYear(String date){
+    return DateTime.parse(date).year.toInt();
+  }
+  int getDateMonth(String date){
+    return DateTime.parse(date).month.toInt();
+  }
+  void updateListView() {
+    final Future<Database> dbFuture = databaseHelper.initializeDatabase();
+    dbFuture.then((database) {
+      Future<List<ScoreI>> noteListFuture = databaseHelper.getScoreIList();
+      noteListFuture.then((scoreIList) {
+        setState(() {
+          this.scoreIList = scoreIList;
+          this.count = scoreIList.length;
+        });
+      });
+    });
+  }
+  void _delete(BuildContext context, ScoreI score) async {
+    int result = await databaseHelper.deleteScore(score.id);
+    if (result != 0) {
+      debugPrint('Score Deleted Successfully');
+      // updateListView();
+    }
   }
 }
 
@@ -323,4 +361,5 @@ class _SAT1ListItemState extends State<SAT1ListItem> {
         break;
     }
   }
+
 }
