@@ -71,7 +71,7 @@ create table score_sat1
 );
  */
   // Fetch Operation: Get all note objects from database
-  Future<List<Map<String, dynamic>>> getScoreMapList() async {
+  Future<List<Map<String, dynamic>>> getScoreIMapListPractice() async {
     Database db = await this.database;
 
 //		var result = await db.rawQuery('SELECT * FROM $noteTable order by $colPriority ASC');
@@ -110,9 +110,9 @@ create table score_sat1
   }
 
   // Get the 'Map List' [ List<Map> ] and convert it to 'Note List' [ List<Note> ]
-  Future<List<ScoreI>> getScoreIList() async {
+  Future<List<ScoreI>> getScoreIListPractice() async {
 
-    var scoreMapList = await getScoreMapList(); // Get 'Map List' from database
+    var scoreMapList = await getScoreIMapListPractice(); // Get 'Map List' from database
     int count = scoreMapList.length;         // Count the number of map entries in db table
 
     List<ScoreI> scoreList = List<ScoreI>();

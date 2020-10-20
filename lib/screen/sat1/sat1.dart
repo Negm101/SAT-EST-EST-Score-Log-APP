@@ -7,9 +7,11 @@ import 'package:delayed_display/delayed_display.dart';
 import 'package:score_log_app/services/database.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:date_format/date_format.dart';
+
 class ScoreSat1 extends StatefulWidget {
   ScoreSat1({Key key}) : super(key: key);
   int position;
+
   @override
   _ScoreSat1State createState() => _ScoreSat1State();
 }
@@ -18,6 +20,7 @@ class _ScoreSat1State extends State<ScoreSat1> {
   DatabaseHelper databaseHelper = DatabaseHelper();
   List<ScoreI> scoreIList;
   int count = 0;
+
   @override
   Widget build(BuildContext context) {
     if (scoreIList == null) {
@@ -28,87 +31,100 @@ class _ScoreSat1State extends State<ScoreSat1> {
       body: DefaultTabController(
         length: 2,
         child: Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              toolbarHeight: 48,
-              bottom: TabBar(
-                labelPadding: EdgeInsets.only(bottom: 13.5, top: 13.5),
-                tabs: [
-                  Text(
-                    'Practice',
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    'Real',
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-            body: TabBarView(
-              physics: NeverScrollableScrollPhysics(),
-              children: [
-                getScoreIItem(),
-                Icon(Icons.directions_transit),
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            toolbarHeight: 48,
+            bottom: TabBar(
+              labelPadding: EdgeInsets.only(bottom: 13.5, top: 13.5),
+              tabs: [
+                Text(
+                  'Practice',
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  'Real',
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
               ],
             ),
-            floatingActionButton: OpenContainer(
-                closedBuilder: (_, openContainer){
-                  return FloatingActionButton(
-                    elevation: 0.0,
-                    onPressed: openContainer,
-                    backgroundColor: Colors.blue,
-                    child: Icon(Icons.add, color: Colors.white, size: 35,),
-                  );
-                },
-                openColor: Colors.blue,
-                closedElevation: 5.0,
-                closedShape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100)
-                ),
-                closedColor: Colors.blue,
-                openBuilder: (_, closeContainer){
-                  return AddSAT1(ScoreI(0, 0, '', '', ''));
-                }
-            ),),
+          ),
+          body: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
+            children: [
+              getScoreIItem(),
+              Icon(Icons.directions_transit),
+            ],
+          ),
+          floatingActionButton: OpenContainer(
+              closedBuilder: (_, openContainer) {
+                return FloatingActionButton(
+                  elevation: 0.0,
+                  onPressed: openContainer,
+                  backgroundColor: Colors.blue,
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                    size: 35,
+                  ),
+                );
+              },
+              openColor: Colors.blue,
+              closedElevation: 5.0,
+              closedShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100)),
+              closedColor: Colors.blue,
+              openBuilder: (_, closeContainer) {
+                return AddSAT1(ScoreI(0, 0, '', 'Practice', ''));
+              }),
+        ),
       ),
     );
   }
-  ListView getScoreIItem(){
+
+  ListView getScoreIItem() {
     return ListView.builder(
       itemCount: scoreIList.length,
-      itemBuilder: (BuildContext context, position){
+      itemBuilder: (BuildContext context, position) {
         position = position;
+        debugPrint(scoreIList[position].date);
         return SAT1ListItem(
           englishScore: scoreIList[position].englishScore,
           mathScore: scoreIList[position].mathScore,
           // TODO: solve invalid format conversation
-          /*dateDay: DateTime.parse(scoreIList[position].date.toString()).day.toInt(),
-          dateMonth: getDateMonth(scoreIList[position].date.toString()),
-          dateYear: getDateYear(scoreIList[position].date.toString()),*/
-          onPressedDelete: () {},
+          dateDay:   getDateDay(scoreIList[position].date),
+          dateMonth: getDateMonth(scoreIList[position].date),
+          dateYear: getDateYear(scoreIList[position].date),
+          onPressedDelete: () {
+            _delete(context, scoreIList[position]);
+            scoreIList.removeAt(position);
+            updateListView();
+            },
           note: scoreIList[position].note,
         );
       },
     );
   }
-  int getDateDay(String date){
+
+  int getDateDay(String date) {
     debugPrint(date);
     debugPrint(date);
     return DateTime.parse(date).day.toInt();
   }
-  int getDateYear(String date){
+
+  int getDateYear(String date) {
     return DateTime.parse(date).year.toInt();
   }
-  int getDateMonth(String date){
+
+  int getDateMonth(String date) {
     return DateTime.parse(date).month.toInt();
   }
+
   void updateListView() {
     final Future<Database> dbFuture = databaseHelper.initializeDatabase();
     dbFuture.then((database) {
-      Future<List<ScoreI>> noteListFuture = databaseHelper.getScoreIList();
+      Future<List<ScoreI>> noteListFuture = databaseHelper.getScoreIListPractice();
       noteListFuture.then((scoreIList) {
         setState(() {
           this.scoreIList = scoreIList;
@@ -117,6 +133,7 @@ class _ScoreSat1State extends State<ScoreSat1> {
       });
     });
   }
+
   void _delete(BuildContext context, ScoreI score) async {
     int result = await databaseHelper.deleteScore(score.id);
     if (result != 0) {
@@ -189,10 +206,10 @@ class _SAT1ListItemState extends State<SAT1ListItem> {
                     Container(
                       margin: EdgeInsets.fromLTRB(14, 1, 0, 2),
                       child: Text(
-
                         widget.dateDay.toString(),
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.blue, fontSize: getWidthSize(.059)),
+                        style: TextStyle(
+                            color: Colors.blue, fontSize: getWidthSize(.059)),
                       ),
                     ),
                     Container(
@@ -206,7 +223,8 @@ class _SAT1ListItemState extends State<SAT1ListItem> {
                   ],
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: getWidthSize(0.04), right: getWidthSize(0.04)),
+                  margin: EdgeInsets.only(
+                      left: getWidthSize(0.04), right: getWidthSize(0.04)),
                   width: 1.5,
                   height: MediaQuery.of(context).size.height,
                   color: Colors.black,
@@ -220,7 +238,8 @@ class _SAT1ListItemState extends State<SAT1ListItem> {
                       children: [
                         scoreText('English', widget.englishScore),
                         scoreText('Math', widget.mathScore),
-                        scoreText('Total', widget.englishScore + widget.mathScore),
+                        scoreText(
+                            'Total', widget.englishScore + widget.mathScore),
                       ],
                     ),
                     Container(
@@ -250,12 +269,15 @@ class _SAT1ListItemState extends State<SAT1ListItem> {
       ),
     );
   }
-  double getWidthSize(double factor){
-    return  MediaQuery.of(context).size.width * factor;
+
+  double getWidthSize(double factor) {
+    return MediaQuery.of(context).size.width * factor;
   }
-  double getHeightSize(double factor){
-    return  MediaQuery.of(context).size.height * factor;
+
+  double getHeightSize(double factor) {
+    return MediaQuery.of(context).size.height * factor;
   }
+
   Widget scoreText(String label, int score) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -273,7 +295,9 @@ class _SAT1ListItemState extends State<SAT1ListItem> {
             score.toString(),
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: Colors.black, fontSize: getWidthSize(.06), fontWeight: FontWeight.bold),
+                color: Colors.black,
+                fontSize: getWidthSize(.06),
+                fontWeight: FontWeight.bold),
           ),
         ),
       ],
@@ -361,5 +385,4 @@ class _SAT1ListItemState extends State<SAT1ListItem> {
         break;
     }
   }
-
 }

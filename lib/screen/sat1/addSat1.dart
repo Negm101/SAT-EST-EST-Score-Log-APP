@@ -146,9 +146,6 @@ class _AddSAT1State extends State<AddSAT1> {
                           autocorrect: false,
                           enabled: false,
                           controller: _scoreDateController,
-                          onChanged: (String value) {
-                            setDate();
-                          },
                         ),
                       ),
                       Padding(
@@ -171,8 +168,9 @@ class _AddSAT1State extends State<AddSAT1> {
                                 isRealSelected = false;
                                 isPracticeSelected = true;
                                 scoreType = 'Practice';
-                                debugPrint(scoreType);
                               });
+                              setTestType();
+                              debugPrint(scoreType);
                             },
                           ),
                           ChoiceChip(
@@ -185,9 +183,9 @@ class _AddSAT1State extends State<AddSAT1> {
                                 isPracticeSelected = false;
                                 isRealSelected = true;
                                 scoreType = 'Real';
-                                setTestType();
-                                debugPrint(scoreType);
                               });
+                              setTestType();
+                              debugPrint(scoreType);
                             },
                           ),
                         ],
@@ -212,9 +210,8 @@ class _AddSAT1State extends State<AddSAT1> {
                   mode: CupertinoDatePickerMode.date,
                   onDateTimeChanged: (DateTime dateTime) {
                     setState(() {
-                      _scoreDateController.value = TextEditingValue(
-                          text:
-                          "${dateTime.year}${dateTime.month}${dateTime.day}");
+                      _scoreDateController.value = TextEditingValue(text: dateTime.toString());
+                      setDate();
                     });
                     print("dateTime: $dateTime");
                   },
@@ -300,7 +297,7 @@ class _AddSAT1State extends State<AddSAT1> {
     scoreI.date = _scoreDateController.text;
   }
   void setTestType(){
-    scoreI.type = _scoreTypeController.text;
+    scoreI.type = scoreType;
   }
   void setNote(){
     scoreI.note = _noteController.text;
