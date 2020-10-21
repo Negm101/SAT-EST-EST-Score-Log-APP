@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:score_log_app/screen/scores.dart';
 import 'package:animations/animations.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:score_log_app/screen/sat1/sat1List.dart';
 void main() => runApp(MyApp());
 
 
 class MyApp extends StatelessWidget {
   static const String _title = 'Flutter Code Sample';
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
         )
       ),
     );
+
   }
 }
 

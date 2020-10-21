@@ -1,24 +1,24 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:score_log_app/model/scoreSAT1.dart';
+import 'package:score_log_app/model/scoreIReal.dart';
 import 'package:score_log_app/services/database.dart';
 import 'package:fleva_icons/fleva_icons.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 //import '../models/user.dart';
-
-class AddSAT1 extends StatefulWidget {
-  final ScoreI scoreI;
-  AddSAT1(this.scoreI);
+// TODO: finish this class
+class AddSAT1Practice extends StatefulWidget {
+  final ScoreIReal scoreI;
+  AddSAT1Practice(this.scoreI);
   @override
   State<StatefulWidget> createState() {
-    return _AddSAT1State(this.scoreI);
+    return _AddSAT1PracticeState(this.scoreI);
   }
 }
 
-class _AddSAT1State extends State<AddSAT1> {
-  _AddSAT1State(this.scoreI);
+class _AddSAT1PracticeState extends State<AddSAT1Practice> {
+  _AddSAT1PracticeState(this.scoreI);
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 /*
   void _handleSubmitted() {
@@ -49,7 +49,7 @@ class _AddSAT1State extends State<AddSAT1> {
   int _state = 0;
 
   DatabaseHelper databaseHelper = DatabaseHelper();
-  ScoreI scoreI;
+  ScoreIReal scoreI;
   @override
   /*void initState() {
     _firstNameController.text = firstName;
@@ -224,7 +224,7 @@ class _AddSAT1State extends State<AddSAT1> {
                   child: setUpButtonChild(),
                   onPressed: () {
                     setState(() {
-                      databaseHelper.insertScore(scoreI);
+                      databaseHelper.insertScoreSatIReal(scoreI);
                       animateButton();
                     });
                   },
@@ -246,8 +246,8 @@ class _AddSAT1State extends State<AddSAT1> {
       return new Text(
         "ADD",
         style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold
+            color: Colors.white,
+            fontWeight: FontWeight.bold
         ),
       );
     } else if (_state == 1) {
@@ -306,17 +306,17 @@ class _AddSAT1State extends State<AddSAT1> {
     int result;
     if (scoreI.id != null) {
       // Case 1: Update operation
-      result = await databaseHelper.updateScore(scoreI);
+      result = await databaseHelper.updateScoreSatIReal(scoreI);
     } else {
       // Case 2: Insert Operation
-      result = await databaseHelper.insertScore(scoreI);
+      result = await databaseHelper.insertScoreSatIReal(scoreI);
     }
 
     if (result != 0) {
       debugPrint('Inserted successfully');
     } else {
       // Failure
-     debugPrint('error');
+      debugPrint('error');
     }
   }
 }

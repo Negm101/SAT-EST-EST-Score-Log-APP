@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:score_log_app/model/scoreSAT1.dart';
-import 'package:score_log_app/screen/sat1/addSat1.dart';
+import 'package:score_log_app/model/scoreIReal.dart';
+import 'package:score_log_app/screen/sat1/addSat1Real.dart';
 import 'package:delayed_display/delayed_display.dart';
 import 'package:score_log_app/services/database.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:date_format/date_format.dart';
 
+// ignore: must_be_immutable
 class ScoreSat1 extends StatefulWidget {
   ScoreSat1({Key key}) : super(key: key);
   int position;
@@ -18,13 +19,12 @@ class ScoreSat1 extends StatefulWidget {
 
 class _ScoreSat1State extends State<ScoreSat1> {
   DatabaseHelper databaseHelper = DatabaseHelper();
-  List<ScoreI> scoreIList;
+  List<ScoreIReal> scoreIList;
   int count = 0;
-
   @override
   Widget build(BuildContext context) {
     if (scoreIList == null) {
-      scoreIList = List<ScoreI>();
+      scoreIList = List<ScoreIReal>();
       updateListView();
     }
     return Scaffold(
@@ -36,6 +36,14 @@ class _ScoreSat1State extends State<ScoreSat1> {
             toolbarHeight: 48,
             bottom: TabBar(
               labelPadding: EdgeInsets.only(bottom: 13.5, top: 13.5),
+              onTap: (index){
+                if (index == 0){
+                  getDataPractice();
+                }
+                else if (index == 1){
+                  debugPrint('hi from real');
+                }
+              },
               tabs: [
                 Text(
                   'Practice',
@@ -52,9 +60,10 @@ class _ScoreSat1State extends State<ScoreSat1> {
           ),
           body: TabBarView(
             physics: NeverScrollableScrollPhysics(),
+
             children: [
               getScoreIItem(),
-              Icon(Icons.directions_transit),
+              Center(),
             ],
           ),
           floatingActionButton: OpenContainer(
@@ -76,42 +85,50 @@ class _ScoreSat1State extends State<ScoreSat1> {
                   borderRadius: BorderRadius.circular(100)),
               closedColor: Colors.blue,
               openBuilder: (_, closeContainer) {
-                return AddSAT1(ScoreI(0, 0, '', 'Practice', ''));
+                return AddSAT1Real(ScoreIReal(0, 0, '', 'Practice', ''));
               }),
         ),
       ),
     );
   }
 
-  ListView getScoreIItem() {
-    return ListView.builder(
-      itemCount: scoreIList.length,
-      itemBuilder: (BuildContext context, position) {
-        position = position;
-        debugPrint(scoreIList[position].date);
-        return SAT1ListItem(
-          englishScore: scoreIList[position].englishScore,
-          mathScore: scoreIList[position].mathScore,
-          // TODO: solve invalid format conversation
-          dateDay:   getDateDay(scoreIList[position].date),
-          dateMonth: getDateMonth(scoreIList[position].date),
-          dateYear: getDateYear(scoreIList[position].date),
-          onPressedDelete: () {
-            _delete(context, scoreIList[position]);
-            scoreIList.removeAt(position);
-            updateListView();
-            },
-          note: scoreIList[position].note,
-        );
-      },
-    );
+  Widget getScoreIItem() {
+    //updateListView(testType);
+    return scoreIList.length != 0 ? RefreshIndicator(
+      child: ListView.builder(
+        itemCount: scoreIList.length,
+        itemBuilder: (BuildContext context, position) {
+          position = position;
+          debugPrint(scoreIList[position].date);
+          return SAT1ListItem(
+            englishScore: scoreIList[position].englishScore,
+            mathScore: scoreIList[position].mathScore,
+            dateDay:   getDateDay(scoreIList[position].date),
+            dateMonth: getDateMonth(scoreIList[position].date),
+            dateYear: getDateYear(scoreIList[position].date),
+            onPressedDelete: () {
+              _delete(context, scoreIList[position]);
+              scoreIList.removeAt(position);
+              updateListView();
+              },
+            note: scoreIList[position].note,
+          );
+        },
+      ),
+      onRefresh: getDataPractice,
+    ): Center(child: CircularProgressIndicator());
   }
-
+  Future<void> getDataPractice() async {
+    setState(() {
+      updateListView();
+    });
+  }
   int getDateDay(String date) {
     debugPrint(date);
     debugPrint(date);
     return DateTime.parse(date).day.toInt();
   }
+
 
   int getDateYear(String date) {
     return DateTime.parse(date).year.toInt();
@@ -124,7 +141,7 @@ class _ScoreSat1State extends State<ScoreSat1> {
   void updateListView() {
     final Future<Database> dbFuture = databaseHelper.initializeDatabase();
     dbFuture.then((database) {
-      Future<List<ScoreI>> noteListFuture = databaseHelper.getScoreIListPractice();
+      Future<List<ScoreIReal>> noteListFuture = databaseHelper.getScoreIListReal();
       noteListFuture.then((scoreIList) {
         setState(() {
           this.scoreIList = scoreIList;
@@ -134,8 +151,8 @@ class _ScoreSat1State extends State<ScoreSat1> {
     });
   }
 
-  void _delete(BuildContext context, ScoreI score) async {
-    int result = await databaseHelper.deleteScore(score.id);
+  void _delete(BuildContext context, ScoreIReal score) async {
+    int result = await databaseHelper.deleteScoreSatIReal(score.id);
     if (result != 0) {
       debugPrint('Score Deleted Successfully');
       // updateListView();
