@@ -20,24 +20,6 @@ class AddSAT1Real extends StatefulWidget {
 class _AddSAT1RealState extends State<AddSAT1Real> {
   _AddSAT1RealState(this.scoreI);
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-/*
-  void _handleSubmitted() {
-    final FormState form = _formKey.currentState;
-    if (!form.validate()) {
-      _autovalidate = true; // Start validating on every change.
-      showInSnackBar('Please fix the errors in red before submitting.');
-    } else {
-      showInSnackBar('snackchat');
-      User.instance.first_name = firstName;
-      User.instance.last_name = lastName;
-
-      User.instance.save().then((result) {
-        print("Saving done: ${result}.");
-      });
-    }
-  }*/
-
-  // controllers for form text controllers
   TextEditingController _englishScoreController = new TextEditingController();
   TextEditingController _mathScoreController = new TextEditingController();
   TextEditingController _noteController = new TextEditingController();
@@ -47,27 +29,20 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
   bool isPracticeSelected = true;
   bool isRealSelected = false;
   int _state = 0;
-
   DatabaseHelper databaseHelper = DatabaseHelper();
   ScoreIReal scoreI;
-  @override
-  /*void initState() {
-    _firstNameController.text = firstName;
-    _lastNameController.text = lastName;
-    return super.initState();
-  }*/
+  bool _validate = false;
+
+  String get value => null;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
     final DateTime today = new DateTime.now();
-    Timer(Duration(seconds: 5), () {
-      // 5s over, navigate to a new page
-    });
     return new Scaffold(
       appBar: new AppBar(
           title: Text(
-            'Add Score',
+            'Add Score (real)',
             textAlign: TextAlign.center,
           ),
           centerTitle: true,
@@ -101,7 +76,7 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
                                 counterText: '',
                               ),
                               autocorrect: false,
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.phone,
                               maxLength: 4,
                               controller: _englishScoreController,
                               onChanged: (String value) {
@@ -116,8 +91,12 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
                                 labelText: "Math",
                                 hintText: '/800',
                                 counterText: '',
+                                errorMaxLines: 4,
+                                //errorText: validateScore(value),
                               ),
                               autocorrect: false,
+                              keyboardType: TextInputType.phone,
+                              maxLength: 4,
                               controller: _mathScoreController,
                               onChanged: (String value) {
                                 setMathScore();
@@ -318,5 +297,11 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
       // Failure
      debugPrint('error');
     }
+  }
+  String validateScore(String value) {
+    if (!(value.length > 4)) {
+      return 'must be less than four no.';
+    }
+    return null;
   }
 }

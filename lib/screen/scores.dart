@@ -11,7 +11,11 @@ class Scores extends StatelessWidget {
             title: 'Button 1',
             elevation: 0,
             onPressed: () {
-              Navigator.push(context, new MaterialPageRoute(builder: (context) => new ScoreSat1()));
+
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(builder: (context) => new ScoreSat1())
+              );
             },
           ),
           CustomButton(

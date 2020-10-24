@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:score_log_app/model/scoreIPractice.dart';
 import 'package:score_log_app/model/scoreIReal.dart';
 import 'package:score_log_app/services/database.dart';
 import 'package:fleva_icons/fleva_icons.dart';
@@ -9,7 +10,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 //import '../models/user.dart';
 // TODO: finish this class
 class AddSAT1Practice extends StatefulWidget {
-  final ScoreIReal scoreI;
+  final ScoreIPractice scoreI;
   AddSAT1Practice(this.scoreI);
   @override
   State<StatefulWidget> createState() {
@@ -38,10 +39,11 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
   }*/
 
   // controllers for form text controllers
-  TextEditingController _englishScoreController = new TextEditingController();
-  TextEditingController _mathScoreController = new TextEditingController();
+  TextEditingController _readingScoreController = new TextEditingController();
+  TextEditingController _writingScoreController = new TextEditingController();
+  TextEditingController _mathNoCalcController = new TextEditingController();
+  TextEditingController _mathCalcController = new TextEditingController();
   TextEditingController _noteController = new TextEditingController();
-  TextEditingController _scoreTypeController = new TextEditingController();
   TextEditingController _scoreDateController = new TextEditingController();
   String scoreType = 'Practice';
   bool isPracticeSelected = true;
@@ -49,7 +51,7 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
   int _state = 0;
 
   DatabaseHelper databaseHelper = DatabaseHelper();
-  ScoreIReal scoreI;
+  ScoreIPractice scoreI;
   @override
   /*void initState() {
     _firstNameController.text = firstName;
@@ -67,7 +69,7 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
     return new Scaffold(
       appBar: new AppBar(
           title: Text(
-            'Add Score',
+            'Add Score (practice)',
             textAlign: TextAlign.center,
           ),
           centerTitle: true,
@@ -96,16 +98,17 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
                             width: MediaQuery.of(context).size.width / 2.5,
                             child: new TextField(
                               decoration: const InputDecoration(
-                                labelText: "English",
-                                hintText: "/800",
+                                labelText: "Reading",
+                                hintText: "/52",
                                 counterText: '',
+                                errorMaxLines: 2,
                               ),
                               autocorrect: false,
                               keyboardType: TextInputType.number,
-                              maxLength: 4,
-                              controller: _englishScoreController,
+                              maxLength: 2,
+                              controller: _readingScoreController,
                               onChanged: (String value) {
-                                setEnglishScore();
+                                setReadingScore();
                               },
                             ),
                           ),
@@ -113,14 +116,54 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
                             width: MediaQuery.of(context).size.width / 2.5,
                             child: new TextField(
                               decoration: const InputDecoration(
-                                labelText: "Math",
-                                hintText: '/800',
+                                labelText: "Writing",
+                                hintText: '/44',
                                 counterText: '',
                               ),
                               autocorrect: false,
-                              controller: _mathScoreController,
+                              keyboardType: TextInputType.number,
+                              controller: _writingScoreController,
                               onChanged: (String value) {
-                                setMathScore();
+                                setWritingScore();
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width / 2.5,
+                            child: new TextField(
+                              decoration: const InputDecoration(
+                                labelText: "Math (no-calc)",
+                                hintText: "/20",
+                                counterText: '',
+                                errorMaxLines: 2,
+                              ),
+                              autocorrect: false,
+                              keyboardType: TextInputType.number,
+                              maxLength: 2,
+                              controller: _mathNoCalcController,
+                              onChanged: (String value) {
+                                setMathNoCalcScore();
+                              },
+                            ),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width / 2.5,
+                            child: new TextField(
+                              decoration: const InputDecoration(
+                                labelText: "Math (calc)",
+                                hintText: '/38',
+                                counterText: '',
+                              ),
+                              autocorrect: false,
+                              keyboardType: TextInputType.number,
+                              controller: _mathCalcController,
+                              onChanged: (String value) {
+                                setMathCalcScore();
                               },
                             ),
                           ),
@@ -134,7 +177,7 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
                           maxLength: 32,
                           controller: _noteController,
                           onChanged: (String value) {
-                            setNote();
+                            
                           },
                         ),
                       ),
@@ -147,48 +190,6 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
                           enabled: false,
                           controller: _scoreDateController,
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 5, top: 20),
-                        child: Text(
-                          'Type',
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ChoiceChip(
-                            label: Text('Practice'),
-                            padding: EdgeInsets.only(
-                                left: getWidthSize(.135), right: getWidthSize(.135)),
-                            selected: isPracticeSelected,
-                            onSelected: (bool value) {
-                              setState(() {
-                                isRealSelected = false;
-                                isPracticeSelected = true;
-                                scoreType = 'Practice';
-                              });
-                              setTestType();
-                              debugPrint(scoreType);
-                            },
-                          ),
-                          ChoiceChip(
-                            label: Text('  Real  '),
-                            padding: EdgeInsets.only(
-                                left: getWidthSize(.135), right: getWidthSize(.135)),
-                            selected: isRealSelected,
-                            onSelected: (bool value) {
-                              setState(() {
-                                isPracticeSelected = false;
-                                isRealSelected = true;
-                                scoreType = 'Real';
-                              });
-                              setTestType();
-                              debugPrint(scoreType);
-                            },
-                          ),
-                        ],
                       ),
                     ],
                   ),
@@ -211,7 +212,6 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
                   onDateTimeChanged: (DateTime dateTime) {
                     setState(() {
                       _scoreDateController.value = TextEditingValue(text: dateTime.toString());
-                      setDate();
                     });
                     print("dateTime: $dateTime");
                   },
@@ -224,7 +224,7 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
                   child: setUpButtonChild(),
                   onPressed: () {
                     setState(() {
-                      databaseHelper.insertScoreSatIReal(scoreI);
+                      databaseHelper.insertScoreSatIPractice(scoreI);
                       animateButton();
                     });
                   },
@@ -287,29 +287,33 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
   double getHeightSize(double factor) {
     return MediaQuery.of(context).size.height * factor;
   }
-  void setEnglishScore(){
-    scoreI.englishScore = int.parse(_englishScoreController.text);
+  void setReadingScore(){
+    scoreI.readingScore = int.parse(_readingScoreController.text);
   }
-  void setMathScore(){
-    scoreI.mathScore = int.parse(_mathScoreController.text);
+  void setWritingScore(){
+    scoreI.writingScore = int.parse(_writingScoreController.text);
   }
-  void setDate(){
+  void setMathNoCalcScore(){
+    scoreI.mathNoCalcScore = int.parse(_mathNoCalcController.text);
+  }
+  void setMathCalcScore(){
+    scoreI.mathCalcScore = int.parse(_mathCalcController.text);
+  }
+  void setDateScore(){
     scoreI.date = _scoreDateController.text;
   }
-  void setTestType(){
-    scoreI.type = scoreType;
+  void setNoteScore(){
+    scoreI.note = _mathNoCalcController.text;
   }
-  void setNote(){
-    scoreI.note = _noteController.text;
-  }
+
   void _save() async {
     int result;
     if (scoreI.id != null) {
       // Case 1: Update operation
-      result = await databaseHelper.updateScoreSatIReal(scoreI);
+      result = await databaseHelper.updateScoreSatIPractice(scoreI);
     } else {
       // Case 2: Insert Operation
-      result = await databaseHelper.insertScoreSatIReal(scoreI);
+      result = await databaseHelper.insertScoreSatIPractice(scoreI);
     }
 
     if (result != 0) {
