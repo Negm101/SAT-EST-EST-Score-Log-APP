@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:score_log_app/model/scoreIReal.dart';
-import 'package:score_log_app/screen/sat1/sat1List.dart';
 import 'package:score_log_app/services/database.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -249,22 +248,10 @@ class _SAT1ListItemRealState extends State<SAT1ListItemReal> {
     }
   }
 }
-class SatIItem extends StatefulWidget {
-  int position;
-  @override
-  _ScoreIItemState createState() => _ScoreIItemState();
-}
-class _ScoreIItemState extends State<SatIItem>{
-  @override
-  Widget build(BuildContext context) {
-
-  }
-}
 class DataSatIReal{
   DatabaseHelper databaseHelper = DatabaseHelper();
   List<ScoreIReal> scoreList;
   int count = 0;
-  int currentPage = 0;
 
   //ScoreSat1State sat1state = ScoreSat1State();
   void autoRefresh(Function setState){
@@ -280,8 +267,6 @@ class DataSatIReal{
   }
 
   int getDateDay(String date) {
-    debugPrint(date);
-    debugPrint(date);
     return DateTime.parse(date).day.toInt();
   }
 

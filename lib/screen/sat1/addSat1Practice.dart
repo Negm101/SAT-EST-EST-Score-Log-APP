@@ -2,13 +2,8 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:score_log_app/model/scoreIPractice.dart';
-import 'package:score_log_app/model/scoreIReal.dart';
 import 'package:score_log_app/services/database.dart';
-import 'package:fleva_icons/fleva_icons.dart';
-import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-//import '../models/user.dart';
-// TODO: finish this class
+//TODO: FIX (MATH CLAC) AND WRITING NOT APPEARING IN LIST
 class AddSAT1Practice extends StatefulWidget {
   final ScoreIPractice scoreI;
   AddSAT1Practice(this.scoreI);
@@ -21,51 +16,19 @@ class AddSAT1Practice extends StatefulWidget {
 class _AddSAT1PracticeState extends State<AddSAT1Practice> {
   _AddSAT1PracticeState(this.scoreI);
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-/*
-  void _handleSubmitted() {
-    final FormState form = _formKey.currentState;
-    if (!form.validate()) {
-      _autovalidate = true; // Start validating on every change.
-      showInSnackBar('Please fix the errors in red before submitting.');
-    } else {
-      showInSnackBar('snackchat');
-      User.instance.first_name = firstName;
-      User.instance.last_name = lastName;
 
-      User.instance.save().then((result) {
-        print("Saving done: ${result}.");
-      });
-    }
-  }*/
-
-  // controllers for form text controllers
   TextEditingController _readingScoreController = new TextEditingController();
   TextEditingController _writingScoreController = new TextEditingController();
   TextEditingController _mathNoCalcController = new TextEditingController();
   TextEditingController _mathCalcController = new TextEditingController();
   TextEditingController _noteController = new TextEditingController();
   TextEditingController _scoreDateController = new TextEditingController();
-  String scoreType = 'Practice';
-  bool isPracticeSelected = true;
-  bool isRealSelected = false;
   int _state = 0;
 
   DatabaseHelper databaseHelper = DatabaseHelper();
   ScoreIPractice scoreI;
   @override
-  /*void initState() {
-    _firstNameController.text = firstName;
-    _lastNameController.text = lastName;
-    return super.initState();
-  }*/
-
-  @override
   Widget build(BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
-    final DateTime today = new DateTime.now();
-    Timer(Duration(seconds: 5), () {
-      // 5s over, navigate to a new page
-    });
     return new Scaffold(
       appBar: new AppBar(
           title: Text(
@@ -80,8 +43,6 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
           ]),
       body: new Form(
           key: _formKey,
-          //autovalidateMode: _autovalidate,
-          //onWillPop: _warnUserAboutInvalidData,
           child: Container(
 
             child: ListView(
@@ -96,13 +57,13 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
                         children: [
                           Container(
                             width: MediaQuery.of(context).size.width / 2.5,
-                            child: new TextField(
+                            child: new TextFormField(
                               decoration: const InputDecoration(
                                 labelText: "Reading",
                                 hintText: "/52",
                                 counterText: '',
-                                errorMaxLines: 2,
                               ),
+                              validator: valReading,
                               autocorrect: false,
                               keyboardType: TextInputType.number,
                               maxLength: 2,
@@ -114,15 +75,17 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
                           ),
                           Container(
                             width: MediaQuery.of(context).size.width / 2.5,
-                            child: new TextField(
+                            child: new TextFormField(
                               decoration: const InputDecoration(
                                 labelText: "Writing",
                                 hintText: '/44',
                                 counterText: '',
                               ),
+                              validator: valWriting,
                               autocorrect: false,
                               keyboardType: TextInputType.number,
                               controller: _writingScoreController,
+                              maxLength: 2,
                               onChanged: (String value) {
                                 setWritingScore();
                               },
@@ -135,13 +98,13 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
                         children: [
                           Container(
                             width: MediaQuery.of(context).size.width / 2.5,
-                            child: new TextField(
+                            child: new TextFormField(
                               decoration: const InputDecoration(
                                 labelText: "Math (no-calc)",
                                 hintText: "/20",
                                 counterText: '',
-                                errorMaxLines: 2,
                               ),
+                              validator: valMathNoCalc,
                               autocorrect: false,
                               keyboardType: TextInputType.number,
                               maxLength: 2,
@@ -153,13 +116,15 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
                           ),
                           Container(
                             width: MediaQuery.of(context).size.width / 2.5,
-                            child: new TextField(
+                            child: new TextFormField(
                               decoration: const InputDecoration(
                                 labelText: "Math (calc)",
                                 hintText: '/38',
                                 counterText: '',
                               ),
+                              validator: valMathClac,
                               autocorrect: false,
+                              maxLength: 2,
                               keyboardType: TextInputType.number,
                               controller: _mathCalcController,
                               onChanged: (String value) {
@@ -170,22 +135,26 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
                         ],
                       ),
                       Container(
-                        child: new TextField(
+                        child: new TextFormField(
                           decoration: const InputDecoration(
                               labelText: "Note", hintText: 'type a simple note'),
                           autocorrect: false,
                           maxLength: 32,
                           controller: _noteController,
                           onChanged: (String value) {
-                            
+                            setNote();
                           },
                         ),
                       ),
                       Container(
-                        child: new TextField(
+                        child: new TextFormField(
                           decoration: const InputDecoration(
                             labelText: "Date of taking the test",
+                            errorStyle: TextStyle(
+                              color: Colors.red, // or any other color
+                            ),
                           ),
+                          validator: validateDate,
                           autocorrect: false,
                           enabled: false,
                           controller: _scoreDateController,
@@ -212,6 +181,7 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
                   onDateTimeChanged: (DateTime dateTime) {
                     setState(() {
                       _scoreDateController.value = TextEditingValue(text: dateTime.toString());
+                      setDate();
                     });
                     print("dateTime: $dateTime");
                   },
@@ -224,8 +194,7 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
                   child: setUpButtonChild(),
                   onPressed: () {
                     setState(() {
-                      databaseHelper.insertScoreSatIPractice(scoreI);
-                      animateButton();
+                      _save();
                     });
                   },
                 ),
@@ -299,27 +268,93 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
   void setMathCalcScore(){
     scoreI.mathCalcScore = int.parse(_mathCalcController.text);
   }
-  void setDateScore(){
+  void setDate(){
     scoreI.date = _scoreDateController.text;
   }
-  void setNoteScore(){
-    scoreI.note = _mathNoCalcController.text;
+  void setNote(){
+    scoreI.note = _noteController.text;
+  }
+  String valReading(String value) {
+    if (value.length == 0){
+      debugPrint('value length: ' + value.length.toString());
+      return "Field can\'t be empty";
+    }
+    else if (int.parse(value.toString()) > 52) {
+      debugPrint('value: ' + value.toString() );
+      return "Must be less than 52";
+    }
+    else {
+      return null;
+    }
+  }
+  String valWriting(String value) {
+    if (value.length == 0){
+      debugPrint('value length: ' + value.length.toString());
+      return "Field can\'t be empty";
+    }
+    else if (int.parse(value.toString()) > 44) {
+      debugPrint('value: ' + value.toString() );
+      return "Must be less than 44";
+    }
+    else {
+      return null;
+    }
+  }
+  String valMathNoCalc(String value) {
+    if (value.length == 0){
+      debugPrint('value length: ' + value.length.toString());
+      return "Field can\'t be empty";
+    }
+    else if (int.parse(value.toString()) > 20) {
+      debugPrint('value: ' + value.toString() );
+      return "Must be less than 20";
+    }
+    else {
+      return null;
+    }
+  }
+  String valMathClac(String value) {
+    if (value.length == 0){
+      debugPrint('value length: ' + value.length.toString());
+      return "Field can\'t be empty";
+    }
+    else if (int.parse(value.toString()) > 38) {
+      debugPrint('value: ' + value.toString() );
+      return "Must be less than 38";
+    }
+    else {
+      return null;
+    }
+  }
+  String validateDate(String date){
+    debugPrint('date: ' + date.length.toString());
+    if(date.length == 0){
+      debugPrint('date.length == ${date.length}');
+      return "Field can\'t be empty";
+    }
+    debugPrint('null');
+    return null;
+  }
+  String validateNote(String note){
+    if (note.length > 32){
+      debugPrint('note length: ' + note.length.toString());
+      return "Characters must be less than 32";
+    }
+    else {
+      return null;
+    }
   }
 
   void _save() async {
-    int result;
-    if (scoreI.id != null) {
-      // Case 1: Update operation
-      result = await databaseHelper.updateScoreSatIPractice(scoreI);
-    } else {
-      // Case 2: Insert Operation
-      result = await databaseHelper.insertScoreSatIPractice(scoreI);
+    if(_formKey.currentState.validate()){
+      await databaseHelper.insertScoreSatIPractice(scoreI);
+      debugPrint('reading: ' + _readingScoreController.text);
+      debugPrint('writing: ' + _writingScoreController.text);
+      debugPrint('math: ' + _mathNoCalcController.text);
+      debugPrint('math(calc) : ' + _mathCalcController.text);
+      debugPrint('date: ' + _scoreDateController.text);
     }
-
-    if (result != 0) {
-      debugPrint('Inserted successfully');
-    } else {
-      // Failure
+    else {
       debugPrint('error');
     }
   }

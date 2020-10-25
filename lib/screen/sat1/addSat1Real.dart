@@ -3,10 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:score_log_app/model/scoreIReal.dart';
 import 'package:score_log_app/services/database.dart';
-import 'package:fleva_icons/fleva_icons.dart';
-import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-//import '../models/user.dart';
 
 class AddSAT1Real extends StatefulWidget {
   final ScoreIReal scoreI;
@@ -20,10 +16,10 @@ class AddSAT1Real extends StatefulWidget {
 class _AddSAT1RealState extends State<AddSAT1Real> {
   _AddSAT1RealState(this.scoreI);
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+
   TextEditingController _englishScoreController = new TextEditingController();
   TextEditingController _mathScoreController = new TextEditingController();
   TextEditingController _noteController = new TextEditingController();
-  TextEditingController _scoreTypeController = new TextEditingController();
   TextEditingController _scoreDateController = new TextEditingController();
   String scoreType = 'Practice';
   bool isPracticeSelected = true;
@@ -31,14 +27,9 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
   int _state = 0;
   DatabaseHelper databaseHelper = DatabaseHelper();
   ScoreIReal scoreI;
-  bool _validate = false;
-
-  String get value => null;
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
-    final DateTime today = new DateTime.now();
     return new Scaffold(
       appBar: new AppBar(
           title: Text(
@@ -53,8 +44,6 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
           ]),
       body: new Form(
           key: _formKey,
-          //autovalidateMode: _autovalidate,
-          //onWillPop: _warnUserAboutInvalidData,
           child: Container(
 
             child: ListView(
@@ -69,12 +58,13 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
                         children: [
                           Container(
                             width: MediaQuery.of(context).size.width / 2.5,
-                            child: new TextField(
+                            child: new TextFormField(
                               decoration: const InputDecoration(
                                 labelText: "English",
                                 hintText: "/800",
                                 counterText: '',
                               ),
+                              validator: validateScore,
                               autocorrect: false,
                               keyboardType: TextInputType.phone,
                               maxLength: 4,
@@ -86,7 +76,7 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
                           ),
                           Container(
                             width: MediaQuery.of(context).size.width / 2.5,
-                            child: new TextField(
+                            child: new TextFormField(
                               decoration: const InputDecoration(
                                 labelText: "Math",
                                 hintText: '/800',
@@ -94,6 +84,7 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
                                 errorMaxLines: 4,
                                 //errorText: validateScore(value),
                               ),
+                              validator: validateScore,
                               autocorrect: false,
                               keyboardType: TextInputType.phone,
                               maxLength: 4,
@@ -108,7 +99,7 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
                       Container(
                         child: new TextField(
                           decoration: const InputDecoration(
-                              labelText: "Note", hintText: 'type a simple note'),
+                              labelText: "Note", hintText: 'type a simple note', errorMaxLines: 32),
                           autocorrect: false,
                           maxLength: 32,
                           controller: _noteController,
@@ -118,57 +109,20 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
                         ),
                       ),
                       Container(
-                        child: new TextField(
+                        child: new TextFormField(
                           decoration: const InputDecoration(
                             labelText: "Date of taking the test",
+                            errorStyle: TextStyle(
+                              color: Colors.red, // or any other color
+                            ),
                           ),
                           autocorrect: false,
+                          validator: validateDate,
                           enabled: false,
                           controller: _scoreDateController,
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 5, top: 20),
-                        child: Text(
-                          'Type',
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ChoiceChip(
-                            label: Text('Practice'),
-                            padding: EdgeInsets.only(
-                                left: getWidthSize(.135), right: getWidthSize(.135)),
-                            selected: isPracticeSelected,
-                            onSelected: (bool value) {
-                              setState(() {
-                                isRealSelected = false;
-                                isPracticeSelected = true;
-                                scoreType = 'Practice';
-                              });
-                              setTestType();
-                              debugPrint(scoreType);
-                            },
-                          ),
-                          ChoiceChip(
-                            label: Text('  Real  '),
-                            padding: EdgeInsets.only(
-                                left: getWidthSize(.135), right: getWidthSize(.135)),
-                            selected: isRealSelected,
-                            onSelected: (bool value) {
-                              setState(() {
-                                isPracticeSelected = false;
-                                isRealSelected = true;
-                                scoreType = 'Real';
-                              });
-                              setTestType();
-                              debugPrint(scoreType);
-                            },
-                          ),
-                        ],
-                      ),
+
                     ],
                   ),
                 ),
@@ -203,8 +157,7 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
                   child: setUpButtonChild(),
                   onPressed: () {
                     setState(() {
-                      databaseHelper.insertScoreSatIReal(scoreI);
-                      animateButton();
+                      _save();
                     });
                   },
                 ),
@@ -238,7 +191,14 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
           valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
         ),
       );
-    } else {
+    }else if(_state == 2){
+      return Icon(
+        Icons.error,
+        color: Colors.white,
+        size: 30,
+      );
+    }
+    else {
       return Icon(
         Icons.check,
         color: Colors.white,
@@ -252,7 +212,7 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
       _state = 1;
     });
 
-    Timer(Duration(milliseconds: 3300), () {
+    Timer(Duration(milliseconds: 1000), () {
       setState(() {
         _state = 2;
       });
@@ -282,26 +242,42 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
     scoreI.note = _noteController.text;
   }
   void _save() async {
-    int result;
-    if (scoreI.id != null) {
-      // Case 1: Update operation
-      result = await databaseHelper.updateScoreSatIReal(scoreI);
-    } else {
-      // Case 2: Insert Operation
-      result = await databaseHelper.insertScoreSatIReal(scoreI);
-    }
-
-    if (result != 0) {
-      debugPrint('Inserted successfully');
-    } else {
-      // Failure
-     debugPrint('error');
-    }
+      if(_formKey.currentState.validate()){
+        await databaseHelper.insertScoreSatIReal(scoreI);
+      }
+      else {
+        debugPrint('error');
+      }
   }
   String validateScore(String value) {
-    if (!(value.length > 4)) {
-      return 'must be less than four no.';
+    if (value.length == 0){
+      debugPrint('value length: ' + value.length.toString());
+      return "Field can\'t be empty";
     }
+    else if (int.parse(value.toString()) > 800) {
+      debugPrint('value: ' + value.toString() );
+      return "Must be less than 800";
+    }
+    else {
+      return null;
+    }
+  }
+  String validateDate(String date){
+    debugPrint('date: ' + date.length.toString());
+    if(date.length == 0){
+      debugPrint('date.length == 0');
+      return "Field can\'t be empty";
+    }
+    debugPrint('null');
     return null;
+  }
+  String validateNote(String note){
+    if (note.length > 32){
+      debugPrint('note length: ' + note.length.toString());
+      return "Characters must be less than 32";
+    }
+    else {
+      return null;
+    }
   }
 }
