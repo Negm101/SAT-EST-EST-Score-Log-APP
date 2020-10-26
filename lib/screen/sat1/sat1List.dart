@@ -163,7 +163,10 @@ class ScoreSat1State extends State<ScoreSat1> {
                 itemCount: practice.scoreList.length,
                 itemBuilder: (BuildContext context, position) {
                   position = position;
-                  debugPrint(practice.scoreList[position].id.toString() +
+                  debugPrint(
+                      position.toString() +
+                      ' | ' +
+                      practice.scoreList[position].id.toString() +
                       ' | ' +
                       practice.scoreList[position].readingScore.toString() +
                       ' | ' +

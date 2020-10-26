@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:score_log_app/screen/sat1/sat1List.dart';
 import 'package:score_log_app/screen/scores.dart';
 void main() => runApp(MyApp());
 
 
 class MyApp extends StatelessWidget {
-  static const String _title = 'Flutter Code Sample';
+  static const String _title = 'Score Log';
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: _title,
-      home: MyStatefulWidget(),
+      home: ScoreSat1(),
       theme: ThemeData(
         textTheme: GoogleFonts.oxygenTextTheme(
           Theme.of(context).textTheme,
@@ -33,8 +34,7 @@ class MyStatefulWidget extends StatefulWidget {
 /// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 1;
-  static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static  List<Widget> _widgetOptions = <Widget>[
     Text(
       'Index 1: Business',

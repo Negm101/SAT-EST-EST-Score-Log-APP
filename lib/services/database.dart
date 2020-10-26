@@ -86,14 +86,14 @@ class DatabaseHelper {
   Future<int> insertScoreSatIReal(ScoreIReal score) async {
     Database db = await this.database;
     var result = await db.insert(scoreIReal.dbTableName, score.toMap());
-    debugPrint('saved');
+    debugPrint('Real saved');
     return result;
   }
 
   Future<int> insertScoreSatIPractice(ScoreIPractice score) async {
     Database db = await this.database;
     var result = await db.insert(scoreIPractice.dbTableName, score.toMap());
-    debugPrint('saved');
+    debugPrint('Practice saved');
     return result;
   }
   // Update Operation: Update a Note object and save it to database

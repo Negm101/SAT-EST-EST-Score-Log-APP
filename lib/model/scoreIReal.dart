@@ -7,77 +7,41 @@ class ScoreIReal {
   final String dbTestType = 'test_type';
   final String dbNote = 'note';
 
-  int _id;
-  int _englishScore;
-  int _mathScore;
-  String _date;
-  String _type;
-  String _note;
-
-
-  int get id => _id;
-
-  set id(int value) {
-    _id = value;
-  }
+  int id;
+  int englishScore;
+  int mathScore;
+  String date;
+  String type;
+  String note;
+  
   ScoreIReal.db();
-  ScoreIReal( this._englishScore, this._mathScore, this._date, this._type,
-      this._note);
-  ScoreIReal.withId(this._id, this._englishScore, this._mathScore, this._date, this._type,
-      this._note);
+  ScoreIReal( this.englishScore, this.mathScore, this.date, this.type,
+      this.note);
+  ScoreIReal.withId(this.id, this.englishScore, this.mathScore, this.date, this.type,
+      this.note);
 
   Map<String, dynamic> toMap() {
 
     var map = Map<String, dynamic>();
-    if (_id != null) {
-      map['id'] = _id;
+    if (id != null) {
+      map[dbId] = id;
     }
-    map['english_score'] = _englishScore;
-    map['math_score'] = _mathScore;
-    map['date'] = _date;
-    map['test_type'] = _type;
-    map['note'] = _note;
+    map[dbEnglishScore] = englishScore;
+    map[dbMathScore] = mathScore;
+    map[dbDate] = date;
+    map[dbTestType] = type;
+    map[dbNote] = note;
     return map;
   }
 
-  // Extract a Note object from a Map object
   ScoreIReal.fromMapObject(Map<String, dynamic> map) {
-    this._id = map['id'];
-    this._englishScore = map['english_score'];
-    this._mathScore = map['math_score'];
-    this._date = map['date'];
-    this._type = map['test_type'];
-    this._note = map['note'];
+    this.id = map[dbId];
+    this.englishScore = map[dbEnglishScore];
+    this.mathScore = map[dbMathScore];
+    this.date = map[dbDate];
+    this.type = map[dbTestType];
+    this.note = map[dbNote];
   }
-
-  int get englishScore => _englishScore;
-
-  set englishScore(int value) {
-    _englishScore = value;
-  }
-
-  int get mathScore => _mathScore;
-
-  set mathScore(int value) {
-    _mathScore = value;
-  }
-
-  String get date => _date;
-
-  set date(String value) {
-    _date = value;
-  }
-
-  String get type => _type;
-
-  set type(String value) {
-    _type = value;
-  }
-
-  String get note => _note;
-
-  set note(String value) {
-    _note = value;
-  }
+  
 }
 

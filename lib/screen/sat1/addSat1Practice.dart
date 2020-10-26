@@ -65,7 +65,7 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
                               ),
                               validator: valReading,
                               autocorrect: false,
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.phone,
                               maxLength: 2,
                               controller: _readingScoreController,
                               onChanged: (String value) {
@@ -83,7 +83,7 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
                               ),
                               validator: valWriting,
                               autocorrect: false,
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.phone,
                               controller: _writingScoreController,
                               maxLength: 2,
                               onChanged: (String value) {
@@ -106,7 +106,7 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
                               ),
                               validator: valMathNoCalc,
                               autocorrect: false,
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.phone,
                               maxLength: 2,
                               controller: _mathNoCalcController,
                               onChanged: (String value) {
@@ -125,7 +125,7 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
                               validator: valMathClac,
                               autocorrect: false,
                               maxLength: 2,
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.phone,
                               controller: _mathCalcController,
                               onChanged: (String value) {
                                 setMathCalcScore();
@@ -258,15 +258,19 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
   }
   void setReadingScore(){
     scoreI.readingScore = int.parse(_readingScoreController.text);
+    debugPrint('reading score: ' + scoreI.readingScore.toString());
   }
   void setWritingScore(){
     scoreI.writingScore = int.parse(_writingScoreController.text);
+    debugPrint('writing score: ' + scoreI.writingScore.toString());
   }
   void setMathNoCalcScore(){
     scoreI.mathNoCalcScore = int.parse(_mathNoCalcController.text);
+    debugPrint('math no calc score: ' + scoreI.mathNoCalcScore.toString());
   }
   void setMathCalcScore(){
     scoreI.mathCalcScore = int.parse(_mathCalcController.text);
+    debugPrint('math calc score: ' + scoreI.mathCalcScore.toString());
   }
   void setDate(){
     scoreI.date = _scoreDateController.text;
@@ -355,7 +359,7 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
       debugPrint('date: ' + _scoreDateController.text);
     }
     else {
-      debugPrint('error');
+      debugPrint('error at save practice');
     }
   }
 }
