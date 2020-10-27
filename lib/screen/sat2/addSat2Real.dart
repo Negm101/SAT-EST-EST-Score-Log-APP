@@ -1,32 +1,30 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:score_log_app/model/sat1/scoreIReal.dart';
+import 'package:score_log_app/model/sat2/scoreIIPractice.dart';
+import 'package:score_log_app/model/sat2/scoreIIReal.dart';
 import 'package:score_log_app/services/database.dart';
 
-class AddSAT1Real extends StatefulWidget {
-  final ScoreIReal scoreI;
-  AddSAT1Real(this.scoreI);
+class AddSAT2Real extends StatefulWidget {
+  final ScoreIIReal score;
+  AddSAT2Real(this.score);
   @override
   State<StatefulWidget> createState() {
-    return _AddSAT1RealState(this.scoreI);
+    return _AddSAT2RealState(this.score);
   }
 }
 
-class _AddSAT1RealState extends State<AddSAT1Real> {
-  _AddSAT1RealState(this.scoreI);
+class _AddSAT2RealState extends State<AddSAT2Real> {
+  _AddSAT2RealState(this.score);
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
-  TextEditingController _englishScoreController = new TextEditingController();
-  TextEditingController _mathScoreController = new TextEditingController();
-  TextEditingController _noteController = new TextEditingController();
+  TextEditingController _scoreController = new TextEditingController();
+  TextEditingController _subjectNameController = new TextEditingController();
   TextEditingController _scoreDateController = new TextEditingController();
-  String scoreType = 'Practice';
-  bool isPracticeSelected = true;
-  bool isRealSelected = false;
+  TextEditingController _noteController = new TextEditingController();
   int _state = 0;
   DatabaseHelper databaseHelper = DatabaseHelper();
-  ScoreIReal scoreI;
+  ScoreIIReal score;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +58,7 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
                             width: MediaQuery.of(context).size.width / 2.5,
                             child: new TextFormField(
                               decoration: const InputDecoration(
-                                labelText: "English",
+                                labelText: "Score",
                                 hintText: "/800",
                                 counterText: '',
                               ),
@@ -68,9 +66,9 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
                               autocorrect: false,
                               keyboardType: TextInputType.phone,
                               maxLength: 4,
-                              controller: _englishScoreController,
+                              controller: _scoreController,
                               onChanged: (String value) {
-                                setEnglishScore();
+                                setScore();
                               },
                             ),
                           ),
@@ -78,19 +76,15 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
                             width: MediaQuery.of(context).size.width / 2.5,
                             child: new TextFormField(
                               decoration: const InputDecoration(
-                                labelText: "Math",
-                                hintText: '/800',
+                                labelText: "Subject Name",
                                 counterText: '',
-                                errorMaxLines: 4,
                                 //errorText: validateScore(value),
                               ),
-                              validator: validateScore,
                               autocorrect: false,
-                              keyboardType: TextInputType.phone,
-                              maxLength: 4,
-                              controller: _mathScoreController,
+                              keyboardType: TextInputType.text,
+                              controller: _subjectNameController,
                               onChanged: (String value) {
-                                setMathScore();
+                                setSubjectName();
                               },
                             ),
                           ),
@@ -178,8 +172,8 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
       return new Text(
         "ADD",
         style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold
+            color: Colors.white,
+            fontWeight: FontWeight.bold
         ),
       );
     } else if (_state == 1) {
@@ -226,29 +220,26 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
   double getHeightSize(double factor) {
     return MediaQuery.of(context).size.height * factor;
   }
-  void setEnglishScore(){
-    scoreI.englishScore = int.parse(_englishScoreController.text);
+  void setScore(){
+    score.score = int.parse(_scoreController.text);
   }
-  void setMathScore(){
-    scoreI.mathScore = int.parse(_mathScoreController.text);
+  void setSubjectName(){
+    score.subject = _subjectNameController.text;
   }
   void setDate(){
-    scoreI.date = _scoreDateController.text;
-  }
-  void setTestType(){
-    scoreI.type = scoreType;
+    score.date = _scoreDateController.text;
   }
   void setNote(){
-    scoreI.note = _noteController.text;
+    score.note = _noteController.text;
   }
   void _save() async {
-      if(_formKey.currentState.validate()){
-        await databaseHelper.insertScoreSatIReal(scoreI);
-        Navigator.pop(context);
-      }
-      else {
-        debugPrint('error');
-      }
+    if(_formKey.currentState.validate()){
+      await databaseHelper.insertScoreSatIIReal(score);
+      Navigator.pop(context);
+    }
+    else {
+      debugPrint('error');
+    }
   }
   String validateScore(String value) {
     if (value.length == 0){

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:score_log_app/model/scoreIReal.dart';
+import 'package:score_log_app/model/sat1/scoreIReal.dart';
 import 'package:score_log_app/services/database.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -289,6 +289,19 @@ class DataSatIReal{
               this.scoreList = scoreIList;
               this.count = scoreIList.length;
             });
+      });
+    });
+  }
+
+  void updateListViewSortBy(Function setState, String sortBy) {
+    final Future<Database> dbFuture = databaseHelper.initializeDatabase();
+    dbFuture.then((database) {
+      Future<List<ScoreIReal>> noteListFuture = databaseHelper.getScoreIListRealSortBy(sortBy);
+      noteListFuture.then((scoreIList) {
+        setState(() {
+          this.scoreList = scoreIList;
+          this.count = scoreIList.length;
+        });
       });
     });
   }

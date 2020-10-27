@@ -7,7 +7,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="score_log_app"
+        android:label="Score Log"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

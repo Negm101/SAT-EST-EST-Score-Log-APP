@@ -1,27 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:score_log_app/model/sat1/scoreIPractice.dart';
+import 'package:score_log_app/model/sat2/scoreIIPractice.dart';
+import 'package:score_log_app/model/sat2/scoreIIReal.dart';
 import 'package:score_log_app/services/database.dart';
 import 'package:sqflite/sqflite.dart';
 
-class SAT1ListItemPractice extends StatefulWidget {
-  final int readingScore;
-  final int writingScore;
-  final int mathNoCalScore;
-  final int mathCalcScore;
+class SAT2ListItemReal extends StatefulWidget {
+  final int score;
   final int dateYear;
   final int dateDay;
   final int dateMonth;
   final String note;
+  final String subject;
   final VoidCallback onPressedDelete;
 
 
-  SAT1ListItemPractice({
+  SAT2ListItemReal({
     Key key,
-    @required this.readingScore,
-    @required this.writingScore,
-    @required this.mathNoCalScore,
-    @required this.mathCalcScore,
+    @required this.score,
+    @required this.subject,
     this.dateDay,
     this.dateMonth,
     this.dateYear,
@@ -30,10 +27,10 @@ class SAT1ListItemPractice extends StatefulWidget {
   });
 
   @override
-  _SAT1ListItemPracticeState createState() => _SAT1ListItemPracticeState();
+  _SAT2ListItemRealState createState() => _SAT2ListItemRealState();
 }
 
-class _SAT1ListItemPracticeState extends State<SAT1ListItemPractice> {
+class _SAT2ListItemRealState extends State<SAT2ListItemReal> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -102,10 +99,7 @@ class _SAT1ListItemPracticeState extends State<SAT1ListItemPractice> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        scoreText('Reading', widget.readingScore),
-                        scoreText('Writing', widget.writingScore),
-                        scoreText('Math', widget.mathNoCalScore),
-                        scoreText('Math (calc)', widget.mathCalcScore)
+                        scoreText(widget.subject, widget.score),
                         //scoreText('Total', widget.readingScore + widget.writingScore),
                       ],
                     ),
@@ -153,7 +147,7 @@ class _SAT1ListItemPracticeState extends State<SAT1ListItemPractice> {
           child: Text(
             label,
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.grey, fontSize: 8),
+            style: TextStyle(color: Colors.grey, fontSize: 12),
           ),
         ),
         Container(
@@ -253,15 +247,15 @@ class _SAT1ListItemPracticeState extends State<SAT1ListItemPractice> {
     }
   }
 }
-class DataSatIPractice{
+class DataSatIIReal{
   DatabaseHelper databaseHelper = DatabaseHelper();
-  List<ScoreIPractice> scoreList;
+  List<ScoreIIReal> scoreList;
   int count = 0;
 
   //ScoreSat1State sat1state = ScoreSat1State();
   void autoRefresh(Function setState){
     if (scoreList == null) {
-      scoreList = List<ScoreIPractice>();
+      scoreList = List<ScoreIIReal>();
       updateListView(setState);
     }
 
@@ -290,7 +284,7 @@ class DataSatIPractice{
   void updateListView(Function setState) {
     final Future<Database> dbFuture = databaseHelper.initializeDatabase();
     dbFuture.then((database) {
-      Future<List<ScoreIPractice>> noteListFuture = databaseHelper.getScoreIListPractice();
+      Future<List<ScoreIIReal>> noteListFuture = databaseHelper.getScoreIIListReal();
       noteListFuture.then((scoreIList) {
         setState(() {
           this.scoreList = scoreIList;
@@ -303,7 +297,7 @@ class DataSatIPractice{
   void updateListViewSortBy(Function setState, String sortBy) {
     final Future<Database> dbFuture = databaseHelper.initializeDatabase();
     dbFuture.then((database) {
-      Future<List<ScoreIPractice>> noteListFuture = databaseHelper.getScoreIListPracticeSortBy(sortBy);
+      Future<List<ScoreIIReal>> noteListFuture = databaseHelper.getScoreIIListRealSortBy(sortBy);
       noteListFuture.then((scoreIList) {
         setState(() {
           this.scoreList = scoreIList;
@@ -313,9 +307,8 @@ class DataSatIPractice{
     });
   }
 
-
-  void delete(BuildContext context, ScoreIPractice score, Function setState) async {
-    int result = await databaseHelper.deleteScoreSatIPractice(score.id);
+  void delete(BuildContext context, ScoreIIReal score, Function setState) async {
+    int result = await databaseHelper.deleteScoreSatIIReal(score.id);
     if (result != 0) {
       debugPrint('Score Deleted Successfully');
       updateListView(setState);

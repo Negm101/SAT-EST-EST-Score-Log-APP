@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:score_log_app/model/scoreIPractice.dart';
+import 'package:score_log_app/model/sat1/scoreIPractice.dart';
 import 'package:score_log_app/services/database.dart';
 //TODO: FIX (MATH CLAC) AND WRITING NOT APPEARING IN LIST
 class AddSAT1Practice extends StatefulWidget {
@@ -357,6 +357,7 @@ class _AddSAT1PracticeState extends State<AddSAT1Practice> {
       debugPrint('math: ' + _mathNoCalcController.text);
       debugPrint('math(calc) : ' + _mathCalcController.text);
       debugPrint('date: ' + _scoreDateController.text);
+      Navigator.pop(context);
     }
     else {
       debugPrint('error at save practice');

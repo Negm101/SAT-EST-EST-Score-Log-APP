@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:score_log_app/screen/sat1/sat1List.dart';
+import 'package:score_log_app/screen/sat2/sat2List.dart';
 
 class Scores extends StatelessWidget {
   @override
@@ -8,10 +9,9 @@ class Scores extends StatelessWidget {
       child: Column(
         children: [
           CustomButton(
-            title: 'Button 1',
+            title: 'SAT I',
             elevation: 0,
             onPressed: () {
-
               Navigator.push(
                   context,
                   new MaterialPageRoute(builder: (context) => new ScoreSat1())
@@ -19,9 +19,14 @@ class Scores extends StatelessWidget {
             },
           ),
           CustomButton(
-            title: 'Button 2',
+            title: 'SAT II',
             elevation: 0,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(builder: (context) => new ScoreSat2())
+              );
+            },
           )
         ],
       ),

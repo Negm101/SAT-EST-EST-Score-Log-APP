@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:score_log_app/screen/sat1/sat1List.dart';
 import 'package:score_log_app/screen/scores.dart';
 void main() => runApp(MyApp());
 
@@ -12,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: _title,
-      home: ScoreSat1(),
+      home: Home(),
       theme: ThemeData(
         textTheme: GoogleFonts.oxygenTextTheme(
           Theme.of(context).textTheme,
@@ -24,25 +23,25 @@ class MyApp extends StatelessWidget {
 }
 
 /// This is the stateful widget that the main application instantiates.
-class MyStatefulWidget extends StatefulWidget {
-  MyStatefulWidget({Key key}) : super(key: key);
+class Home extends StatefulWidget {
+  Home({Key key}) : super(key: key);
 
   @override
-  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
+  _HomeState createState() => _HomeState();
 }
 
 /// This is the private State class that goes with MyStatefulWidget.
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+class _HomeState extends State<Home> {
   int _selectedIndex = 1;
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static  List<Widget> _widgetOptions = <Widget>[
     Text(
-      'Index 1: Business',
+      'Calculators',
       style: optionStyle,
     ),
     Scores(),
     Text(
-      'Index 2: School',
+      'Tansik',
       style: optionStyle,
     ),
   ];
@@ -58,28 +57,32 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     return Scaffold(
       appBar: AppBar(
 
-        title: const Center(child: Text('Score Log App', textAlign: TextAlign.center,),)
+        title: const Center(child: Text('Score Log', textAlign: TextAlign.center,),)
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.blue,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.calculate),
-            label: 'Calculator',
+            label: 'Calculators',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.list_alt),
+            icon: Icon(Icons.library_add),
             label: 'Scores',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.announcement),
-            label: 'About',
+            icon: Icon(Icons.list_alt),
+            label: 'Tansik',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedFontSize: 12,
+        unselectedFontSize: 12,
+        unselectedItemColor: Colors.grey[350],
+        selectedItemColor: Colors.white,
         onTap: _onItemTapped,
       ),
     );
