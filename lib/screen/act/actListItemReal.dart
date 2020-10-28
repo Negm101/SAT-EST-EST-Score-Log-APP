@@ -1,25 +1,28 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:score_log_app/model/sat2/scoreIIPractice.dart';
-import 'package:score_log_app/model/sat2/scoreIIReal.dart';
+import 'package:score_log_app/model/act/actReal.dart';
 import 'package:score_log_app/services/database.dart';
 import 'package:sqflite/sqflite.dart';
 
-class SAT2ListItemReal extends StatefulWidget {
-  final int score;
+class ActListItemReal extends StatefulWidget {
+  final int englishScore;
+  final int mathScore;
+  final int readingScore;
+  final int scienceScore;
   final int dateYear;
   final int dateDay;
   final int dateMonth;
   final String note;
-  final String subject;
-  EdgeInsets margin;
+  final EdgeInsets margin;
   final VoidCallback onPressedDelete;
 
 
-  SAT2ListItemReal({
+  ActListItemReal({
     Key key,
-    @required this.score,
-    @required this.subject,
+    @required this.englishScore,
+    @required this.mathScore,
+    @required this.readingScore,
+    @required this.scienceScore,
     @required this.margin,
     this.dateDay,
     this.dateMonth,
@@ -29,12 +32,14 @@ class SAT2ListItemReal extends StatefulWidget {
   });
 
   @override
-  _SAT2ListItemRealState createState() => _SAT2ListItemRealState();
+  _ActListItemRealState createState() => _ActListItemRealState();
 }
 
-class _SAT2ListItemRealState extends State<SAT2ListItemReal> {
+class _ActListItemRealState extends State<ActListItemReal> {
   @override
   Widget build(BuildContext context) {
+    double average = (widget.englishScore + widget.mathScore + widget.readingScore + widget.scienceScore).toDouble()/4;
+    int composite =  average.toInt();
     return Container(
       height: MediaQuery.of(context).size.height / 7,
       width: MediaQuery.of(context).size.width,
@@ -101,8 +106,11 @@ class _SAT2ListItemRealState extends State<SAT2ListItemReal> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        scoreText(widget.subject, widget.score),
-                        //scoreText('Total', widget.readingScore + widget.writingScore),
+                        scoreText('English', widget.englishScore),
+                        scoreText('Math', widget.mathScore),
+                        scoreText('Reading', widget.readingScore),
+                        scoreText('Science', widget.scienceScore),
+                        scoreText('Composite', composite),
                       ],
                     ),
                     Container(
@@ -149,7 +157,7 @@ class _SAT2ListItemRealState extends State<SAT2ListItemReal> {
           child: Text(
             label,
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.grey, fontSize: 12),
+            style: TextStyle(color: Colors.grey, fontSize: 8),
           ),
         ),
         Container(
@@ -249,16 +257,16 @@ class _SAT2ListItemRealState extends State<SAT2ListItemReal> {
     }
   }
 }
-class DataSatIIReal{
+class DataActReal{
   DatabaseHelper databaseHelper = DatabaseHelper();
-  ScoreIIReal title = new ScoreIIReal.db();
-  List<ScoreIIReal> scoreList;
+  ActReal title = ActReal.db();
+  List<ActReal> scoreList;
   int count = 0;
 
   //ScoreSat1State sat1state = ScoreSat1State();
   void autoRefresh(Function setState){
     if (scoreList == null) {
-      scoreList = List<ScoreIIReal>();
+      scoreList = List<ActReal>();
       updateListView(setState);
     }
 
@@ -269,8 +277,6 @@ class DataSatIIReal{
   }
 
   int getDateDay(String date) {
-    debugPrint(date);
-    debugPrint(date);
     return DateTime.parse(date).day.toInt();
   }
 
@@ -287,7 +293,7 @@ class DataSatIIReal{
   void updateListView(Function setState) {
     final Future<Database> dbFuture = databaseHelper.initializeDatabase();
     dbFuture.then((database) {
-      Future<List<ScoreIIReal>> noteListFuture = databaseHelper.getScoreIIListReal();
+      Future<List<ActReal>> noteListFuture = databaseHelper.getActReal();
       noteListFuture.then((scoreIList) {
         setState(() {
           this.scoreList = scoreIList;
@@ -300,7 +306,7 @@ class DataSatIIReal{
   void updateListViewSortBy(Function setState, String sortBy) {
     final Future<Database> dbFuture = databaseHelper.initializeDatabase();
     dbFuture.then((database) {
-      Future<List<ScoreIIReal>> noteListFuture = databaseHelper.getScoreIIListRealSortBy(sortBy);
+      Future<List<ActReal>> noteListFuture = databaseHelper.getActRealSortBy(sortBy);
       noteListFuture.then((scoreIList) {
         setState(() {
           this.scoreList = scoreIList;
@@ -309,17 +315,15 @@ class DataSatIIReal{
       });
     });
   }
-
-  void delete(BuildContext context, ScoreIIReal score, Function setState) async {
-    int result = await databaseHelper.deleteScoreSatIIReal(score.id);
+  void deleteAll(Function setState) async{
+    int result = await databaseHelper.deleteAllFrom(title.dbTableName);
     if (result != 0) {
       debugPrint('Score Deleted Successfully');
       updateListView(setState);
     }
   }
-
-  void deleteAll(Function setState) async{
-    int result = await databaseHelper.deleteAllFrom(title.dbTableName);
+  void delete(BuildContext context, ActReal score, Function setState) async {
+    int result = await databaseHelper.deleteActReal(score.id);
     if (result != 0) {
       debugPrint('Score Deleted Successfully');
       updateListView(setState);

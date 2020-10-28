@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:score_log_app/screen/sat1/sat1List.dart';
 import 'package:score_log_app/screen/sat2/sat2List.dart';
 
+import 'act/actList.dart';
+
 class Scores extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,16 @@ class Scores extends StatelessWidget {
               Navigator.push(
                   context,
                   new MaterialPageRoute(builder: (context) => new ScoreSat2())
+              );
+            },
+          ),
+          CustomButton(
+            title: 'ACT',
+            elevation: 0,
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(builder: (context) => new ActScore())
               );
             },
           )

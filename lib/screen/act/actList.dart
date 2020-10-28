@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
-import 'package:score_log_app/model/sat2/scoreIIPractice.dart';
-import 'package:score_log_app/model/sat2/scoreIIReal.dart';
-import 'package:score_log_app/screen/sat2/addSat2Practice.dart';
-import 'package:score_log_app/screen/sat2/sat2ListItemPractice.dart';
-import 'package:score_log_app/screen/sat2/sat2ListItemReal.dart';
+import 'package:score_log_app/model/act/actPractice.dart';
+import 'package:score_log_app/model/act/actReal.dart';
+import 'package:score_log_app/screen/act/actListItemPractice.dart';
+import 'package:score_log_app/screen/act/actListItemReal.dart';
+import 'package:score_log_app/screen/act/addActReal.dart';
 
-import 'addSat2Real.dart';
+import 'addActPractice.dart';
 
 // ignore: must_be_immutable
-class ScoreSat2 extends StatefulWidget {
+class ActScore extends StatefulWidget {
   @override
-  ScoreSat2State createState() => ScoreSat2State();
+  _ActScoreState createState() => _ActScoreState();
 }
 
-class ScoreSat2State extends State<ScoreSat2> {
-  ScoreIIPractice scorePractice = new ScoreIIPractice.db();
-  ScoreIIReal scoreReal = new ScoreIIReal.db();
-  DataSatIIReal real = new DataSatIIReal();
-  DataSatIIPractice practice = new DataSatIIPractice();
+class _ActScoreState extends State<ActScore> {
+  ActReal scoreReal = new ActReal.db();
+  ActPractice scorePractice = new ActPractice.db();
+  DataActReal real = new DataActReal();
+  DataActPractice practice = new DataActPractice();
   int pageOpen = 0;
-
   @override
   Widget build(BuildContext context) {
     practice.autoRefresh(setState);
@@ -31,22 +30,20 @@ class ScoreSat2State extends State<ScoreSat2> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             leading: IconButton(
               icon: Icon(Icons.arrow_back_outlined),
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
-            automaticallyImplyLeading: false,
-            title: Text('SAT II'),
+            title: Text('ACT'),
             actions: [
               PopupMenuButton(
                 onSelected: (button) {
                   if (button == 0) {
                     sortByScore();
                   } else if (button == 1) {
-                    sortBySubject();
-                  } else if (button == 2) {
                     sortByDate();
                   }
                 },
@@ -59,12 +56,8 @@ class ScoreSat2State extends State<ScoreSat2> {
                       value: 0,
                     ),
                     PopupMenuItem(
-                      child: Text('Sort by subject'),
-                      value: 1,
-                    ),
-                    PopupMenuItem(
                       child: Text('Sort by date'),
-                      value: 2,
+                      value: 1,
                     ),
                   ];
                 },
@@ -102,8 +95,8 @@ class ScoreSat2State extends State<ScoreSat2> {
           body: TabBarView(
             physics: NeverScrollableScrollPhysics(),
             children: [
-              getScoreIIReal(),
-              getScoreIIPractice(),
+              getScoreIReal(),
+              getScoreIPractice(),
             ],
           ),
           bottomNavigationBar: BottomAppBar(
@@ -145,10 +138,10 @@ class ScoreSat2State extends State<ScoreSat2> {
               openBuilder: (_, closeContainer) {
                 if (pageOpen == 0) {
                   real.updateListView(setState);
-                  return AddSAT2Real(ScoreIIReal(0, '', '', ''));
+                  return AddActReal(ActReal(0,0,'',0,0,''));
                 } else if (pageOpen == 1) {
                   practice.updateListView(setState);
-                  return AddSAT2Practice(ScoreIIPractice(0, '', '', ''));
+                  return  AddActPractice(ActPractice(0,0,'',0,0,''));
                 } else {
                   return Center(
                     child: Text('error at openBuilder'),
@@ -160,7 +153,7 @@ class ScoreSat2State extends State<ScoreSat2> {
     );
   }
 
-  Widget getScoreIIReal() {
+  Widget getScoreIReal() {
     if (real.scoreList.length == 0) {
       return Center(
         child: Text(
@@ -172,41 +165,44 @@ class ScoreSat2State extends State<ScoreSat2> {
     } else {
       return real.scoreList.length != 0
           ? RefreshIndicator(
-              child: ListView.builder(
-                itemCount: real.scoreList.length,
-                itemBuilder: (BuildContext context, position) {
-                  position = position;
-                  debugPrint(real.scoreList[position].id.toString() +
-                      ' | ' +
-                      real.scoreList[position].score.toString() +
-                      ' | ' +
-                      real.scoreList[position].subject.toString());
-                  return SAT2ListItemReal(
-                    margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
-                    score: real.scoreList[position].score,
-                    subject: real.scoreList[position].subject,
-                    dateDay: real.getDateDay(real.scoreList[position].date),
-                    dateMonth: real.getDateMonth(real.scoreList[position].date),
-                    dateYear: real.getDateYear(real.scoreList[position].date),
-                    onPressedDelete: () {
-                      setState(() {
-                        real.delete(
-                            context, real.scoreList[position], setState);
-                        real.scoreList.removeAt(position);
-                      });
-                    },
-                    note: real.scoreList[position].note,
-                  );
-                },
-              ),
-              onRefresh: getDataReal,
-              displacement: 20,
-            )
+        child: ListView.builder(
+          physics: BouncingScrollPhysics(),
+          itemCount: real.scoreList.length,
+          itemBuilder: (BuildContext context, position) {
+            position = position;
+            debugPrint(real.scoreList[position].id.toString() +
+                ' | ' +
+                real.scoreList[position].englishScore.toString() +
+                ' | ' +
+                real.scoreList[position].mathScore.toString());
+            return ActListItemReal(
+              margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+              englishScore: real.scoreList[position].englishScore,
+              mathScore: real.scoreList[position].mathScore,
+              readingScore: real.scoreList[position].readingScore,
+              scienceScore: real.scoreList[position].scienceScore,
+              dateDay: real.getDateDay(real.scoreList[position].date),
+              dateMonth: real.getDateMonth(real.scoreList[position].date),
+              dateYear: real.getDateYear(real.scoreList[position].date),
+              onPressedDelete: () {
+                setState(() {
+                  real.delete(
+                      context, real.scoreList[position], setState);
+                  real.scoreList.removeAt(position);
+                });
+              },
+              note: real.scoreList[position].note,
+            );
+          },
+        ),
+        onRefresh: getDataReal,
+        displacement: 20,
+      )
           : Center(child: CircularProgressIndicator());
     }
   }
 
-  Widget getScoreIIPractice() {
+  Widget getScoreIPractice() {
     if (practice.scoreList.length == 0) {
       return Center(
         child: Text(
@@ -218,45 +214,53 @@ class ScoreSat2State extends State<ScoreSat2> {
     } else {
       return practice.scoreList.length != 0
           ? RefreshIndicator(
-              child: ListView.builder(
-                itemCount: practice.scoreList.length,
-                itemBuilder: (BuildContext context, position) {
-                  position = position;
-                  debugPrint(position.toString() +
-                      ' | ' +
-                      practice.scoreList[position].id.toString() +
-                      ' | ' +
-                      practice.scoreList[position].score.toString() +
-                      ' | ' +
-                      practice.scoreList[position].subject.toString() +
-                      ' | ' +
-                      practice.scoreList[position].date.toString() +
-                      ' | ' +
-                      practice.scoreList[position].note.toString());
-                  return SAT2ListItemPractice(
-                    margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
-                    score: practice.scoreList[position].score,
-                    subject: practice.scoreList[position].subject,
-                    dateDay:
-                        practice.getDateDay(practice.scoreList[position].date),
-                    dateMonth: practice
-                        .getDateMonth(practice.scoreList[position].date),
-                    dateYear:
-                        practice.getDateYear(practice.scoreList[position].date),
-                    onPressedDelete: () {
-                      setState(() {
-                        practice.delete(
-                            context, practice.scoreList[position], setState);
-                        practice.scoreList.removeAt(position);
-                      });
-                    },
-                    note: practice.scoreList[position].note,
-                  );
-                },
-              ),
-              onRefresh: getDataPractice,
-              displacement: 20,
-            )
+        child: ListView.builder(
+          physics: BouncingScrollPhysics(),
+          itemCount: practice.scoreList.length,
+          itemBuilder: (BuildContext context, position) {
+            position = position;
+            debugPrint(position.toString() +
+                ' | ' +
+                practice.scoreList[position].id.toString() +
+                ' | ' +
+                practice.scoreList[position].englishScore.toString() +
+                ' | ' +
+                practice.scoreList[position].mathScore.toString() +
+                ' | ' +
+                practice.scoreList[position].readingScore.toString() +
+                ' | ' +
+                practice.scoreList[position].scienceScore.toString() +
+                ' | ' +
+                practice.scoreList[position].date.toString() +
+                ' | ' +
+                practice.scoreList[position].note.toString());
+            return ActListItemPractice(
+              margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+              readingScore: practice.scoreList[position].readingScore,
+              englishScore: practice.scoreList[position].englishScore,
+              mathScore: practice.scoreList[position].mathScore,
+              scienceScore:
+              practice.scoreList[position].scienceScore,
+              dateDay:
+              practice.getDateDay(practice.scoreList[position].date),
+              dateMonth: practice
+                  .getDateMonth(practice.scoreList[position].date),
+              dateYear:
+              practice.getDateYear(practice.scoreList[position].date),
+              onPressedDelete: () {
+                setState(() {
+                  practice.delete(
+                      context, practice.scoreList[position], setState);
+                  practice.scoreList.removeAt(position);
+                });
+              },
+              note: practice.scoreList[position].note,
+            );
+          },
+        ),
+        onRefresh: getDataPractice,
+        displacement: 20,
+      )
           : Center(child: CircularProgressIndicator());
     }
   }
@@ -269,19 +273,16 @@ class ScoreSat2State extends State<ScoreSat2> {
     practice.updateListView(setState);
   }
 
-  Future<void> sortBySubject() async {
-    if (pageOpen == 0) {
-      real.updateListViewSortBy(setState, scoreReal.dbSubject);
-    } else if (pageOpen == 1) {
-      practice.updateListViewSortBy(setState, scorePractice.dbSubject);
-    }
-  }
-
   Future<void> sortByScore() async {
     if (pageOpen == 0) {
-      real.updateListViewSortBy(setState, scoreReal.dbScore);
+      real.updateListViewSortBy(setState,
+          '${scoreReal.dbEnglishScore} ASC,${scoreReal.dbMathScore} ASC');
     } else if (pageOpen == 1) {
-      practice.updateListViewSortBy(setState, scorePractice.dbScore);
+      practice.updateListViewSortBy(setState,
+          '${scorePractice.dbReadingScore} ASC,'
+              '${scorePractice.dbMathScore} ASC, '
+              '${scorePractice.dbEnglishScore} ASC, '
+              '${scorePractice.dbScienceScore} ASC ');
     }
   }
 
@@ -324,7 +325,7 @@ class ScoreSat2State extends State<ScoreSat2> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Delete all SAT II scores"),
+      title: Text("Delete all ACT scores"),
       //content: Text("Would you like to continue learning how to use Flutter alerts?"),
       actions: [
         cancelButton,
@@ -340,4 +341,5 @@ class ScoreSat2State extends State<ScoreSat2> {
       },
     );
   }
+
 }

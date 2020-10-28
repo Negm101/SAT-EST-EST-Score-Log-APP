@@ -1,46 +1,32 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:score_log_app/model/sat2/scoreIIPractice.dart';
+import 'package:score_log_app/model/act/actReal.dart';
 import 'package:score_log_app/services/database.dart';
-import 'package:dropdown_search/dropdown_search.dart';
-/*
-Literature	~60
-US History	90
-World History	95
-Math Level 1&2	50
-Bio E/M	80
-Chemistry	85
-Physics	75
-French and German	85 (~85 with listening, 35% are listening)
-Spanish	85 (~85 with listening, 40% are listening
-Hebrew	85
-Italian	80-85
-Latin	70-75
-Chinese with Listening	85 (33% are Listening)
-Japanese and Korean with Listening
-*/
-class AddSAT2Practice extends StatefulWidget {
-  final ScoreIIPractice score;
-  AddSAT2Practice(this.score);
+
+class AddActReal extends StatefulWidget {
+  final ActReal score;
+  AddActReal(this.score);
   @override
   State<StatefulWidget> createState() {
-    return _AddSAT2PracticeState(this.score);
+    return _AddActRealState(this.score);
   }
 }
 
-class _AddSAT2PracticeState extends State<AddSAT2Practice> {
-  _AddSAT2PracticeState(this.score);
+class _AddActRealState extends State<AddActReal> {
+  _AddActRealState(this.score);
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
-  TextEditingController _scoreController = new TextEditingController();
-  TextEditingController _subjectNameController = new TextEditingController();
-  TextEditingController _scoreDateController = new TextEditingController();
+  TextEditingController _englishScoreController = new TextEditingController();
+  TextEditingController _mathScoreController = new TextEditingController();
+  TextEditingController _readingScoreController = new TextEditingController();
+  TextEditingController _scienceScoreController = new TextEditingController();
   TextEditingController _noteController = new TextEditingController();
+  TextEditingController _scoreDateController = new TextEditingController();
   int _state = 0;
-  DatabaseHelper databaseHelper = DatabaseHelper();
-  ScoreIIPractice score;
 
+  DatabaseHelper databaseHelper = DatabaseHelper();
+  ActReal score;
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -73,17 +59,17 @@ class _AddSAT2PracticeState extends State<AddSAT2Practice> {
                             width: MediaQuery.of(context).size.width / 2.5,
                             child: new TextFormField(
                               decoration: const InputDecoration(
-                                labelText: "Score",
-                                hintText: "/100",
+                                labelText: "English",
+                                hintText: "/36",
                                 counterText: '',
                               ),
-                              validator: validateScore,
+                              validator: valScore,
                               autocorrect: false,
                               keyboardType: TextInputType.phone,
-                              maxLength: 4,
-                              controller: _scoreController,
+                              maxLength: 2,
+                              controller: _englishScoreController,
                               onChanged: (String value) {
-                                setScore();
+                                setEnglishScore();
                               },
                             ),
                           ),
@@ -91,24 +77,67 @@ class _AddSAT2PracticeState extends State<AddSAT2Practice> {
                             width: MediaQuery.of(context).size.width / 2.5,
                             child: new TextFormField(
                               decoration: const InputDecoration(
-                                labelText: "Subject",
+                                labelText: "Math",
+                                hintText: '/36',
                                 counterText: '',
-                                //errorText: validateScore(value),
                               ),
+                              validator: valScore,
                               autocorrect: false,
-                              keyboardType: TextInputType.text,
-                              controller: _subjectNameController,
+                              keyboardType: TextInputType.phone,
+                              controller: _mathScoreController,
+                              maxLength: 2,
                               onChanged: (String value) {
-                                setSubjectName();
+                                setMathScore();
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width / 2.5,
+                            child: new TextFormField(
+                              decoration: const InputDecoration(
+                                labelText: "Reading",
+                                hintText: "/36",
+                                counterText: '',
+                              ),
+                              validator: valScore,
+                              autocorrect: false,
+                              keyboardType: TextInputType.phone,
+                              maxLength: 2,
+                              controller: _readingScoreController,
+                              onChanged: (String value) {
+                                setReadingScore();
+                              },
+                            ),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width / 2.5,
+                            child: new TextFormField(
+                              decoration: const InputDecoration(
+                                labelText: "Science",
+                                hintText: '/36',
+                                counterText: '',
+                              ),
+                              validator: valScore,
+                              autocorrect: false,
+                              maxLength: 2,
+                              keyboardType: TextInputType.phone,
+                              controller: _scienceScoreController,
+                              onChanged: (String value) {
+                                setScienceScore();
                               },
                             ),
                           ),
                         ],
                       ),
                       Container(
-                        child: new TextField(
+                        child: new TextFormField(
                           decoration: const InputDecoration(
-                              labelText: "Note", hintText: 'type a simple note', errorMaxLines: 32),
+                              labelText: "Note", hintText: 'type a simple note'),
                           autocorrect: false,
                           maxLength: 32,
                           controller: _noteController,
@@ -125,8 +154,8 @@ class _AddSAT2PracticeState extends State<AddSAT2Practice> {
                               color: Colors.red, // or any other color
                             ),
                           ),
-                          autocorrect: false,
                           validator: validateDate,
+                          autocorrect: false,
                           enabled: false,
                           controller: _scoreDateController,
                         ),
@@ -199,14 +228,7 @@ class _AddSAT2PracticeState extends State<AddSAT2Practice> {
           valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
         ),
       );
-    }else if(_state == 2){
-      return Icon(
-        Icons.error,
-        color: Colors.white,
-        size: 30,
-      );
-    }
-    else {
+    } else {
       return Icon(
         Icons.check,
         color: Colors.white,
@@ -220,7 +242,7 @@ class _AddSAT2PracticeState extends State<AddSAT2Practice> {
       _state = 1;
     });
 
-    Timer(Duration(milliseconds: 1000), () {
+    Timer(Duration(milliseconds: 3300), () {
       setState(() {
         _state = 2;
       });
@@ -234,11 +256,21 @@ class _AddSAT2PracticeState extends State<AddSAT2Practice> {
   double getHeightSize(double factor) {
     return MediaQuery.of(context).size.height * factor;
   }
-  void setScore(){
-    score.score = int.parse(_scoreController.text);
+  void setEnglishScore(){
+    score.englishScore = int.parse(_englishScoreController.text);
+    debugPrint('reading score: ' + score.englishScore.toString());
   }
-  void setSubjectName(){
-    score.subject = _subjectNameController.text;
+  void setMathScore(){
+    score.mathScore = int.parse(_mathScoreController.text);
+    debugPrint('writing score: ' + score.mathScore.toString());
+  }
+  void setReadingScore(){
+    score.readingScore = int.parse(_readingScoreController.text);
+    debugPrint('math no calc score: ' + score.readingScore.toString());
+  }
+  void setScienceScore(){
+    score.scienceScore = int.parse(_scienceScoreController.text);
+    debugPrint('math calc score: ' + score.scienceScore.toString());
   }
   void setDate(){
     score.date = _scoreDateController.text;
@@ -246,23 +278,14 @@ class _AddSAT2PracticeState extends State<AddSAT2Practice> {
   void setNote(){
     score.note = _noteController.text;
   }
-  void _save() async {
-    if(_formKey.currentState.validate()){
-      await databaseHelper.insertScoreSatIIPractice(score);
-      Navigator.pop(context);
-    }
-    else {
-      debugPrint('error');
-    }
-  }
-  String validateScore(String value) {
+  String valScore(String value) {
     if (value.length == 0){
       debugPrint('value length: ' + value.length.toString());
       return "Field can\'t be empty";
     }
-    else if (int.parse(value.toString()) > 100) {
+    else if (int.parse(value.toString()) > 36) {
       debugPrint('value: ' + value.toString() );
-      return "Must be less than 800";
+      return "Must be less than 36";
     }
     else {
       return null;
@@ -271,7 +294,7 @@ class _AddSAT2PracticeState extends State<AddSAT2Practice> {
   String validateDate(String date){
     debugPrint('date: ' + date.length.toString());
     if(date.length == 0){
-      debugPrint('date.length == 0');
+      debugPrint('date.length == ${date.length}');
       return "Field can\'t be empty";
     }
     debugPrint('null');
@@ -284,6 +307,21 @@ class _AddSAT2PracticeState extends State<AddSAT2Practice> {
     }
     else {
       return null;
+    }
+  }
+
+  void _save() async {
+    if(_formKey.currentState.validate()){
+      await databaseHelper.insertScoreActReal(score);
+      debugPrint('reading: ' + _englishScoreController.text);
+      debugPrint('writing: ' + _mathScoreController.text);
+      debugPrint('math: ' + _readingScoreController.text);
+      debugPrint('math(calc) : ' + _scienceScoreController.text);
+      debugPrint('date: ' + _scoreDateController.text);
+      Navigator.pop(context);
+    }
+    else {
+      debugPrint('error at save practice');
     }
   }
 }

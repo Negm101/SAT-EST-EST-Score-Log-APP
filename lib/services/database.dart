@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:score_log_app/model/act/actPractice.dart';
+import 'package:score_log_app/model/act/actReal.dart';
 import 'package:score_log_app/model/sat1/scoreIPractice.dart';
 import 'package:score_log_app/model/sat1/scoreIReal.dart';
 import 'package:score_log_app/model/sat2/scoreIIPractice.dart';
@@ -7,22 +9,6 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-/*
-Literature	~60
-US History	90
-World History	95
-Math Level 1&2	50
-Bio E/M	80
-Chemistry	85
-Physics	75
-French and German	85 (~85 with listening, 35% are listening)
-Spanish	85 (~85 with listening, 40% are listening
-Hebrew	85
-Italian	80-85
-Latin	70-75
-Chinese with Listening	85 (33% are Listening)
-Japanese and Korean with Listening
-*/
 class DatabaseHelper {
 
   static DatabaseHelper _databaseHelper;    // Singleton DatabaseHelper
@@ -31,6 +17,8 @@ class DatabaseHelper {
   ScoreIPractice scoreIPractice = ScoreIPractice.db();
   ScoreIIReal scoreIIReal = ScoreIIReal.db();
   ScoreIIPractice scoreIIPractice = ScoreIIPractice.db();
+  ActPractice scoreActPractice = ActPractice.db();
+  ActReal scoreActReal = ActReal.db();
 
   DatabaseHelper._createInstance(); // Named constructor to create instance of DatabaseHelper
 
@@ -105,6 +93,30 @@ class DatabaseHelper {
             "${scoreIIPractice.dbNote} VARCHAR(34)  NOT NULL DEFAULT 'No note for this test'"
             ")"
     );
+    await db.execute(
+        "CREATE TABLE ${scoreActReal.dbTableName}"
+            "("
+            "${scoreActReal.dbId} INTEGER UNIQUE NOT NULL PRIMARY KEY AUTOINCREMENT,"
+            "${scoreActReal.dbEnglishScore} INTEGER NOT NULL CHECK (${scoreActReal.dbEnglishScore} >= 1 and ${scoreActReal.dbEnglishScore} <= 36),"
+            "${scoreActReal.dbMathScore} INTEGER NOT NULL CHECK ( ${scoreActReal.dbMathScore}  >= 1 and ${scoreActReal.dbMathScore}  <= 36 ),"
+            "${scoreActReal.dbReadingScore} INTEGER NOT NULL CHECK ( ${scoreActReal.dbReadingScore}  >= 1 and ${scoreActReal.dbReadingScore}  <= 36 ),"
+            "${scoreActReal.dbScienceScore} INTEGER NOT NULL CHECK ( ${scoreActReal.dbScienceScore}  >= 1 and ${scoreActReal.dbScienceScore}  <= 36 ),"
+            "${scoreActReal.dbDate} DATE NOT NULL,"
+            "${scoreActReal.dbNote} VARCHAR(34)  NOT NULL DEFAULT 'No note for this test'"
+            ")"
+    );
+    await db.execute(
+        "CREATE TABLE ${scoreActPractice.dbTableName}"
+            "("
+            "${scoreActPractice.dbId} INTEGER UNIQUE NOT NULL PRIMARY KEY AUTOINCREMENT,"
+            "${scoreActPractice.dbEnglishScore} INTEGER NOT NULL CHECK (${scoreActPractice.dbEnglishScore} >= 1 and ${scoreActPractice.dbEnglishScore} <= 75),"
+            "${scoreActPractice.dbMathScore} INTEGER NOT NULL CHECK ( ${scoreActPractice.dbMathScore}  >= 1 and ${scoreActPractice.dbMathScore}  <= 60 ),"
+            "${scoreActPractice.dbReadingScore} INTEGER NOT NULL CHECK ( ${scoreActPractice.dbReadingScore}  >= 1 and ${scoreActPractice.dbReadingScore}  <= 40 ),"
+            "${scoreActPractice.dbScienceScore} INTEGER NOT NULL CHECK ( ${scoreActPractice.dbScienceScore}  >= 1 and ${scoreActPractice.dbScienceScore}  <= 40 ),"
+            "${scoreActPractice.dbDate} DATE NOT NULL,"
+            "${scoreActPractice.dbNote} VARCHAR(34)  NOT NULL DEFAULT 'No note for this test'"
+            ")"
+    );
     debugPrint('tables Created');
   }
 
@@ -132,6 +144,19 @@ class DatabaseHelper {
     var result = await db.query(scoreIIPractice.dbTableName, orderBy: '${scoreIIPractice.dbId} ASC');
     return result;
   }
+
+  Future<List<Map<String, dynamic>>> getActMapListReal() async {
+    Database db = await this.database;
+    var result = await db.query(scoreActReal.dbTableName, orderBy: '${scoreActReal.dbId} ASC');
+    return result;
+  }
+
+  Future<List<Map<String, dynamic>>> getActMapListPractice() async {
+    Database db = await this.database;
+    var result = await db.query(scoreActPractice.dbTableName, orderBy: '${scoreActPractice.dbId} ASC');
+    return result;
+  }
+
 
   // Insert Operation: Insert an object to database
   Future<int> insertScoreSatIReal(ScoreIReal score) async {
@@ -162,6 +187,21 @@ class DatabaseHelper {
     return result;
   }
 
+  Future<int> insertScoreActReal(ActReal score) async {
+    Database db = await this.database;
+    var result = await db.insert(scoreActReal.dbTableName, score.toMap());
+    debugPrint('Real II saved');
+    return result;
+  }
+
+  Future<int> insertScoreActPractice(ActPractice score) async {
+    Database db = await this.database;
+    var result = await db.insert(scoreActPractice.dbTableName, score.toMap());
+    debugPrint('Practice II saved');
+    return result;
+  }
+
+
   // Update Operation: Update an object and save it to database
   Future<int> updateScoreSatIReal(ScoreIReal score) async {
     var db = await this.database;
@@ -187,6 +227,17 @@ class DatabaseHelper {
     return result;
   }
 
+  Future<int> updateActReal(ActReal score) async {
+    var db = await this.database;
+    var result = await db.update(scoreActReal.dbTableName, score.toMap(), where: '${scoreActReal.dbId} = ?', whereArgs: [score.id]);
+    return result;
+  }
+
+  Future<int> updateActPractice(ActPractice score) async {
+    var db = await this.database;
+    var result = await db.update(scoreActPractice.dbTableName, score.toMap(), where: '${scoreActPractice.dbId} = ?', whereArgs: [score.id]);
+    return result;
+  }
   // Delete Operation: Delete an object from database
   Future<int> deleteScoreSatIReal(int id) async {
     var db = await this.database;
@@ -211,6 +262,26 @@ class DatabaseHelper {
     int result = await db.rawDelete('DELETE FROM ${scoreIIPractice.dbTableName} WHERE ${scoreIIPractice.dbId} = $id');
     return result;
   }
+
+  Future<int> deleteActReal(int id) async {
+    var db = await this.database;
+    int result = await db.rawDelete('DELETE FROM ${scoreActReal.dbTableName} WHERE ${scoreActPractice.dbId} = $id');
+    return result;
+  }
+
+  Future<int> deleteActPractice(int id) async {
+    var db = await this.database;
+    int result = await db.rawDelete('DELETE FROM ${scoreActPractice.dbTableName} WHERE ${scoreActPractice.dbId} = $id');
+    return result;
+  }
+
+  Future<int> deleteAllFrom(String tableName) async {
+    var db = await this.database;
+    int result = await db.rawDelete("DELETE FROM " + tableName);
+    return result;
+  }
+
+
 
   // Get number of objects in database
   Future<int> getCountSatIReal() async {
@@ -237,6 +308,20 @@ class DatabaseHelper {
   Future<int> getCountSatIIPractice() async {
     Database db = await this.database;
     List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) from ${scoreIIPractice.dbTableName}');
+    int result = Sqflite.firstIntValue(x);
+    return result;
+  }
+
+  Future<int> getCountActReal() async {
+    Database db = await this.database;
+    List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) from ${scoreActReal.dbTableName}');
+    int result = Sqflite.firstIntValue(x);
+    return result;
+  }
+
+  Future<int> getCountActPractice() async {
+    Database db = await this.database;
+    List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) from ${scoreActPractice.dbTableName}');
     int result = Sqflite.firstIntValue(x);
     return result;
   }
@@ -353,6 +438,64 @@ class DatabaseHelper {
 
     return scoreList;
   }
+
+  Future<List<ActReal>> getActReal() async {
+    Database db = await this.database;
+    var scoreMapList = await db.query(scoreActReal.dbTableName, orderBy: '${scoreActReal.dbId} ASC'); // Get 'Map List' from database
+    int count = scoreMapList.length;         // Count the number of map entries in db table
+
+    List<ActReal> scoreList = List<ActReal>();
+    // For loop to create a 'Note List' from a 'Map List'
+    for (int i = 0; i < count; i++) {
+      scoreList.add(ActReal.fromMapObject(scoreMapList[i]));
+    }
+
+    return scoreList;
+  }
+
+  Future<List<ActReal>> getActRealSortBy(String sortBy) async {
+    Database db = await this.database;
+    var scoreMapList = await db.query(scoreActReal.dbTableName, orderBy: '$sortBy'); // Get 'Map List' from database
+    int count = scoreMapList.length;         // Count the number of map entries in db table
+
+    List<ActReal> scoreList = List<ActReal>();
+    // For loop to create a 'Note List' from a 'Map List'
+    for (int i = 0; i < count; i++) {
+      scoreList.add(ActReal.fromMapObject(scoreMapList[i]));
+    }
+
+    return scoreList;
+  }
+
+  Future<List<ActPractice>> getActPractice() async {
+    Database db = await this.database;
+    var scoreMapList = await db.query(scoreActPractice.dbTableName, orderBy: '${scoreActPractice.dbId} ASC'); // Get 'Map List' from database
+    int count = scoreMapList.length;         // Count the number of map entries in db table
+
+    List<ActPractice> scoreList = List<ActPractice>();
+    // For loop to create a 'Note List' from a 'Map List'
+    for (int i = 0; i < count; i++) {
+      scoreList.add(ActPractice.fromMapObject(scoreMapList[i]));
+    }
+
+    return scoreList;
+  }
+
+  Future<List<ActPractice>> getActPracticeSortBy(String sortBy) async {
+    Database db = await this.database;
+    var scoreMapList = await db.query(scoreActPractice.dbTableName, orderBy: '$sortBy'); // Get 'Map List' from database
+    int count = scoreMapList.length;         // Count the number of map entries in db table
+
+    List<ActPractice> scoreList = List<ActPractice>();
+    // For loop to create a 'Note List' from a 'Map List'
+    for (int i = 0; i < count; i++) {
+      scoreList.add(ActPractice.fromMapObject(scoreMapList[i]));
+    }
+
+    return scoreList;
+  }
+
+
 
 }
 

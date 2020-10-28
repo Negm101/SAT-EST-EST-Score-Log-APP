@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:score_log_app/model/sat1/scoreIPractice.dart';
 import 'package:score_log_app/services/database.dart';
-//TODO: FIX (MATH CLAC) AND WRITING NOT APPEARING IN LIST
+
 class AddSAT1Practice extends StatefulWidget {
   final ScoreIPractice scoreI;
   AddSAT1Practice(this.scoreI);

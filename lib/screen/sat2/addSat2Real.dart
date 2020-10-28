@@ -1,13 +1,19 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:score_log_app/model/sat2/scoreIIPractice.dart';
+import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:score_log_app/model/sat2/scoreIIReal.dart';
 import 'package:score_log_app/services/database.dart';
-
+import 'package:flutter_picker/flutter_picker.dart';
+//TODO: INVALID DATE FORMAT ERROR IN DATE PICKER ADAPTER
+//TODO: COMPLETE ADDING SCORE FORM AND IMPLEMENTED TO ALL SCORES
 class AddSAT2Real extends StatefulWidget {
   final ScoreIIReal score;
+
   AddSAT2Real(this.score);
+
   @override
   State<StatefulWidget> createState() {
     return _AddSAT2RealState(this.score);
@@ -16,15 +22,38 @@ class AddSAT2Real extends StatefulWidget {
 
 class _AddSAT2RealState extends State<AddSAT2Real> {
   _AddSAT2RealState(this.score);
+
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
   TextEditingController _scoreController = new TextEditingController();
-  TextEditingController _subjectNameController = new TextEditingController();
-  TextEditingController _scoreDateController = new TextEditingController();
+  TextEditingController _scoreDateController =
+      new TextEditingController(text: DateTime.now().toString());
   TextEditingController _noteController = new TextEditingController();
+  TextEditingController _subjectNameController =
+      TextEditingController(text: 'Math Level 1');
+  TextEditingController _scoreDateSaveController = new TextEditingController();
   int _state = 0;
   DatabaseHelper databaseHelper = DatabaseHelper();
   ScoreIIReal score;
+  final subjects = [
+    "Math Level 1",
+    "Math Level 2",
+    "Biology E",
+    'Biology M',
+    'Literature',
+    'US History',
+    'World History',
+    'Chemistry',
+    'Physics',
+    'French',
+    'German',
+    'Spanish',
+    'Italian',
+    'Latin',
+    'Chinese',
+    'Japanese',
+    'Korean'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -43,57 +72,41 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
       body: new Form(
           key: _formKey,
           child: Container(
-
             child: ListView(
               children: [
                 Container(
-                  margin: EdgeInsets.only(left: getWidthSize(0.05), right: getWidthSize(0.05)),
+                  margin: EdgeInsets.only(
+                      left: getWidthSize(0.05), right: getWidthSize(0.05)),
                   child: new Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width / 2.5,
-                            child: new TextFormField(
-                              decoration: const InputDecoration(
-                                labelText: "Score",
-                                hintText: "/800",
-                                counterText: '',
-                              ),
-                              validator: validateScore,
-                              autocorrect: false,
-                              keyboardType: TextInputType.phone,
-                              maxLength: 4,
-                              controller: _scoreController,
-                              onChanged: (String value) {
-                                setScore();
-                              },
-                            ),
+                      Container(
+                        margin: EdgeInsets.only(top: 10, bottom: 10),
+                        child: new TextFormField(
+                          decoration: const InputDecoration(
+                            //border: OutlineInputBorder(),
+                            labelText: "Score",
+                            hintText: "/800",
+                            counterText: '',
                           ),
-                          Container(
-                            width: MediaQuery.of(context).size.width / 2.5,
-                            child: new TextFormField(
-                              decoration: const InputDecoration(
-                                labelText: "Subject Name",
-                                counterText: '',
-                                //errorText: validateScore(value),
-                              ),
-                              autocorrect: false,
-                              keyboardType: TextInputType.text,
-                              controller: _subjectNameController,
-                              onChanged: (String value) {
-                                setSubjectName();
-                              },
-                            ),
-                          ),
-                        ],
+                          validator: validateScore,
+                          autocorrect: false,
+                          keyboardType: TextInputType.phone,
+                          maxLength: 4,
+                          controller: _scoreController,
+                          onChanged: (String value) {
+                            setScore();
+                          },
+                        ),
                       ),
                       Container(
+                        margin: EdgeInsets.only(top: 10, bottom: 10),
                         child: new TextField(
                           decoration: const InputDecoration(
-                              labelText: "Note", hintText: 'type a simple note', errorMaxLines: 32),
+                              //border: OutlineInputBorder(),
+                              labelText: "Note",
+                              hintText: 'type a simple note',
+                              errorMaxLines: 32),
                           autocorrect: false,
                           maxLength: 32,
                           controller: _noteController,
@@ -102,9 +115,11 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
                           },
                         ),
                       ),
-                      Container(
+                      /*Container(
+                        margin: EdgeInsets.only(top: 10, bottom: 10),
                         child: new TextFormField(
                           decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
                             labelText: "Date of taking the test",
                             errorStyle: TextStyle(
                               color: Colors.red, // or any other color
@@ -115,8 +130,58 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
                           enabled: false,
                           controller: _scoreDateController,
                         ),
+                      ),*/
+                      /*
+                      Container(
+                        margin: EdgeInsets.only(top: 20, bottom: 20),
+                        child: DropdownSearch<String>(
+                            mode: Mode.MENU,
+                            showSelectedItem: true,
+                            items: subjects,
+                            label: "Subject",
+                            onChanged: (value) {
+                              setState(() {
+                                _subjectName = value;
+                                setSubjectName();
+                              });
+                            },
+                            selectedItem: _subjectName),
+                      ),*/
+                      Container(
+                        margin: EdgeInsets.only(top: 20, bottom: 20),
+                        child: TextFormField(
+                          validator: validateDate,
+                          readOnly: true,
+                          controller: _subjectNameController,
+                          decoration: InputDecoration(
+                            //contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
+                            border: OutlineInputBorder(),
+                            labelText: 'Subject',
+                            hintText: _subjectNameController.text,
+                            suffixIcon: Icon(Icons.arrow_drop_down),
+                          ),
+                          onTap: () {
+                            showPickerSubject(context);
+                          },
+                        ),
                       ),
-
+                      Container(
+                        child: TextFormField(
+                          validator: validateDate,
+                          readOnly: true,
+                          controller: _scoreDateController,
+                          decoration: InputDecoration(
+                            //contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
+                            border: OutlineInputBorder(),
+                            labelText: 'Date',
+                            hintText: 'Date of taking the test',
+                            suffixIcon: Icon(Icons.arrow_drop_down),
+                          ),
+                          onTap: () {
+                            showPickerDate(context);
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -124,40 +189,16 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
             ),
           )),
       bottomNavigationBar: BottomAppBar(
-
         child: Container(
-          height: getHeightSize(.34),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Expanded(
-                child: CupertinoDatePicker(
-                  minimumDate: DateTime(2000),
-                  mode: CupertinoDatePickerMode.date,
-                  onDateTimeChanged: (DateTime dateTime) {
-                    setState(() {
-                      _scoreDateController.value = TextEditingValue(text: dateTime.toString());
-                      setDate();
-                    });
-                    print("dateTime: $dateTime");
-                  },
-                ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                color: Colors.blue,
-                child: FlatButton(
-                  child: setUpButtonChild(),
-                  onPressed: () {
-                    setState(() {
-                      _save();
-                    });
-                  },
-                ),
-              ),
-
-            ],
+          width: MediaQuery.of(context).size.width,
+          color: Colors.blue,
+          child: FlatButton(
+            child: setUpButtonChild(),
+            onPressed: () {
+              setState(() {
+                _save();
+              });
+            },
           ),
         ),
       ),
@@ -171,10 +212,8 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
     if (_state == 0) {
       return new Text(
         "ADD",
-        style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold
-        ),
+        style:
+            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       );
     } else if (_state == 1) {
       return SizedBox(
@@ -185,14 +224,13 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
           valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
         ),
       );
-    }else if(_state == 2){
+    } else if (_state == 2) {
       return Icon(
         Icons.error,
         color: Colors.white,
         size: 30,
       );
-    }
-    else {
+    } else {
       return Icon(
         Icons.check,
         color: Colors.white,
@@ -220,56 +258,105 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
   double getHeightSize(double factor) {
     return MediaQuery.of(context).size.height * factor;
   }
-  void setScore(){
+
+  void setScore() {
     score.score = int.parse(_scoreController.text);
   }
-  void setSubjectName(){
+
+  void setSubjectName() {
     score.subject = _subjectNameController.text;
   }
-  void setDate(){
+
+  void setDate() {
     score.date = _scoreDateController.text;
   }
-  void setNote(){
+
+  void setNote() {
     score.note = _noteController.text;
   }
+
   void _save() async {
-    if(_formKey.currentState.validate()){
+    if (_formKey.currentState.validate()) {
+      setSubjectName();
+      setDate();
       await databaseHelper.insertScoreSatIIReal(score);
       Navigator.pop(context);
-    }
-    else {
+    } else {
       debugPrint('error');
     }
   }
+
   String validateScore(String value) {
-    if (value.length == 0){
+    if (value.length == 0) {
       debugPrint('value length: ' + value.length.toString());
       return "Field can\'t be empty";
-    }
-    else if (int.parse(value.toString()) > 800) {
-      debugPrint('value: ' + value.toString() );
+    } else if (int.parse(value.toString()) > 800) {
+      debugPrint('value: ' + value.toString());
       return "Must be less than 800";
-    }
-    else {
+    } else {
       return null;
     }
   }
-  String validateDate(String date){
+
+  String validateDate(String date) {
     debugPrint('date: ' + date.length.toString());
-    if(date.length == 0){
+    if (date.length == 0) {
       debugPrint('date.length == 0');
       return "Field can\'t be empty";
     }
     debugPrint('null');
     return null;
   }
-  String validateNote(String note){
-    if (note.length > 32){
+
+  String validateNote(String note) {
+    if (note.length > 32) {
       debugPrint('note length: ' + note.length.toString());
       return "Characters must be less than 32";
-    }
-    else {
+    } else {
       return null;
     }
+  }
+
+  showPickerSubject(BuildContext context) {
+    new Picker(
+        adapter: PickerDataAdapter<String>(pickerdata: subjects),
+        changeToFirst: true,
+        hideHeader: false,
+        headercolor: Colors.blue,
+        cancelTextStyle:
+            TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        confirmTextStyle:
+            TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        onConfirm: (Picker picker, List value) {
+          setState(() {
+            _subjectNameController.text = picker.adapter.text
+                .toString()
+                .replaceAll("[", "")
+                .replaceAll(']', '');
+            setSubjectName();
+          });
+        }).showModal(this.context); //_scaffoldKey.currentState);
+  }
+
+  showPickerDate(BuildContext context) {
+    Picker(
+        hideHeader: false,
+        adapter: DateTimePickerAdapter(
+          minValue: DateTime(2000, 1, 1),
+          maxValue: DateTime.now(),
+        ),
+        headercolor: Colors.blue,
+        cancelTextStyle:
+            TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        confirmTextStyle:
+            TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        selectedTextStyle: TextStyle(color: Colors.blue),
+        onConfirm: (Picker picker, List value) {
+          String dateTime = "${(picker.adapter as DateTimePickerAdapter).value.year.toString()}-${(picker.adapter as DateTimePickerAdapter).value.month.toString()}-${(picker.adapter as DateTimePickerAdapter).value.day.toString()}";
+          _scoreDateController.text = dateTime;
+          _scoreDateSaveController.text = (picker.adapter as DateTimePickerAdapter).value.toString();
+          setDate();
+          print('save date:' + (picker.adapter as DateTimePickerAdapter).value.toString());
+        }).showModal(context);
   }
 }

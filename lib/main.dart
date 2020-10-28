@@ -70,7 +70,7 @@ class _HomeState extends State<Home> {
             label: 'Calculators',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.library_add),
+            icon: Icon(Icons.analytics),
             label: 'Scores',
           ),
           BottomNavigationBarItem(

@@ -11,6 +11,7 @@ class SAT1ListItemReal extends StatefulWidget {
   final int dateDay;
   final int dateMonth;
   final String note;
+  final EdgeInsets margin;
   final VoidCallback onPressedDelete;
 
 
@@ -21,6 +22,7 @@ class SAT1ListItemReal extends StatefulWidget {
     @required this.dateDay,
     @required this.dateMonth,
     @required this.dateYear,
+    @required this.margin,
     this.onPressedDelete,
     this.note,
   });
@@ -35,7 +37,7 @@ class _SAT1ListItemRealState extends State<SAT1ListItemReal> {
     return Container(
       height: MediaQuery.of(context).size.height / 7,
       width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.only(left: 10, right: 10, top: 20),
+      margin: widget.margin,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
         color: Colors.white,
@@ -250,6 +252,7 @@ class _SAT1ListItemRealState extends State<SAT1ListItemReal> {
 }
 class DataSatIReal{
   DatabaseHelper databaseHelper = DatabaseHelper();
+  ScoreIReal title = new ScoreIReal.db();
   List<ScoreIReal> scoreList;
   int count = 0;
 
@@ -308,6 +311,14 @@ class DataSatIReal{
 
   void delete(BuildContext context, ScoreIReal score, Function setState) async {
     int result = await databaseHelper.deleteScoreSatIReal(score.id);
+    if (result != 0) {
+      debugPrint('Score Deleted Successfully');
+      updateListView(setState);
+    }
+  }
+
+  void deleteAll(Function setState) async{
+    int result = await databaseHelper.deleteAllFrom(title.dbTableName);
     if (result != 0) {
       debugPrint('Score Deleted Successfully');
       updateListView(setState);

@@ -99,6 +99,24 @@ class ScoreSat1State extends State<ScoreSat1> {
               getScoreIPractice(),
             ],
           ),
+          bottomNavigationBar: BottomAppBar(
+            shape: CircularNotchedRectangle(),
+            child: new Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  color: Colors.white,
+                  onPressed: () {
+                    showDialogDelete(context);
+                  },
+                ),
+              ],
+            ),
+            color: Colors.blue,
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           floatingActionButton: OpenContainer(
               closedBuilder: (_, openContainer) {
                 return FloatingActionButton(
@@ -158,6 +176,7 @@ class ScoreSat1State extends State<ScoreSat1> {
                       ' | ' +
                       real.scoreList[position].mathScore.toString());
                   return SAT1ListItemReal(
+                    margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
                     englishScore: real.scoreList[position].englishScore,
                     mathScore: real.scoreList[position].mathScore,
                     dateDay: real.getDateDay(real.scoreList[position].date),
@@ -214,6 +233,7 @@ class ScoreSat1State extends State<ScoreSat1> {
                       ' | ' +
                       practice.scoreList[position].note.toString());
                   return SAT1ListItemPractice(
+                    margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
                     readingScore: practice.scoreList[position].readingScore,
                     writingScore: practice.scoreList[position].writingScore,
                     mathCalcScore: practice.scoreList[position].mathCalcScore,
@@ -270,6 +290,53 @@ class ScoreSat1State extends State<ScoreSat1> {
     } else if (pageOpen == 1) {
       practice.updateListViewSortBy(setState, scorePractice.dbDate);
     }
+  }
+
+  EdgeInsets getMargin(int length, int id){
+    if (id == length){
+      return EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 80);
+    }
+    else{
+      return EdgeInsets.only(left: 10, right: 10, top: 20);
+    }
+  }
+  showDialogDelete(BuildContext context) {
+
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel", style: TextStyle(color: Colors.grey),),
+      onPressed:  () { Navigator.pop(context);},
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Delete", style: TextStyle(color: Colors.red),),
+      onPressed:  () {
+        if(pageOpen == 0){
+          real.deleteAll(setState);
+        }
+        else if(pageOpen == 1){
+          practice.deleteAll(setState);
+        }
+        Navigator.of(context).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Delete all SAT I scores"),
+      //content: Text("Would you like to continue learning how to use Flutter alerts?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
 }

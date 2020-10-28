@@ -13,6 +13,7 @@ class SAT1ListItemPractice extends StatefulWidget {
   final int dateDay;
   final int dateMonth;
   final String note;
+  final EdgeInsets margin;
   final VoidCallback onPressedDelete;
 
 
@@ -22,6 +23,7 @@ class SAT1ListItemPractice extends StatefulWidget {
     @required this.writingScore,
     @required this.mathNoCalScore,
     @required this.mathCalcScore,
+    @required this.margin,
     this.dateDay,
     this.dateMonth,
     this.dateYear,
@@ -39,7 +41,7 @@ class _SAT1ListItemPracticeState extends State<SAT1ListItemPractice> {
     return Container(
       height: MediaQuery.of(context).size.height / 7,
       width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.only(left: 10, right: 10, top: 20),
+      margin: widget.margin,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
         color: Colors.white,
@@ -255,6 +257,7 @@ class _SAT1ListItemPracticeState extends State<SAT1ListItemPractice> {
 }
 class DataSatIPractice{
   DatabaseHelper databaseHelper = DatabaseHelper();
+  ScoreIPractice title = new ScoreIPractice.db();
   List<ScoreIPractice> scoreList;
   int count = 0;
 
@@ -316,6 +319,14 @@ class DataSatIPractice{
 
   void delete(BuildContext context, ScoreIPractice score, Function setState) async {
     int result = await databaseHelper.deleteScoreSatIPractice(score.id);
+    if (result != 0) {
+      debugPrint('Score Deleted Successfully');
+      updateListView(setState);
+    }
+  }
+
+  void deleteAll(Function setState) async{
+    int result = await databaseHelper.deleteAllFrom(title.dbTableName);
     if (result != 0) {
       debugPrint('Score Deleted Successfully');
       updateListView(setState);
