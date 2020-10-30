@@ -1,12 +1,17 @@
 import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_picker/Picker.dart';
+import 'package:intl/intl.dart';
 import 'package:score_log_app/model/sat1/scoreIReal.dart';
 import 'package:score_log_app/services/database.dart';
 
 class AddSAT1Real extends StatefulWidget {
   final ScoreIReal scoreI;
+
   AddSAT1Real(this.scoreI);
+
   @override
   State<StatefulWidget> createState() {
     return _AddSAT1RealState(this.scoreI);
@@ -15,15 +20,15 @@ class AddSAT1Real extends StatefulWidget {
 
 class _AddSAT1RealState extends State<AddSAT1Real> {
   _AddSAT1RealState(this.scoreI);
+
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
   TextEditingController _englishScoreController = new TextEditingController();
   TextEditingController _mathScoreController = new TextEditingController();
   TextEditingController _noteController = new TextEditingController();
-  TextEditingController _scoreDateController = new TextEditingController();
+  TextEditingController _scoreDateController = new TextEditingController(
+      text: DateFormat('yyyy-MM-dd').format(DateTime.now()).toString());
   String scoreType = 'Practice';
-  bool isPracticeSelected = true;
-  bool isRealSelected = false;
   int _state = 0;
   DatabaseHelper databaseHelper = DatabaseHelper();
   ScoreIReal scoreI;
@@ -97,9 +102,12 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
                         ],
                       ),
                       Container(
+                        margin: EdgeInsets.only(top: 10, bottom: 10),
                         child: new TextField(
                           decoration: const InputDecoration(
-                              labelText: "Note", hintText: 'type a simple note', errorMaxLines: 32),
+                              labelText: "Note",
+                              hintText: 'type a simple note',
+                              errorMaxLines: 1),
                           autocorrect: false,
                           maxLength: 32,
                           controller: _noteController,
@@ -109,17 +117,18 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
                         ),
                       ),
                       Container(
-                        child: new TextFormField(
-                          decoration: const InputDecoration(
-                            labelText: "Date of taking the test",
-                            errorStyle: TextStyle(
-                              color: Colors.red, // or any other color
-                            ),
-                          ),
-                          autocorrect: false,
+                        child: TextFormField(
                           validator: validateDate,
-                          enabled: false,
+                          readOnly: true,
                           controller: _scoreDateController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Date of taking the test',
+                            suffixIcon: Icon(Icons.date_range),
+                          ),
+                          onTap: () {
+                            showPickerDate(context);
+                          },
                         ),
                       ),
 
@@ -132,38 +141,15 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
       bottomNavigationBar: BottomAppBar(
 
         child: Container(
-          height: getHeightSize(.34),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Expanded(
-                child: CupertinoDatePicker(
-                  minimumDate: DateTime(2000),
-                  mode: CupertinoDatePickerMode.date,
-                  onDateTimeChanged: (DateTime dateTime) {
-                    setState(() {
-                      _scoreDateController.value = TextEditingValue(text: dateTime.toString());
-                      setDate();
-                    });
-                    print("dateTime: $dateTime");
-                  },
-                ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                color: Colors.blue,
-                child: FlatButton(
-                  child: setUpButtonChild(),
-                  onPressed: () {
-                    setState(() {
-                      _save();
-                    });
-                  },
-                ),
-              ),
-
-            ],
+          width: MediaQuery.of(context).size.width,
+          color: Colors.blue,
+          child: FlatButton(
+            child: setUpButtonChild(),
+            onPressed: () {
+              setState(() {
+                _save();
+              });
+            },
           ),
         ),
       ),
@@ -243,6 +229,7 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
   }
   void _save() async {
       if(_formKey.currentState.validate()){
+        setDate();
         await databaseHelper.insertScoreSatIReal(scoreI);
         Navigator.pop(context);
       }
@@ -256,8 +243,12 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
       return "Field can\'t be empty";
     }
     else if (int.parse(value.toString()) > 800) {
-      debugPrint('value: ' + value.toString() );
-      return "Must be less than 800";
+      debugPrint('value: ' + value.toString());
+      return "At most 800";
+    }
+    else if (int.parse(value.toString()) < 200) {
+      debugPrint('value: ' + value.toString());
+      return "At least 200";
     }
     else {
       return null;
@@ -272,13 +263,38 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
     debugPrint('null');
     return null;
   }
-  String validateNote(String note){
-    if (note.length > 32){
+
+  String validateNote(String note) {
+    if (note.length > 32) {
       debugPrint('note length: ' + note.length.toString());
-      return "Characters must be less than 32";
+      return "At most 32 characters";
     }
     else {
       return null;
     }
+  }
+
+  showPickerDate(BuildContext context) {
+    Picker(
+        hideHeader: false,
+        adapter: DateTimePickerAdapter(
+          minValue: DateTime(2000, 1, 1),
+          maxValue: DateTime.now(),
+        ),
+        headercolor: Colors.blue,
+        cancelTextStyle: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.bold),
+        confirmTextStyle: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.bold),
+        selectedTextStyle: TextStyle(color: Colors.blue),
+        onConfirm: (Picker picker, List value) {
+          var date = (picker.adapter as DateTimePickerAdapter).value;
+          _scoreDateController.text = getDateFormat(date);
+          setDate();
+        }).showModal(context);
+  }
+
+  String getDateFormat(DateTime date) {
+    return DateFormat('yyyy-MM-dd').format(date);
   }
 }

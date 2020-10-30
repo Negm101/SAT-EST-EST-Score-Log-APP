@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:score_log_app/screen/calculator.dart';
 import 'package:score_log_app/screen/scores.dart';
+import 'package:score_log_app/screen/tansik.dart';
+
 void main() => runApp(MyApp());
 
 
 class MyApp extends StatelessWidget {
-  static const String _title = 'Score Log';
+  static const String _title = 'EgyScore';
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -13,9 +17,11 @@ class MyApp extends StatelessWidget {
       title: _title,
       home: Home(),
       theme: ThemeData(
-        textTheme: GoogleFonts.oxygenTextTheme(
-          Theme.of(context).textTheme,
-        )
+          textTheme: GoogleFonts.oxygenTextTheme(
+            Theme
+                .of(context)
+                .textTheme,
+          )
       ),
     );
 
@@ -33,17 +39,10 @@ class Home extends StatefulWidget {
 /// This is the private State class that goes with MyStatefulWidget.
 class _HomeState extends State<Home> {
   int _selectedIndex = 1;
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static  List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Calculators',
-      style: optionStyle,
-    ),
     Scores(),
-    Text(
-      'Tansik',
-      style: optionStyle,
-    ),
+    Calculator(),
+    Tansik(),
   ];
 
   void _onItemTapped(int index) {
@@ -57,7 +56,8 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
 
-        title: const Center(child: Text('Score Log', textAlign: TextAlign.center,),)
+          title: const Center(
+            child: Text('EgyScore', textAlign: TextAlign.center,),)
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
@@ -66,12 +66,12 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.blue,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.calculate),
-            label: 'Calculators',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.analytics),
             label: 'Scores',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calculate),
+            label: 'Calculators',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list_alt),
@@ -81,7 +81,7 @@ class _HomeState extends State<Home> {
         currentIndex: _selectedIndex,
         selectedFontSize: 12,
         unselectedFontSize: 12,
-        unselectedItemColor: Colors.grey[350],
+        unselectedItemColor: Colors.grey[300],
         selectedItemColor: Colors.white,
         onTap: _onItemTapped,
       ),

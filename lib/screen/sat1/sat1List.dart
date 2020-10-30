@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
+import 'package:flutter/material.dart';
 import 'package:score_log_app/model/sat1/scoreIPractice.dart';
 import 'package:score_log_app/model/sat1/scoreIReal.dart';
 import 'package:score_log_app/screen/sat1/addSat1Practice.dart';
@@ -138,10 +138,12 @@ class ScoreSat1State extends State<ScoreSat1> {
               openBuilder: (_, closeContainer) {
                 if (pageOpen == 0) {
                   real.updateListView(setState);
-                  return AddSAT1Real(ScoreIReal(0, 0, '', 'Practice', ''));
+                  return AddSAT1Real(ScoreIReal(
+                      0, 0, '', 'Practice', '(no note was specified)'));
                 } else if (pageOpen == 1) {
                   practice.updateListView(setState);
-                  return AddSAT1Practice(ScoreIPractice(0, 0, '', 0, 0, ''));
+                  return AddSAT1Practice(ScoreIPractice(
+                      0, 0, '', 0, 0, '(no note was specified)'));
                 } else {
                   return Center(
                     child: Text('error at openBuilder'),

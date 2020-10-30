@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:score_log_app/model/sat2/scoreIIPractice.dart';
 import 'package:score_log_app/model/sat2/scoreIIReal.dart';
 import 'package:score_log_app/services/database.dart';
 import 'package:sqflite/sqflite.dart';
 
+// ignore: must_be_immutable
 class SAT2ListItemReal extends StatefulWidget {
   final int score;
   final int dateYear;

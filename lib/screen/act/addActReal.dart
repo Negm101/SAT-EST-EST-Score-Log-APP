@@ -1,12 +1,17 @@
 import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_picker/Picker.dart';
+import 'package:intl/intl.dart';
 import 'package:score_log_app/model/act/actReal.dart';
 import 'package:score_log_app/services/database.dart';
 
 class AddActReal extends StatefulWidget {
   final ActReal score;
+
   AddActReal(this.score);
+
   @override
   State<StatefulWidget> createState() {
     return _AddActRealState(this.score);
@@ -15,6 +20,7 @@ class AddActReal extends StatefulWidget {
 
 class _AddActRealState extends State<AddActReal> {
   _AddActRealState(this.score);
+
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
   TextEditingController _englishScoreController = new TextEditingController();
@@ -22,11 +28,13 @@ class _AddActRealState extends State<AddActReal> {
   TextEditingController _readingScoreController = new TextEditingController();
   TextEditingController _scienceScoreController = new TextEditingController();
   TextEditingController _noteController = new TextEditingController();
-  TextEditingController _scoreDateController = new TextEditingController();
+  TextEditingController _scoreDateController = new TextEditingController(
+      text: DateFormat('yyyy-MM-dd').format(DateTime.now()));
   int _state = 0;
 
   DatabaseHelper databaseHelper = DatabaseHelper();
   ActReal score;
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -135,9 +143,11 @@ class _AddActRealState extends State<AddActReal> {
                         ],
                       ),
                       Container(
+                        margin: EdgeInsets.only(top: 10, bottom: 10),
                         child: new TextFormField(
                           decoration: const InputDecoration(
-                              labelText: "Note", hintText: 'type a simple note'),
+                              labelText: "Note",
+                              hintText: 'type a simple note'),
                           autocorrect: false,
                           maxLength: 32,
                           controller: _noteController,
@@ -147,17 +157,18 @@ class _AddActRealState extends State<AddActReal> {
                         ),
                       ),
                       Container(
-                        child: new TextFormField(
-                          decoration: const InputDecoration(
-                            labelText: "Date of taking the test",
-                            errorStyle: TextStyle(
-                              color: Colors.red, // or any other color
-                            ),
-                          ),
+                        child: TextFormField(
                           validator: validateDate,
-                          autocorrect: false,
-                          enabled: false,
+                          readOnly: true,
                           controller: _scoreDateController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Date of taking the test',
+                            suffixIcon: Icon(Icons.date_range),
+                          ),
+                          onTap: () {
+                            showPickerDate(context);
+                          },
                         ),
                       ),
                     ],
@@ -167,40 +178,16 @@ class _AddActRealState extends State<AddActReal> {
             ),
           )),
       bottomNavigationBar: BottomAppBar(
-
         child: Container(
-          height: getHeightSize(.34),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Expanded(
-                child: CupertinoDatePicker(
-                  minimumDate: DateTime(2000),
-                  mode: CupertinoDatePickerMode.date,
-                  onDateTimeChanged: (DateTime dateTime) {
-                    setState(() {
-                      _scoreDateController.value = TextEditingValue(text: dateTime.toString());
-                      setDate();
-                    });
-                    print("dateTime: $dateTime");
-                  },
-                ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                color: Colors.blue,
-                child: FlatButton(
-                  child: setUpButtonChild(),
-                  onPressed: () {
-                    setState(() {
-                      _save();
-                    });
-                  },
-                ),
-              ),
-
-            ],
+          width: MediaQuery.of(context).size.width,
+          color: Colors.blue,
+          child: FlatButton(
+            child: setUpButtonChild(),
+            onPressed: () {
+              setState(() {
+                _save();
+              });
+            },
           ),
         ),
       ),
@@ -285,7 +272,7 @@ class _AddActRealState extends State<AddActReal> {
     }
     else if (int.parse(value.toString()) > 36) {
       debugPrint('value: ' + value.toString() );
-      return "Must be less than 36";
+      return "At most 36";
     }
     else {
       return null;
@@ -303,7 +290,7 @@ class _AddActRealState extends State<AddActReal> {
   String validateNote(String note){
     if (note.length > 32){
       debugPrint('note length: ' + note.length.toString());
-      return "Characters must be less than 32";
+      return "At most 32 characters";
     }
     else {
       return null;
@@ -312,6 +299,7 @@ class _AddActRealState extends State<AddActReal> {
 
   void _save() async {
     if(_formKey.currentState.validate()){
+      setDate();
       await databaseHelper.insertScoreActReal(score);
       debugPrint('reading: ' + _englishScoreController.text);
       debugPrint('writing: ' + _mathScoreController.text);
@@ -323,5 +311,29 @@ class _AddActRealState extends State<AddActReal> {
     else {
       debugPrint('error at save practice');
     }
+  }
+
+  showPickerDate(BuildContext context) {
+    Picker(
+        hideHeader: false,
+        adapter: DateTimePickerAdapter(
+          minValue: DateTime(2000, 1, 1),
+          maxValue: DateTime.now(),
+        ),
+        headercolor: Colors.blue,
+        cancelTextStyle: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.bold),
+        confirmTextStyle: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.bold),
+        selectedTextStyle: TextStyle(color: Colors.blue),
+        onConfirm: (Picker picker, List value) {
+          var date = (picker.adapter as DateTimePickerAdapter).value;
+          _scoreDateController.text = getDateFormat(date);
+          setDate();
+        }).showModal(context);
+  }
+
+  String getDateFormat(DateTime date) {
+    return DateFormat('yyyy-MM-dd').format(date);
   }
 }

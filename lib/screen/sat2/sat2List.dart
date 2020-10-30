@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
+import 'package:flutter/material.dart';
 import 'package:score_log_app/model/sat2/scoreIIPractice.dart';
 import 'package:score_log_app/model/sat2/scoreIIReal.dart';
 import 'package:score_log_app/screen/sat2/addSat2Practice.dart';
@@ -145,10 +145,12 @@ class ScoreSat2State extends State<ScoreSat2> {
               openBuilder: (_, closeContainer) {
                 if (pageOpen == 0) {
                   real.updateListView(setState);
-                  return AddSAT2Real(ScoreIIReal(0, '', '', ''));
+                  return AddSAT2Real(
+                      ScoreIIReal(0, '', '', '(no note was specified)'));
                 } else if (pageOpen == 1) {
                   practice.updateListView(setState);
-                  return AddSAT2Practice(ScoreIIPractice(0, '', '', ''));
+                  return AddSAT2Practice(
+                      ScoreIIPractice(0, '', '', '(no note was specified)'));
                 } else {
                   return Center(
                     child: Text('error at openBuilder'),

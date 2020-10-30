@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
+import 'package:flutter/material.dart';
 import 'package:score_log_app/model/act/actPractice.dart';
 import 'package:score_log_app/model/act/actReal.dart';
 import 'package:score_log_app/screen/act/actListItemPractice.dart';
@@ -138,10 +138,12 @@ class _ActScoreState extends State<ActScore> {
               openBuilder: (_, closeContainer) {
                 if (pageOpen == 0) {
                   real.updateListView(setState);
-                  return AddActReal(ActReal(0,0,'',0,0,''));
+                  return AddActReal(
+                      ActReal(0, 0, '', 0, 0, '(no note was specified)'));
                 } else if (pageOpen == 1) {
                   practice.updateListView(setState);
-                  return  AddActPractice(ActPractice(0,0,'',0,0,''));
+                  return AddActPractice(
+                      ActPractice(0, 0, '', 0, 0, '(no note was specified)'));
                 } else {
                   return Center(
                     child: Text('error at openBuilder'),

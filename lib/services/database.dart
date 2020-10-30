@@ -1,37 +1,40 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:score_log_app/model/act/actPractice.dart';
 import 'package:score_log_app/model/act/actReal.dart';
 import 'package:score_log_app/model/sat1/scoreIPractice.dart';
 import 'package:score_log_app/model/sat1/scoreIReal.dart';
 import 'package:score_log_app/model/sat2/scoreIIPractice.dart';
 import 'package:score_log_app/model/sat2/scoreIIReal.dart';
+import 'package:score_log_app/model/tansik.dart';
 import 'package:sqflite/sqflite.dart';
-import 'dart:async';
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
+
 class DatabaseHelper {
 
-  static DatabaseHelper _databaseHelper;    // Singleton DatabaseHelper
-  static Database _database;                // Singleton Database
+  static DatabaseHelper _databaseHelper; // Singleton DatabaseHelper
+  static Database _database; // Singleton Database
   ScoreIReal scoreIReal = ScoreIReal.db();
   ScoreIPractice scoreIPractice = ScoreIPractice.db();
   ScoreIIReal scoreIIReal = ScoreIIReal.db();
   ScoreIIPractice scoreIIPractice = ScoreIIPractice.db();
   ActPractice scoreActPractice = ActPractice.db();
   ActReal scoreActReal = ActReal.db();
+  TansikModel tansik = TansikModel.db();
 
   DatabaseHelper._createInstance(); // Named constructor to create instance of DatabaseHelper
 
   factory DatabaseHelper() {
-
     if (_databaseHelper == null) {
-      _databaseHelper = DatabaseHelper._createInstance(); // This is executed only once, singleton object
+      _databaseHelper = DatabaseHelper
+          ._createInstance(); // This is executed only once, singleton object
     }
     return _databaseHelper;
   }
 
   Future<Database> get database async {
-
     if (_database == null) {
       _database = await initializeDatabase();
     }
@@ -41,15 +44,15 @@ class DatabaseHelper {
   Future<Database> initializeDatabase() async {
     // Get the directory path for both Android and iOS to store database.
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'notes.db';
+    String path = directory.path + 'LOG';
 
     // Open/create the database at a given path
-    var scoreDatabase = await openDatabase(path, version: 1, onCreate: _createDb);
+    var scoreDatabase =
+        await openDatabase(path, version: 1, onCreate: _createDb);
     return scoreDatabase;
   }
 
   void _createDb(Database db, int newVersion) async {
-
     await db.execute(
         "CREATE TABLE ${scoreIReal.dbTableName}"
             "("
@@ -201,7 +204,6 @@ class DatabaseHelper {
     return result;
   }
 
-
   // Update Operation: Update an object and save it to database
   Future<int> updateScoreSatIReal(ScoreIReal score) async {
     var db = await this.database;
@@ -238,6 +240,7 @@ class DatabaseHelper {
     var result = await db.update(scoreActPractice.dbTableName, score.toMap(), where: '${scoreActPractice.dbId} = ?', whereArgs: [score.id]);
     return result;
   }
+
   // Delete Operation: Delete an object from database
   Future<int> deleteScoreSatIReal(int id) async {
     var db = await this.database;
@@ -280,7 +283,6 @@ class DatabaseHelper {
     int result = await db.rawDelete("DELETE FROM " + tableName);
     return result;
   }
-
 
 
   // Get number of objects in database
@@ -494,7 +496,6 @@ class DatabaseHelper {
 
     return scoreList;
   }
-
 
 
 }

@@ -42,6 +42,9 @@ dependencies:
   date_format: ^1.0.9
   dropdown_search: ^0.4.5
   flutter_picker: ^1.1.5
+  smooth_page_indicator: ^0.2.0
+  csv: ^4.0.3
+  scidart_io: ^0.0.1-dev.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -53,15 +56,13 @@ flutter_svg: ^0.17.4
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

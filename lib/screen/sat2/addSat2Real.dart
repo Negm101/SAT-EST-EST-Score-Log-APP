@@ -1,14 +1,12 @@
 import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_picker/flutter_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:score_log_app/model/sat2/scoreIIReal.dart';
 import 'package:score_log_app/services/database.dart';
-import 'package:flutter_picker/flutter_picker.dart';
-//TODO: INVALID DATE FORMAT ERROR IN DATE PICKER ADAPTER
-//TODO: COMPLETE ADDING SCORE FORM AND IMPLEMENTED TO ALL SCORES
+
 class AddSAT2Real extends StatefulWidget {
   final ScoreIIReal score;
 
@@ -26,12 +24,11 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
   TextEditingController _scoreController = new TextEditingController();
-  TextEditingController _scoreDateController =
-      new TextEditingController(text: DateTime.now().toString());
+  TextEditingController _scoreDateController = new TextEditingController(
+      text: DateFormat('yyyy-MM-dd').format(DateTime.now()));
   TextEditingController _noteController = new TextEditingController();
   TextEditingController _subjectNameController =
       TextEditingController(text: 'Math Level 1');
-  TextEditingController _scoreDateSaveController = new TextEditingController();
   int _state = 0;
   DatabaseHelper databaseHelper = DatabaseHelper();
   ScoreIIReal score;
@@ -54,7 +51,6 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
     'Japanese',
     'Korean'
   ];
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -115,38 +111,6 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
                           },
                         ),
                       ),
-                      /*Container(
-                        margin: EdgeInsets.only(top: 10, bottom: 10),
-                        child: new TextFormField(
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: "Date of taking the test",
-                            errorStyle: TextStyle(
-                              color: Colors.red, // or any other color
-                            ),
-                          ),
-                          autocorrect: false,
-                          validator: validateDate,
-                          enabled: false,
-                          controller: _scoreDateController,
-                        ),
-                      ),*/
-                      /*
-                      Container(
-                        margin: EdgeInsets.only(top: 20, bottom: 20),
-                        child: DropdownSearch<String>(
-                            mode: Mode.MENU,
-                            showSelectedItem: true,
-                            items: subjects,
-                            label: "Subject",
-                            onChanged: (value) {
-                              setState(() {
-                                _subjectName = value;
-                                setSubjectName();
-                              });
-                            },
-                            selectedItem: _subjectName),
-                      ),*/
                       Container(
                         margin: EdgeInsets.only(top: 20, bottom: 20),
                         child: TextFormField(
@@ -156,9 +120,9 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
                           decoration: InputDecoration(
                             //contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
                             border: OutlineInputBorder(),
-                            labelText: 'Subject',
+                            //labelText: 'Subject',
                             hintText: _subjectNameController.text,
-                            suffixIcon: Icon(Icons.arrow_drop_down),
+                            suffixIcon: Icon(Icons.subject),
                           ),
                           onTap: () {
                             showPickerSubject(context);
@@ -173,9 +137,9 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
                           decoration: InputDecoration(
                             //contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
                             border: OutlineInputBorder(),
-                            labelText: 'Date',
+                            //labelText: 'Date',
                             hintText: 'Date of taking the test',
-                            suffixIcon: Icon(Icons.arrow_drop_down),
+                            suffixIcon: Icon(Icons.date_range),
                           ),
                           onTap: () {
                             showPickerDate(context);
@@ -292,8 +256,12 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
       return "Field can\'t be empty";
     } else if (int.parse(value.toString()) > 800) {
       debugPrint('value: ' + value.toString());
-      return "Must be less than 800";
-    } else {
+      return "At most 800";
+    } else if (int.parse(value.toString()) < 200) {
+      debugPrint('value: ' + value.toString());
+      return "At least 200";
+    }
+    else {
       return null;
     }
   }
@@ -311,7 +279,7 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
   String validateNote(String note) {
     if (note.length > 32) {
       debugPrint('note length: ' + note.length.toString());
-      return "Characters must be less than 32";
+      return "At most 32 characters";
     } else {
       return null;
     }
@@ -346,17 +314,19 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
           maxValue: DateTime.now(),
         ),
         headercolor: Colors.blue,
-        cancelTextStyle:
-            TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        confirmTextStyle:
-            TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        cancelTextStyle: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.bold),
+        confirmTextStyle: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.bold),
         selectedTextStyle: TextStyle(color: Colors.blue),
         onConfirm: (Picker picker, List value) {
-          String dateTime = "${(picker.adapter as DateTimePickerAdapter).value.year.toString()}-${(picker.adapter as DateTimePickerAdapter).value.month.toString()}-${(picker.adapter as DateTimePickerAdapter).value.day.toString()}";
-          _scoreDateController.text = dateTime;
-          _scoreDateSaveController.text = (picker.adapter as DateTimePickerAdapter).value.toString();
+          var date = (picker.adapter as DateTimePickerAdapter).value;
+          _scoreDateController.text = getDateFormat(date);
           setDate();
-          print('save date:' + (picker.adapter as DateTimePickerAdapter).value.toString());
         }).showModal(context);
+  }
+
+  String getDateFormat(DateTime date) {
+    return DateFormat('yyyy-MM-dd').format(date);
   }
 }

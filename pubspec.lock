@@ -99,6 +99,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.16.2"
+  csv:
+    dependency: "direct main"
+    description:
+      name: csv
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.3"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -394,6 +401,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.24.1"
+  scidart:
+    dependency: transitive
+    description:
+      name: scidart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1-dev.6"
+  scidart_io:
+    dependency: "direct main"
+    description:
+      name: scidart_io
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1-dev.3"
   screen:
     dependency: transitive
     description:
@@ -406,6 +427,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  smooth_page_indicator:
+    dependency: "direct main"
+    description:
+      name: smooth_page_indicator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   source_span:
     dependency: transitive
     description:
