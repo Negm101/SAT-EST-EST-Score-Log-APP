@@ -45,7 +45,14 @@ dependencies:
   smooth_page_indicator: ^0.2.0
   csv: ^4.0.3
   scidart_io: ^0.0.1-dev.3
+
 dev_dependencies:
+  flutter_launcher_icons: ^0.8.1
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/appIcon.png"
+
   flutter_test:
     sdk: flutter
 
