@@ -10,7 +10,8 @@ class Calculator extends StatelessWidget {
       child: Column(
         children: [
           CustomButton(
-            title: 'SAT',
+            title: 'Tansik Percent',
+            state: '(beta)',
             elevation: 0,
             onPressed: () {
               Navigator.push(
@@ -21,14 +22,15 @@ class Calculator extends StatelessWidget {
             },
           ),
           CustomButton(
-            title: 'ACT',
+            title: 'ACT to SAT Score',
+            state: '(beta)',
             elevation: 0,
             onPressed: () {
               Navigator.push(
                   context,
                   new MaterialPageRoute(
                       builder: (context) =>
-                          new ActCalc(Calculators.act(0, 0, 0))));
+                      new ActCalc(Calculators.act(0, 0, 0))));
             },
           )
         ],
@@ -39,12 +41,14 @@ class Calculator extends StatelessWidget {
 
 class CustomButton extends StatefulWidget {
   final String title;
+  final String state;
   final VoidCallback onPressed;
   final double elevation;
 
   CustomButton({
     Key key,
     @required this.title,
+    @required this.state,
     this.elevation = 4,
     this.onPressed,
   });
@@ -58,30 +62,47 @@ class _CustomButtonState extends State<CustomButton> {
   Widget build(BuildContext context) {
     return Container(
       child: RaisedButton(
-        padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-        color: Colors.white,
-        elevation: widget.elevation,
-        onPressed: widget.onPressed,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            circle(),
-            Text(
-              widget.title,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            circle()
-          ],
-        ),
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+          color: Colors.white,
+          elevation: widget.elevation,
+          onPressed: widget.onPressed,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  circle(),
+                  Container(
+                    margin: EdgeInsets.only(left: 30),
+                    child: Text(
+                      widget.title,
+                      style: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 30),
+                child: Text(
+                  widget.state,
+                  style: TextStyle(fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey),
+                ),
+              ),
+            ],
+          )
       ),
     );
   }
 
   Widget circle() {
     return Container(
-        width: 18,
-        height: 18,
+        width: 16,
+        height: 16,
         decoration: new BoxDecoration(
           color: Colors.blue,
           shape: BoxShape.circle,

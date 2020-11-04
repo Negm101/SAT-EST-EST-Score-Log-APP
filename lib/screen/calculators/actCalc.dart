@@ -37,7 +37,7 @@ class _ActCalcState extends State<ActCalc> {
     return new Scaffold(
       appBar: new AppBar(
           title: Text(
-            'ACT to SAT (beta)',
+            'ACT to SAT',
             textAlign: TextAlign.center,
           ),
           centerTitle: true,
@@ -125,63 +125,8 @@ class _ActCalcState extends State<ActCalc> {
                     ],
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width / 2.5,
-                      margin: EdgeInsets.only(top: 20, bottom: 10),
-                      child: TextFormField(
-                        //validator: validateDate,
-                        readOnly: true,
-                        textAlign: TextAlign.center,
-                        controller: _compositeController,
-                        decoration: InputDecoration(
-                          labelStyle: TextStyle(
-                              color: Colors.blue, fontWeight: FontWeight.bold),
-                          alignLabelWithHint: true,
-                          disabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue)),
-                          focusColor: Colors.blue,
-                          enabled: false,
-                          border: OutlineInputBorder(),
-                          labelText: 'Composite',
-                          suffixIcon: Icon(
-                            Icons.done,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width / 2.5,
-                      margin: EdgeInsets.only(top: 20, bottom: 10),
-                      child: TextFormField(
-                        //validator: validateDate,
-                        readOnly: true,
-                        textAlign: TextAlign.center,
-                        controller: _resultController,
-                        decoration: InputDecoration(
-                          labelStyle: TextStyle(
-                              color: Colors.blue, fontWeight: FontWeight.bold),
-                          alignLabelWithHint: true,
-                          disabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue)),
-                          enabled: false,
-                          border: OutlineInputBorder(),
-                          labelText: 'SAT I',
-                          hintText: 'Final SAT I Result',
-                          suffixIcon: Icon(
-                            Icons.done,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
                 Container(
-                  margin: EdgeInsets.only(top: 10, bottom: 10),
+                  margin: EdgeInsets.only(top: 20, bottom: 10),
                   child: TextFormField(
                     keyboardType: TextInputType.phone,
                     controller: _actTextController,
@@ -195,62 +140,125 @@ class _ActCalcState extends State<ActCalc> {
                     },
                   ),
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.only(top: 20, bottom: 10),
-                  child: TextFormField(
-                    //validator: validateDate,
-                    readOnly: true,
-                    textAlign: TextAlign.center,
-                    controller: _resultSubjectsController,
-                    decoration: InputDecoration(
-                      alignLabelWithHint: true,
-                      labelStyle: TextStyle(
-                          color: Colors.blue, fontWeight: FontWeight.bold),
-                      disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue)),
-                      focusColor: Colors.blue,
-                      enabled: false,
-                      border: OutlineInputBorder(),
-                      labelText: 'SAT II',
-                      hintText: 'Act to SAT II',
-                      suffixIcon: Icon(
-                        Icons.done,
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          color: Colors.blue,
-          child: FlatButton(
-            child: Text(
-              "CALCULATE",
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-            onPressed: () {
-              setState(() {
-                _scrollController.animateTo(
-                  _scrollController.position.maxScrollExtent,
-                  curve: Curves.bounceOut,
-                  duration: const Duration(milliseconds: 500),
-                );
-                setResult();
-                setCompositeScore();
-                setResultScore();
-              });
-            },
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width / 2.5,
+                margin:
+                    EdgeInsets.only(top: 20, bottom: 10, left: 20, right: 5),
+                child: TextFormField(
+                  //validator: validateDate,
+                  readOnly: true,
+                  textAlign: TextAlign.center,
+                  controller: _compositeController,
+                  decoration: InputDecoration(
+                    labelStyle: TextStyle(
+                        color: Colors.blue, fontWeight: FontWeight.bold),
+                    alignLabelWithHint: true,
+                    disabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
+                    focusColor: Colors.blue,
+                    enabled: false,
+                    border: OutlineInputBorder(),
+                    labelText: 'Composite',
+                    suffixIcon: Icon(
+                      Icons.done,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width / 2.5,
+                margin:
+                    EdgeInsets.only(top: 20, bottom: 10, left: 5, right: 20),
+                child: TextFormField(
+                  //validator: validateDate,
+                  readOnly: true,
+                  textAlign: TextAlign.center,
+                  controller: _resultController,
+                  decoration: InputDecoration(
+                    labelStyle: TextStyle(
+                        color: Colors.blue, fontWeight: FontWeight.bold),
+                    alignLabelWithHint: true,
+                    disabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
+                    enabled: false,
+                    border: OutlineInputBorder(),
+                    labelText: 'SAT I',
+                    hintText: 'Final SAT I Result',
+                    suffixIcon: Icon(
+                      Icons.done,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ),
-      ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.only(top: 10, bottom: 15, left: 20, right: 20),
+            child: TextFormField(
+              //validator: validateDate,
+              readOnly: true,
+              textAlign: TextAlign.center,
+              controller: _resultSubjectsController,
+              decoration: InputDecoration(
+                alignLabelWithHint: true,
+                labelStyle:
+                    TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                disabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue)),
+                focusColor: Colors.blue,
+                enabled: false,
+                border: OutlineInputBorder(),
+                labelText: 'SAT II',
+                hintText: 'Act to SAT II',
+                suffixIcon: Icon(
+                  Icons.done,
+                  color: Colors.blue,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            color: Colors.blue,
+            child: FlatButton(
+              child: Text(
+                "CALCULATE",
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+              onPressed: () {
+                setState(() {
+                  _scrollController.animateTo(
+                    _scrollController.position.maxScrollExtent,
+                    curve: Curves.bounceOut,
+                    duration: const Duration(milliseconds: 500),
+                  );
+                  setResult();
+                  setCompositeScore();
+                  setResultScore();
+                });
+              },
+            ),
+          ),
+        ],
+      )),
     );
   }
 

@@ -33,7 +33,7 @@ class _SatCalcState extends State<SatCalc> {
     return new Scaffold(
       appBar: new AppBar(
           title: Text(
-            'SAT I Tansik',
+            'Tansik Percent',
             textAlign: TextAlign.center,
           ),
           centerTitle: true,
@@ -90,7 +90,7 @@ class _SatCalcState extends State<SatCalc> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 10, bottom: 10),
+                  margin: EdgeInsets.only(top: 10, bottom: 30),
                   child: new TextFormField(
                     decoration: const InputDecoration(
                       //border: OutlineInputBorder(),
@@ -114,7 +114,10 @@ class _SatCalcState extends State<SatCalc> {
                     ChoiceChip(
                       label: Text('Public'),
                       padding: EdgeInsets.only(
-                          left: getWidthSize(.135), right: getWidthSize(.135)),
+                          left: getWidthSize(.135),
+                          right: getWidthSize(.135),
+                          top: 10,
+                          bottom: 10),
                       selected: isPublicSelected,
                       onSelected: (bool value) {
                         setState(() {
@@ -129,7 +132,10 @@ class _SatCalcState extends State<SatCalc> {
                     ChoiceChip(
                       label: Text('Private'),
                       padding: EdgeInsets.only(
-                          left: getWidthSize(.135), right: getWidthSize(.135)),
+                          left: getWidthSize(.135),
+                          right: getWidthSize(.135),
+                          top: 10,
+                          bottom: 10),
                       selected: isPrivateSelected,
                       onSelected: (bool value) {
                         setState(() {
@@ -203,57 +209,62 @@ class _SatCalcState extends State<SatCalc> {
                     ),
                   ),
                 ),*/
-                Container(
-                  margin: EdgeInsets.only(top: 10, bottom: 10),
-                  child: TextFormField(
-                    //validator: validateDate,
-                    readOnly: true,
-                    controller: _resultController,
-                    decoration: InputDecoration(
-                      labelStyle: TextStyle(
-                          color: Colors.blue, fontWeight: FontWeight.bold),
-                      alignLabelWithHint: true,
-                      disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue)),
-                      focusColor: Colors.blue,
-                      enabled: false,
-                      border: OutlineInputBorder(),
-                      labelText: 'Final Result',
-                      suffixIcon: Icon(
-                        Icons.done,
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          color: Colors.blue,
-          child: FlatButton(
-            child: Text(
-              "CALCULATE",
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold),
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 20, bottom: 20, right: 20, left: 20),
+            child: TextFormField(
+              //validator: validateDate,
+              readOnly: true,
+              controller: _resultController,
+              decoration: InputDecoration(
+                labelStyle:
+                    TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                alignLabelWithHint: true,
+                disabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue)),
+                focusColor: Colors.blue,
+                enabled: false,
+                border: OutlineInputBorder(),
+                labelText: 'Final Result',
+                suffixIcon: Icon(
+                  Icons.done,
+                  color: Colors.blue,
+                ),
+              ),
             ),
-            onPressed: () {
-              setState(() {
-                _scrollController.animateTo(
-                  _scrollController.position.maxScrollExtent,
-                  curve: Curves.bounceOut,
-                  duration: const Duration(milliseconds: 500),
-                );
-                setResult();
-              });
-            },
           ),
-        ),
-      ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            color: Colors.blue,
+            child: FlatButton(
+              child: Text(
+                "CALCULATE",
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+              onPressed: () {
+                setState(() {
+                  _scrollController.animateTo(
+                    _scrollController.position.maxScrollExtent,
+                    curve: Curves.bounceOut,
+                    duration: const Duration(milliseconds: 500),
+                  );
+                  setResult();
+                });
+              },
+            ),
+          ),
+        ],
+      )),
     );
   }
 

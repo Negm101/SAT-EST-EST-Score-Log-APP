@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:score_log_app/screen/calculator.dart';
 import 'package:score_log_app/screen/scores.dart';
@@ -12,17 +13,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: _title,
       home: Home(),
       theme: ThemeData(
           textTheme: GoogleFonts.oxygenTextTheme(
-            Theme
-                .of(context)
-                .textTheme,
-          )
-      ),
+        Theme.of(context).textTheme,
+      )),
     );
 
   }
@@ -31,7 +30,6 @@ class MyApp extends StatelessWidget {
 /// This is the stateful widget that the main application instantiates.
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
-
   @override
   _HomeState createState() => _HomeState();
 }
@@ -53,11 +51,11 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    const String title = 'Egy Score';
     return Scaffold(
       appBar: AppBar(
-
           title: const Center(
-            child: Text('EgyScore', textAlign: TextAlign.center,),)
+            child: Text(title, textAlign: TextAlign.center,),)
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
@@ -84,6 +82,7 @@ class _HomeState extends State<Home> {
         unselectedItemColor: Colors.grey[300],
         selectedItemColor: Colors.white,
         onTap: _onItemTapped,
+
       ),
     );
   }

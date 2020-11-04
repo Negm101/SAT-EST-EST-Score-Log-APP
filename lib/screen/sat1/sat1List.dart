@@ -159,7 +159,7 @@ class ScoreSat1State extends State<ScoreSat1> {
     if (real.scoreList.length == 0) {
       return Center(
         child: Text(
-          '(اه سمؤة) \nNO SCORES AVAILABLE',
+          'NO SCORES AVAILABLE',
           style: TextStyle(),
           textAlign: TextAlign.center,
         ),
@@ -206,7 +206,7 @@ class ScoreSat1State extends State<ScoreSat1> {
     if (practice.scoreList.length == 0) {
       return Center(
         child: Text(
-          '(اه سمؤة) \nNO SCORES AVAILABLE',
+          'NO SCORES AVAILABLE',
           style: TextStyle(),
           textAlign: TextAlign.center,
         ),
