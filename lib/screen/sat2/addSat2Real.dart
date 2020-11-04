@@ -6,6 +6,7 @@ import 'package:flutter_picker/flutter_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:score_log_app/model/sat2/scoreIIReal.dart';
 import 'package:score_log_app/services/database.dart';
+import 'package:score_log_app/services/generalVar.dart';
 
 class AddSAT2Real extends StatefulWidget {
   final ScoreIIReal score;
@@ -155,7 +156,7 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
       bottomNavigationBar: BottomAppBar(
         child: Container(
           width: MediaQuery.of(context).size.width,
-          color: Colors.blue,
+          color: MyColors.primary(),
           child: FlatButton(
             child: setUpButtonChild(),
             onPressed: () {
@@ -290,11 +291,11 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
         adapter: PickerDataAdapter<String>(pickerdata: subjects),
         changeToFirst: true,
         hideHeader: false,
-        headercolor: Colors.blue,
+        headercolor: MyColors.primary(),
         cancelTextStyle:
-            TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         confirmTextStyle:
-            TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         onConfirm: (Picker picker, List value) {
           setState(() {
             _subjectNameController.text = picker.adapter.text
@@ -313,12 +314,12 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
           minValue: DateTime(2000, 1, 1),
           maxValue: DateTime.now(),
         ),
-        headercolor: Colors.blue,
+        headercolor: MyColors.primary(),
         cancelTextStyle: TextStyle(
             color: Colors.white, fontWeight: FontWeight.bold),
         confirmTextStyle: TextStyle(
             color: Colors.white, fontWeight: FontWeight.bold),
-        selectedTextStyle: TextStyle(color: Colors.blue),
+        selectedTextStyle: TextStyle(color: MyColors.primary()),
         onConfirm: (Picker picker, List value) {
           var date = (picker.adapter as DateTimePickerAdapter).value;
           _scoreDateController.text = getDateFormat(date);

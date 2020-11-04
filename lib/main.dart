@@ -4,12 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:score_log_app/screen/calculator.dart';
 import 'package:score_log_app/screen/scores.dart';
 import 'package:score_log_app/screen/tansik.dart';
+import 'package:score_log_app/services/generalVar.dart';
 
 void main() => runApp(MyApp());
 
 
 class MyApp extends StatelessWidget {
   static const String _title = 'EgyScore';
+  final MyColors colors = new MyColors.primary();
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +21,11 @@ class MyApp extends StatelessWidget {
       title: _title,
       home: Home(),
       theme: ThemeData(
-          textTheme: GoogleFonts.oxygenTextTheme(
-        Theme.of(context).textTheme,
-      )),
+        textTheme: GoogleFonts.oxygenTextTheme(
+          Theme.of(context).textTheme,
+        ),
+        primaryColor: MyColors.primary(),
+      ),
     );
 
   }
@@ -36,8 +40,9 @@ class Home extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _HomeState extends State<Home> {
+  final MyColors colors = new MyColors.primary();
   int _selectedIndex = 1;
-  static  List<Widget> _widgetOptions = <Widget>[
+  static List<Widget> _widgetOptions = <Widget>[
     Scores(),
     Calculator(),
     Tansik(),
@@ -61,7 +66,7 @@ class _HomeState extends State<Home> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: MyColors.primary(),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.analytics),
@@ -86,4 +91,16 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+}
+
+class HexColor extends Color {
+  static int _getColorFromHex(String hexColor) {
+    hexColor = hexColor.toUpperCase().replaceAll("#", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF" + hexColor;
+    }
+    return int.parse(hexColor, radix: 16);
+  }
+
+  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }

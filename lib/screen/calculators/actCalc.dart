@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:score_log_app/services/calculators.dart';
+import 'package:score_log_app/services/generalVar.dart';
 
 class ActCalc extends StatefulWidget {
   final Calculators calculators;
@@ -165,17 +166,17 @@ class _ActCalcState extends State<ActCalc> {
                   controller: _compositeController,
                   decoration: InputDecoration(
                     labelStyle: TextStyle(
-                        color: Colors.blue, fontWeight: FontWeight.bold),
+                        color: MyColors.primary(), fontWeight: FontWeight.bold),
                     alignLabelWithHint: true,
                     disabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)),
-                    focusColor: Colors.blue,
+                        borderSide: BorderSide(color: MyColors.primary())),
+                    focusColor: MyColors.primary(),
                     enabled: false,
                     border: OutlineInputBorder(),
                     labelText: 'Composite',
                     suffixIcon: Icon(
                       Icons.done,
-                      color: Colors.blue,
+                      color: MyColors.primary(),
                     ),
                   ),
                 ),
@@ -191,17 +192,17 @@ class _ActCalcState extends State<ActCalc> {
                   controller: _resultController,
                   decoration: InputDecoration(
                     labelStyle: TextStyle(
-                        color: Colors.blue, fontWeight: FontWeight.bold),
+                        color: MyColors.primary(), fontWeight: FontWeight.bold),
                     alignLabelWithHint: true,
                     disabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)),
+                        borderSide: BorderSide(color: MyColors.primary())),
                     enabled: false,
                     border: OutlineInputBorder(),
                     labelText: 'SAT I',
                     hintText: 'Final SAT I Result',
                     suffixIcon: Icon(
                       Icons.done,
-                      color: Colors.blue,
+                      color: MyColors.primary(),
                     ),
                   ),
                 ),
@@ -219,24 +220,28 @@ class _ActCalcState extends State<ActCalc> {
               decoration: InputDecoration(
                 alignLabelWithHint: true,
                 labelStyle:
-                    TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                TextStyle(
+                    color: MyColors.primary(), fontWeight: FontWeight.bold),
                 disabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue)),
-                focusColor: Colors.blue,
+                    borderSide: BorderSide(color: MyColors.primary())),
+                focusColor: MyColors.primary(),
                 enabled: false,
                 border: OutlineInputBorder(),
                 labelText: 'SAT II',
                 hintText: 'Act to SAT II',
                 suffixIcon: Icon(
                   Icons.done,
-                  color: Colors.blue,
+                  color: MyColors.primary(),
                 ),
               ),
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width,
-            color: Colors.blue,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
+            color: MyColors.primary(),
             child: FlatButton(
               child: Text(
                 "CALCULATE",

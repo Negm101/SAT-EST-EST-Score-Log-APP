@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:score_log_app/model/act/actPractice.dart';
 import 'package:score_log_app/services/database.dart';
+import 'package:score_log_app/services/generalVar.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ActListItemPractice extends StatefulWidget {
@@ -77,7 +78,8 @@ class _ActListItemPracticeState extends State<ActListItemPractice> {
                         widget.dateDay.toString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            color: Colors.blue, fontSize: getWidthSize(.059)),
+                            color: MyColors.primary(),
+                            fontSize: getWidthSize(.059)),
                       ),
                     ),
                     Container(

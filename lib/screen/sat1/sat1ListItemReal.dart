@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:score_log_app/model/sat1/scoreIReal.dart';
 import 'package:score_log_app/services/database.dart';
+import 'package:score_log_app/services/generalVar.dart';
 import 'package:sqflite/sqflite.dart';
 
 class SAT1ListItemReal extends StatefulWidget {
@@ -73,7 +74,8 @@ class _SAT1ListItemRealState extends State<SAT1ListItemReal> {
                         widget.dateDay.toString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            color: Colors.blue, fontSize: getWidthSize(.059)),
+                            color: MyColors.primary(),
+                            fontSize: getWidthSize(.059)),
                       ),
                     ),
                     Container(

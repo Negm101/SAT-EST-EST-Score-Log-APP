@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:score_log_app/screen/sat1/sat1List.dart';
 import 'package:score_log_app/screen/sat2/sat2List.dart';
 import 'package:score_log_app/services/database.dart';
+import 'package:score_log_app/services/generalVar.dart';
 
 import 'act/actList.dart';
 
@@ -122,42 +123,44 @@ class CustomButton extends StatefulWidget {
 }
 
 class _CustomButtonState extends State<CustomButton> {
+  MyColors colors = new MyColors.primary();
+
   @override
   Widget build(BuildContext context) {
     return Container(
       child: RaisedButton(
-        padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-        color: Colors.white,
-        elevation: widget.elevation,
-        onPressed: widget.onPressed,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                circle(),
-                Container(
-                  margin: EdgeInsets.only(left: 30),
-                  child: Text(
-                    widget.title,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+          color: Colors.white,
+          elevation: widget.elevation,
+          onPressed: widget.onPressed,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  circle(),
+                  Container(
+                    margin: EdgeInsets.only(left: 30),
+                    child: Text(
+                      widget.title,
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 30),
-              child: Text(
-                '${widget.numberOfScores.toString()} score(s)',
-                style: TextStyle(fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey),
+                ],
               ),
-            ),
-          ],
-        )
+              Container(
+                margin: EdgeInsets.only(left: 30),
+                child: Text(
+                  '${widget.numberOfScores.toString()} score(s)',
+                  style: TextStyle(fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey),
+                ),
+              ),
+            ],
+          )
       ),
     );
   }
@@ -167,7 +170,7 @@ class _CustomButtonState extends State<CustomButton> {
         width: 16,
         height: 16,
         decoration: new BoxDecoration(
-          color: Colors.blue,
+          color: MyColors.primary(),
           shape: BoxShape.circle,
         ));
   }

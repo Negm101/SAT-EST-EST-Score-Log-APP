@@ -55,7 +55,7 @@ class _CustomButtonState extends State<CustomButton> {
         width: 18,
         height: 18,
         decoration: new BoxDecoration(
-          color: Colors.blue,
+          color: MyColors.primary(),
           shape: BoxShape.circle,
         ));
   }

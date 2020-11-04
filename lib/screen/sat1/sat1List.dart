@@ -6,6 +6,7 @@ import 'package:score_log_app/screen/sat1/addSat1Practice.dart';
 import 'package:score_log_app/screen/sat1/addSat1Real.dart';
 import 'package:score_log_app/screen/sat1/sat1ListItemPractice.dart';
 import 'package:score_log_app/screen/sat1/sat1ListItemReal.dart';
+import 'package:score_log_app/services/generalVar.dart';
 
 // ignore: must_be_immutable
 class ScoreSat1 extends StatefulWidget {
@@ -114,7 +115,7 @@ class ScoreSat1State extends State<ScoreSat1> {
                 ),
               ],
             ),
-            color: Colors.blue,
+            color: MyColors.primary(),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           floatingActionButton: OpenContainer(
@@ -122,7 +123,7 @@ class ScoreSat1State extends State<ScoreSat1> {
                 return FloatingActionButton(
                   elevation: 0.0,
                   onPressed: openContainer,
-                  backgroundColor: Colors.blue,
+                  backgroundColor: MyColors.primary(),
                   child: Icon(
                     Icons.add,
                     color: Colors.white,
@@ -130,11 +131,11 @@ class ScoreSat1State extends State<ScoreSat1> {
                   ),
                 );
               },
-              openColor: Colors.blue,
+              openColor: MyColors.primary(),
               closedElevation: 5.0,
               closedShape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100)),
-              closedColor: Colors.blue,
+              closedColor: MyColors.primary(),
               openBuilder: (_, closeContainer) {
                 if (pageOpen == 0) {
                   real.updateListView(setState);

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:score_log_app/screen/calculators/actCalc.dart';
 import 'package:score_log_app/screen/calculators/satCalc.dart';
 import 'package:score_log_app/services/calculators.dart';
+import 'package:score_log_app/services/generalVar.dart';
 
 class Calculator extends StatelessWidget {
   @override
@@ -11,7 +12,7 @@ class Calculator extends StatelessWidget {
         children: [
           CustomButton(
             title: 'Tansik Percent',
-            state: '(beta)',
+            state: '',
             elevation: 0,
             onPressed: () {
               Navigator.push(
@@ -58,6 +59,8 @@ class CustomButton extends StatefulWidget {
 }
 
 class _CustomButtonState extends State<CustomButton> {
+  MyColors colors = new MyColors.primary();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -104,7 +107,7 @@ class _CustomButtonState extends State<CustomButton> {
         width: 16,
         height: 16,
         decoration: new BoxDecoration(
-          color: Colors.blue,
+          color: MyColors.primary(),
           shape: BoxShape.circle,
         ));
   }

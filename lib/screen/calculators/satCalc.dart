@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:score_log_app/services/calculators.dart';
+import 'package:score_log_app/services/generalVar.dart';
 
 class SatCalc extends StatefulWidget {
   final Calculators calculators;
@@ -203,7 +204,7 @@ class _SatCalcState extends State<SatCalc> {
                     controller: pageController,
                     count: 2,
                     effect: WormEffect(
-                      activeDotColor: Colors.blue,
+                      activeDotColor: MyColors.primary(),
                       dotHeight: 10,
                       dotWidth: 10
                     ),
@@ -226,25 +227,28 @@ class _SatCalcState extends State<SatCalc> {
               readOnly: true,
               controller: _resultController,
               decoration: InputDecoration(
-                labelStyle:
-                    TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                labelStyle: TextStyle(
+                    color: MyColors.primary(), fontWeight: FontWeight.bold),
                 alignLabelWithHint: true,
                 disabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue)),
-                focusColor: Colors.blue,
+                    borderSide: BorderSide(color: MyColors.primary())),
+                focusColor: MyColors.primary(),
                 enabled: false,
                 border: OutlineInputBorder(),
                 labelText: 'Final Result',
                 suffixIcon: Icon(
                   Icons.done,
-                  color: Colors.blue,
+                  color: MyColors.primary(),
                 ),
               ),
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width,
-            color: Colors.blue,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
+            color: MyColors.primary(),
             child: FlatButton(
               child: Text(
                 "CALCULATE",

@@ -6,6 +6,7 @@ import 'package:flutter_picker/Picker.dart';
 import 'package:intl/intl.dart';
 import 'package:score_log_app/model/sat1/scoreIReal.dart';
 import 'package:score_log_app/services/database.dart';
+import 'package:score_log_app/services/generalVar.dart';
 
 class AddSAT1Real extends StatefulWidget {
   final ScoreIReal scoreI;
@@ -142,7 +143,7 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
 
         child: Container(
           width: MediaQuery.of(context).size.width,
-          color: Colors.blue,
+          color: MyColors.primary(),
           child: FlatButton(
             child: setUpButtonChild(),
             onPressed: () {
@@ -281,12 +282,12 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
           minValue: DateTime(2000, 1, 1),
           maxValue: DateTime.now(),
         ),
-        headercolor: Colors.blue,
+        headercolor: MyColors.primary(),
         cancelTextStyle: TextStyle(
             color: Colors.white, fontWeight: FontWeight.bold),
         confirmTextStyle: TextStyle(
             color: Colors.white, fontWeight: FontWeight.bold),
-        selectedTextStyle: TextStyle(color: Colors.blue),
+        selectedTextStyle: TextStyle(color: MyColors.primary()),
         onConfirm: (Picker picker, List value) {
           var date = (picker.adapter as DateTimePickerAdapter).value;
           _scoreDateController.text = getDateFormat(date);

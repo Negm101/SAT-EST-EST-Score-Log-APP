@@ -5,6 +5,7 @@ import 'package:score_log_app/model/act/actReal.dart';
 import 'package:score_log_app/screen/act/actListItemPractice.dart';
 import 'package:score_log_app/screen/act/actListItemReal.dart';
 import 'package:score_log_app/screen/act/addActReal.dart';
+import 'package:score_log_app/services/generalVar.dart';
 
 import 'addActPractice.dart';
 
@@ -114,7 +115,7 @@ class _ActScoreState extends State<ActScore> {
                 ),
               ],
             ),
-            color: Colors.blue,
+            color: MyColors.primary(),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           floatingActionButton: OpenContainer(
@@ -122,7 +123,7 @@ class _ActScoreState extends State<ActScore> {
                 return FloatingActionButton(
                   elevation: 0.0,
                   onPressed: openContainer,
-                  backgroundColor: Colors.blue,
+                  backgroundColor: MyColors.primary(),
                   child: Icon(
                     Icons.add,
                     color: Colors.white,
@@ -130,11 +131,11 @@ class _ActScoreState extends State<ActScore> {
                   ),
                 );
               },
-              openColor: Colors.blue,
+              openColor: MyColors.primary(),
               closedElevation: 5.0,
               closedShape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100)),
-              closedColor: Colors.blue,
+              closedColor: MyColors.primary(),
               openBuilder: (_, closeContainer) {
                 if (pageOpen == 0) {
                   real.updateListView(setState);

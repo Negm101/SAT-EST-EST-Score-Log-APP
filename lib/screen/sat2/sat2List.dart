@@ -5,6 +5,7 @@ import 'package:score_log_app/model/sat2/scoreIIReal.dart';
 import 'package:score_log_app/screen/sat2/addSat2Practice.dart';
 import 'package:score_log_app/screen/sat2/sat2ListItemPractice.dart';
 import 'package:score_log_app/screen/sat2/sat2ListItemReal.dart';
+import 'package:score_log_app/services/generalVar.dart';
 
 import 'addSat2Real.dart';
 
@@ -121,7 +122,7 @@ class ScoreSat2State extends State<ScoreSat2> {
                 ),
               ],
             ),
-            color: Colors.blue,
+            color: MyColors.primary(),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           floatingActionButton: OpenContainer(
@@ -129,7 +130,7 @@ class ScoreSat2State extends State<ScoreSat2> {
                 return FloatingActionButton(
                   elevation: 0.0,
                   onPressed: openContainer,
-                  backgroundColor: Colors.blue,
+                  backgroundColor: MyColors.primary(),
                   child: Icon(
                     Icons.add,
                     color: Colors.white,
@@ -137,11 +138,11 @@ class ScoreSat2State extends State<ScoreSat2> {
                   ),
                 );
               },
-              openColor: Colors.blue,
+              openColor: MyColors.primary(),
               closedElevation: 5.0,
               closedShape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100)),
-              closedColor: Colors.blue,
+              closedColor: MyColors.primary(),
               openBuilder: (_, closeContainer) {
                 if (pageOpen == 0) {
                   real.updateListView(setState);
