@@ -150,66 +150,6 @@ class _SatCalcState extends State<SatCalc> {
                     ),
                   ],
                 ),
-                /*
-                Container(
-                  margin: EdgeInsets.only(top: 10, bottom: 5),
-
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height/3,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.all(Radius.circular(5))
-                  ),
-
-                  child: PageView(
-
-                    controller:pageController,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(top: 5, right:30, left: 0),
-                        child: Column(
-                          //mainAxisAlignment: MainAxisAlignment,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('For government universities', style: TextStyle(fontWeight: FontWeight.bold, fontSize: getHeightSize(.03)),textAlign: TextAlign.center,),
-                            Container(
-                              margin: EdgeInsets.only(top: 15),
-                              child: Text('- You must get at least 1050 score in SAT 1.', style: TextStyle(fontSize: getHeightSize(.020)),),
-                            ),
-                            Text('- To add the SAT 2 score, you must get at least   1100 score.', style: TextStyle(fontSize: getHeightSize(.020)),),
-                            Text('- The bonus for getting a score above 1090 is 9%.', style: TextStyle(fontSize: getHeightSize(.020)),),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(top: 5, right: 0, left: 30),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('For private universities', style: TextStyle(fontWeight: FontWeight.bold, fontSize: getHeightSize(.03)),textAlign: TextAlign.center,),
-                            Container(
-                              margin: EdgeInsets.only(top: 15),
-                              child: Text('- To add the SAT 2 score, you must get at least 900 score', style: TextStyle(fontSize: getHeightSize(.020)),),
-                            ),
-
-                            Text('- The bonus for getting above 1090 is 15%.', style: TextStyle(fontSize: getHeightSize(.020)),),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Center(
-                  child: SmoothPageIndicator(
-                    controller: pageController,
-                    count: 2,
-                    effect: WormEffect(
-                      activeDotColor: MyColors.primary(),
-                      dotHeight: 10,
-                      dotWidth: 10
-                    ),
-                  ),
-                ),*/
               ],
             ),
           ),

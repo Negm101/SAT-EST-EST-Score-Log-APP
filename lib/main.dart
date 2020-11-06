@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:score_log_app/screen/calculator.dart';
 import 'package:score_log_app/screen/scores.dart';
+import 'package:score_log_app/screen/settings.dart';
 import 'package:score_log_app/screen/tansik.dart';
 import 'package:score_log_app/services/generalVar.dart';
 
@@ -31,14 +32,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/// This is the stateful widget that the main application instantiates.
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
   @override
   _HomeState createState() => _HomeState();
 }
 
-/// This is the private State class that goes with MyStatefulWidget.
 class _HomeState extends State<Home> {
   final MyColors colors = new MyColors.primary();
   int _selectedIndex = 1;
@@ -59,8 +58,24 @@ class _HomeState extends State<Home> {
     const String title = 'Egy Score';
     return Scaffold(
       appBar: AppBar(
-          title: const Center(
-            child: Text(title, textAlign: TextAlign.center,),)
+        leading: const Center(
+          child: Text(title, textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18),),),
+        leadingWidth: MediaQuery
+            .of(context)
+            .size
+            .width / 2,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.announcement, color: MyColors.textColorDark(),),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(builder: (context) => new Setting())
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
@@ -91,16 +106,4 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-}
-
-class HexColor extends Color {
-  static int _getColorFromHex(String hexColor) {
-    hexColor = hexColor.toUpperCase().replaceAll("#", "");
-    if (hexColor.length == 6) {
-      hexColor = "FF" + hexColor;
-    }
-    return int.parse(hexColor, radix: 16);
-  }
-
-  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }

@@ -16,7 +16,6 @@ class _ScoresState extends State<Scores> {
   int sat1Count = 0;
   int sat2Count = 0;
   int actCount = 0;
-
   @override
   Widget build(BuildContext context) {
     getSat1Count();

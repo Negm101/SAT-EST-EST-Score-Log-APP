@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +35,7 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+      return new Scaffold(
       appBar: new AppBar(
           title: Text(
             'Add Score (real)',
@@ -48,104 +47,17 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
               padding: const EdgeInsets.fromLTRB(0.0, 10.0, 5.0, 10.0),
             )
           ]),
-      body: new Form(
-          key: _formKey,
-          child: Container(
-
-            child: ListView(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: getWidthSize(0.05), right: getWidthSize(0.05)),
-                  child: new Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width / 2.5,
-                            child: new TextFormField(
-                              decoration: const InputDecoration(
-                                labelText: "English",
-                                hintText: "/800",
-                                counterText: '',
-                              ),
-                              validator: validateScore,
-                              autocorrect: false,
-                              keyboardType: TextInputType.phone,
-                              maxLength: 4,
-                              controller: _englishScoreController,
-                              onChanged: (String value) {
-                                setEnglishScore();
-                              },
-                            ),
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width / 2.5,
-                            child: new TextFormField(
-                              decoration: const InputDecoration(
-                                labelText: "Math",
-                                hintText: '/800',
-                                counterText: '',
-                                errorMaxLines: 4,
-                                //errorText: validateScore(value),
-                              ),
-                              validator: validateScore,
-                              autocorrect: false,
-                              keyboardType: TextInputType.phone,
-                              maxLength: 4,
-                              controller: _mathScoreController,
-                              onChanged: (String value) {
-                                setMathScore();
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 10, bottom: 10),
-                        child: new TextField(
-                          decoration: const InputDecoration(
-                              labelText: "Note",
-                              hintText: 'type a simple note',
-                              errorMaxLines: 1),
-                          autocorrect: false,
-                          maxLength: 32,
-                          controller: _noteController,
-                          onChanged: (String value) {
-                            setNote();
-                          },
-                        ),
-                      ),
-                      Container(
-                        child: TextFormField(
-                          validator: validateDate,
-                          readOnly: true,
-                          controller: _scoreDateController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'Date of taking the test',
-                            suffixIcon: Icon(Icons.date_range),
-                          ),
-                          onTap: () {
-                            showPickerDate(context);
-                          },
-                        ),
-                      ),
-
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )),
+      body: body(),
       bottomNavigationBar: BottomAppBar(
-
         child: Container(
           width: MediaQuery.of(context).size.width,
           color: MyColors.primary(),
           child: FlatButton(
-            child: setUpButtonChild(),
+            child: Text(
+              'ADD',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
             onPressed: () {
               setState(() {
                 _save();
@@ -157,53 +69,95 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
     );
   }
 
-/*
-
- */
-  Widget setUpButtonChild() {
-    if (_state == 0) {
-      return new Text(
-        "ADD",
-        style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold
-        ),
-      );
-    } else if (_state == 1) {
-      return SizedBox(
-        height: 20,
-        width: 20,
-        child: CircularProgressIndicator(
-          strokeWidth: 4,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-        ),
-      );
-    }else if(_state == 2){
-      return Icon(
-        Icons.error,
-        color: Colors.white,
-        size: 30,
-      );
-    }
-    else {
-      return Icon(
-        Icons.check,
-        color: Colors.white,
-        size: 30,
-      );
-    }
-  }
-
-  void animateButton() {
-    setState(() {
-      _state = 1;
-    });
-
-    Timer(Duration(milliseconds: 1000), () {
-      setState(() {
-        _state = 2;
-      });
-    });
+  Widget body() {
+    return new Form(
+        key: _formKey,
+        child: ListView(
+          children: [
+            Container(
+              margin: EdgeInsets.only(
+                  left: getWidthSize(0.05), right: getWidthSize(0.05)),
+              child: new Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2.5,
+                        child: new TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: "English",
+                            hintText: "/800",
+                            counterText: '',
+                          ),
+                          validator: validateScore,
+                          autocorrect: false,
+                          keyboardType: TextInputType.phone,
+                          maxLength: 4,
+                          controller: _englishScoreController,
+                          onChanged: (String value) {
+                            setEnglishScore();
+                          },
+                        ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2.5,
+                        child: new TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: "Math",
+                            hintText: '/800',
+                            counterText: '',
+                            errorMaxLines: 4,
+                            //errorText: validateScore(value),
+                          ),
+                          validator: validateScore,
+                          autocorrect: false,
+                          keyboardType: TextInputType.phone,
+                          maxLength: 4,
+                          controller: _mathScoreController,
+                          onChanged: (String value) {
+                            setMathScore();
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    child: new TextField(
+                      decoration: const InputDecoration(
+                          labelText: "Note",
+                          hintText: 'type a simple note',
+                          errorMaxLines: 1),
+                      autocorrect: false,
+                      maxLength: 32,
+                      controller: _noteController,
+                      onChanged: (String value) {
+                        setNote();
+                      },
+                    ),
+                  ),
+                  Container(
+                    child: TextFormField(
+                      validator: validateDate,
+                      readOnly: true,
+                      controller: _scoreDateController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Date of taking the test',
+                        suffixIcon: Icon(Icons.date_range),
+                      ),
+                      onTap: () {
+                        showPickerDate(context);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ));
   }
 
   double getWidthSize(double factor) {

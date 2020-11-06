@@ -4,9 +4,9 @@ class TansikModel {
   final dbPercent = 'PERCENT';
   final dbYear = 'YEAR';
 
-  String university;
-  double percent;
-  int year;
+  var university;
+  var percent;
+  var year;
 
   TansikModel.db();
 

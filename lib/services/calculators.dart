@@ -12,6 +12,8 @@ class Calculators {
   int actSubjects;
   bool isPublic = true;
 
+  Calculators();
+
   Calculators.sat(this.sat1, this.sat2, this.gpa);
 
   Calculators.act(this.english, this.reading, this.math);

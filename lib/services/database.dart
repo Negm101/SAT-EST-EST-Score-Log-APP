@@ -31,6 +31,7 @@ class DatabaseHelper {
       _databaseHelper = DatabaseHelper
           ._createInstance(); // This is executed only once, singleton object
     }
+
     return _databaseHelper;
   }
 
@@ -38,6 +39,7 @@ class DatabaseHelper {
     if (_database == null) {
       _database = await initializeDatabase();
     }
+
     return _database;
   }
 
@@ -51,6 +53,7 @@ class DatabaseHelper {
         await openDatabase(path, version: 1, onCreate: _createDb);
     return scoreDatabase;
   }
+
 
   void _createDb(Database db, int newVersion) async {
     await db.execute(

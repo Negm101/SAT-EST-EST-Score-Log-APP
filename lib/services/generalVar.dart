@@ -1,7 +1,9 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
+
 class MyColors extends Color {
-  MyColors.primary() : super(_getColorFromHex('3F88C5'));
+  MyColors.primary() : super(_getColorFromHex('215A84'));
 
   MyColors.primaryDark() : super(_getColorFromHex('032B43'));
 
@@ -17,3 +19,4 @@ class MyColors extends Color {
     return int.parse(hexColor, radix: 16);
   }
 }
+
