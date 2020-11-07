@@ -58,21 +58,25 @@ class _HomeState extends State<Home> {
     const String title = 'Egy Score';
     return Scaffold(
       appBar: AppBar(
-        leading: const Center(
-          child: Text(title, textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18),),),
-        leadingWidth: MediaQuery
-            .of(context)
-            .size
-            .width / 2,
+        leading: Container(
+          alignment: Alignment.centerLeft,
+          margin: EdgeInsets.only(left: 20),
+          child: Text(
+            title,
+            textAlign: TextAlign.left,
+            style: TextStyle(fontSize: 18),
+          ),
+        ),
+        leadingWidth: MediaQuery.of(context).size.width / 2,
         actions: [
           IconButton(
-            icon: Icon(Icons.announcement, color: MyColors.textColorDark(),),
+            icon: Icon(
+              Icons.settings_rounded,
+              color: MyColors.textColorDark(),
+            ),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  new MaterialPageRoute(builder: (context) => new Setting())
-              );
+              Navigator.push(context,
+                  new MaterialPageRoute(builder: (context) => new Setting()));
             },
           ),
         ],

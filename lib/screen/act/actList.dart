@@ -21,6 +21,8 @@ class _ActScoreState extends State<ActScore> {
   DataActReal real = new DataActReal();
   DataActPractice practice = new DataActPractice();
   int pageOpen = 0;
+  IconData analytics = Icons.analytics;
+
   @override
   Widget build(BuildContext context) {
     practice.autoRefresh(setState);
@@ -113,6 +115,21 @@ class _ActScoreState extends State<ActScore> {
                     showDialogDelete(context);
                   },
                 ),
+                IconButton(
+                  icon: Icon(
+                    analytics,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      if (analytics == Icons.analytics) {
+                        analytics = Icons.analytics_outlined;
+                      } else if (analytics == Icons.analytics_outlined) {
+                        analytics = Icons.analytics;
+                      }
+                    });
+                  },
+                ),
               ],
             ),
             color: MyColors.primary(),
@@ -169,7 +186,6 @@ class _ActScoreState extends State<ActScore> {
       return real.scoreList.length != 0
           ? RefreshIndicator(
         child: ListView.builder(
-          physics: BouncingScrollPhysics(),
           itemCount: real.scoreList.length,
           itemBuilder: (BuildContext context, position) {
             position = position;
@@ -218,7 +234,6 @@ class _ActScoreState extends State<ActScore> {
       return practice.scoreList.length != 0
           ? RefreshIndicator(
         child: ListView.builder(
-          physics: BouncingScrollPhysics(),
           itemCount: practice.scoreList.length,
           itemBuilder: (BuildContext context, position) {
             position = position;

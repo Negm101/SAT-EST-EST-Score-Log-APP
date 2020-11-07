@@ -21,6 +21,7 @@ class ScoreSat2State extends State<ScoreSat2> {
   DataSatIIReal real = new DataSatIIReal();
   DataSatIIPractice practice = new DataSatIIPractice();
   int pageOpen = 0;
+  IconData analytics = Icons.analytics;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +70,7 @@ class ScoreSat2State extends State<ScoreSat2> {
                     ),
                   ];
                 },
-              )
+              ),
             ],
             bottom: TabBar(
               labelPadding: EdgeInsets.only(bottom: 13.5, top: 13.5),
@@ -111,13 +112,28 @@ class ScoreSat2State extends State<ScoreSat2> {
             shape: CircularNotchedRectangle(),
             child: new Row(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 IconButton(
                   icon: Icon(Icons.delete),
                   color: Colors.white,
                   onPressed: () {
                     showDialogDelete(context);
+                  },
+                ),
+                IconButton(
+                  icon: Icon(
+                    analytics,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      if (analytics == Icons.analytics) {
+                        analytics = Icons.analytics_outlined;
+                      } else if (analytics == Icons.analytics_outlined) {
+                        analytics = Icons.analytics;
+                      }
+                    });
                   },
                 ),
               ],
@@ -185,7 +201,8 @@ class ScoreSat2State extends State<ScoreSat2> {
                       ' | ' +
                       real.scoreList[position].subject.toString());
                   return SAT2ListItemReal(
-                    margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+                    margin: EdgeInsets.only(
+                        left: 10, right: 10, top: 10, bottom: 10),
                     score: real.scoreList[position].score,
                     subject: real.scoreList[position].subject,
                     dateDay: real.getDateDay(real.scoreList[position].date),
@@ -237,7 +254,8 @@ class ScoreSat2State extends State<ScoreSat2> {
                       ' | ' +
                       practice.scoreList[position].note.toString());
                   return SAT2ListItemPractice(
-                    margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+                    margin: EdgeInsets.only(
+                        left: 10, right: 10, top: 10, bottom: 10),
                     score: practice.scoreList[position].score,
                     subject: practice.scoreList[position].subject,
                     dateDay:
@@ -296,29 +314,34 @@ class ScoreSat2State extends State<ScoreSat2> {
     }
   }
 
-  EdgeInsets getMargin(int length, int id){
-    if (id == length){
+  EdgeInsets getMargin(int length, int id) {
+    if (id == length) {
       return EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 80);
-    }
-    else{
+    } else {
       return EdgeInsets.only(left: 10, right: 10, top: 20);
     }
   }
 
   showDialogDelete(BuildContext context) {
-
     // set up the buttons
     Widget cancelButton = FlatButton(
-      child: Text("Cancel", style: TextStyle(color: Colors.grey),),
-      onPressed:  () { Navigator.pop(context);},
+      child: Text(
+        "Cancel",
+        style: TextStyle(color: Colors.grey),
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+      },
     );
     Widget continueButton = FlatButton(
-      child: Text("Delete", style: TextStyle(color: Colors.red),),
-      onPressed:  () {
-        if(pageOpen == 0){
+      child: Text(
+        "Delete",
+        style: TextStyle(color: Colors.red),
+      ),
+      onPressed: () {
+        if (pageOpen == 0) {
           real.deleteAll(setState);
-        }
-        else if(pageOpen == 1){
+        } else if (pageOpen == 1) {
           practice.deleteAll(setState);
         }
         Navigator.of(context).pop();

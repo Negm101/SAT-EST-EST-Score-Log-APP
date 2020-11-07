@@ -62,7 +62,7 @@ class _SAT2ListItemRealState extends State<SAT2ListItemReal> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      margin: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                      margin: EdgeInsets.fromLTRB(getWidthSize(0.04), 0, 0, 0),
                       child: Text(
                         widget.dateYear.toString(),
                         textAlign: TextAlign.center,
@@ -70,7 +70,7 @@ class _SAT2ListItemRealState extends State<SAT2ListItemReal> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.fromLTRB(14, 1, 0, 2),
+                      margin: EdgeInsets.fromLTRB(getWidthSize(0.04), 1, 0, 2),
                       child: Text(
                         widget.dateDay.toString(),
                         textAlign: TextAlign.center,
@@ -80,7 +80,7 @@ class _SAT2ListItemRealState extends State<SAT2ListItemReal> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                      margin: EdgeInsets.fromLTRB(getWidthSize(0.04), 0, 0, 0),
                       child: Text(
                         getMonth(widget.dateMonth),
                         textAlign: TextAlign.center,
@@ -118,17 +118,19 @@ class _SAT2ListItemRealState extends State<SAT2ListItemReal> {
               ],
             ),
             Container(
-              margin: EdgeInsets.only(right: getWidthSize(0.015)),
-              alignment: Alignment.center,
-              child: IconButton(
-                  icon: Icon(
+                //margin: EdgeInsets.only(right: getWidthSize(0.015)),
+                alignment: Alignment.centerRight,
+                child: FlatButton(
+                  padding: EdgeInsets.zero,
+                  height: MediaQuery.of(context).size.height,
+                  minWidth: getWidthSize(0.15),
+                  child: Icon(
                     Icons.delete,
+                    size: getWidthSize(.065),
                     color: Colors.red,
-                    size: getWidthSize(.07),
-                    semanticLabel: 'delete',
                   ),
-                  onPressed: widget.onPressedDelete),
-            ),
+                  onPressed: widget.onPressedDelete,
+                )),
           ],
         ),
       ),

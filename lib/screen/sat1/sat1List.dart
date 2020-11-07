@@ -169,7 +169,6 @@ class ScoreSat1State extends State<ScoreSat1> {
       return real.scoreList.length != 0
           ? RefreshIndicator(
               child: ListView.builder(
-                physics: BouncingScrollPhysics(),
                 itemCount: real.scoreList.length,
                 itemBuilder: (BuildContext context, position) {
                   position = position;
@@ -216,7 +215,6 @@ class ScoreSat1State extends State<ScoreSat1> {
       return practice.scoreList.length != 0
           ? RefreshIndicator(
               child: ListView.builder(
-                physics: BouncingScrollPhysics(),
                 itemCount: practice.scoreList.length,
                 itemBuilder: (BuildContext context, position) {
                   position = position;
