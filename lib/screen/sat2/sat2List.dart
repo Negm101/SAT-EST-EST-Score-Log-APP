@@ -21,7 +21,7 @@ class ScoreSat2State extends State<ScoreSat2> {
   DataSatIIReal real = new DataSatIIReal();
   DataSatIIPractice practice = new DataSatIIPractice();
   int pageOpen = 0;
-  IconData analytics = Icons.analytics;
+  IconData analytics = Icons.analytics_outlined;
 
   @override
   Widget build(BuildContext context) {
@@ -78,12 +78,10 @@ class ScoreSat2State extends State<ScoreSat2> {
                 if (index == 0) {
                   setState(() {
                     pageOpen = 0;
-                    debugPrint('Current Page = $pageOpen');
                   });
                 } else if (index == 1) {
                   setState(() {
                     pageOpen = 1;
-                    debugPrint('Current Page = $pageOpen');
                   });
                 }
               },
@@ -115,7 +113,7 @@ class ScoreSat2State extends State<ScoreSat2> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: Icon(Icons.delete_forever),
                   color: Colors.white,
                   onPressed: () {
                     showDialogDelete(context);
@@ -195,11 +193,6 @@ class ScoreSat2State extends State<ScoreSat2> {
                 itemCount: real.scoreList.length,
                 itemBuilder: (BuildContext context, position) {
                   position = position;
-                  debugPrint(real.scoreList[position].id.toString() +
-                      ' | ' +
-                      real.scoreList[position].score.toString() +
-                      ' | ' +
-                      real.scoreList[position].subject.toString());
                   return SAT2ListItemReal(
                     margin: EdgeInsets.only(
                         left: 10, right: 10, top: 10, bottom: 10),
@@ -242,17 +235,6 @@ class ScoreSat2State extends State<ScoreSat2> {
                 itemCount: practice.scoreList.length,
                 itemBuilder: (BuildContext context, position) {
                   position = position;
-                  debugPrint(position.toString() +
-                      ' | ' +
-                      practice.scoreList[position].id.toString() +
-                      ' | ' +
-                      practice.scoreList[position].score.toString() +
-                      ' | ' +
-                      practice.scoreList[position].subject.toString() +
-                      ' | ' +
-                      practice.scoreList[position].date.toString() +
-                      ' | ' +
-                      practice.scoreList[position].note.toString());
                   return SAT2ListItemPractice(
                     margin: EdgeInsets.only(
                         left: 10, right: 10, top: 10, bottom: 10),

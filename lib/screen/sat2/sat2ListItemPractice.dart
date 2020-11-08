@@ -272,8 +272,6 @@ class DataSatIIPractice{
   }
 
   int getDateDay(String date) {
-    debugPrint(date);
-    debugPrint(date);
     return DateTime.parse(date).day.toInt();
   }
 
@@ -317,14 +315,12 @@ class DataSatIIPractice{
   void delete(BuildContext context, ScoreIIPractice score, Function setState) async {
     int result = await databaseHelper.deleteScoreSatIIPractice(score.id);
     if (result != 0) {
-      debugPrint('Score Deleted Successfully');
       updateListView(setState);
     }
   }
   void deleteAll(Function setState) async{
     int result = await databaseHelper.deleteAllFrom(title.dbTableName);
     if (result != 0) {
-      debugPrint('Score Deleted Successfully');
       updateListView(setState);
     }
   }

@@ -19,7 +19,9 @@ class ScoreSat1State extends State<ScoreSat1> {
   ScoreIPractice scorePractice = new ScoreIPractice.db();
   DataSatIReal real = new DataSatIReal();
   DataSatIPractice practice = new DataSatIPractice();
+  IconData analytics = Icons.analytics_outlined;
   int pageOpen = 0;
+
   @override
   Widget build(BuildContext context) {
     practice.autoRefresh(setState);
@@ -40,7 +42,6 @@ class ScoreSat1State extends State<ScoreSat1> {
             title: Text('SAT I'),
             actions: [
               PopupMenuButton(
-
                 onSelected: (button) {
                   if (button == 0) {
                     sortByScore();
@@ -70,12 +71,10 @@ class ScoreSat1State extends State<ScoreSat1> {
                 if (index == 0) {
                   setState(() {
                     pageOpen = 0;
-                    debugPrint('Current Page = $pageOpen');
                   });
                 } else if (index == 1) {
                   setState(() {
                     pageOpen = 1;
-                    debugPrint('Current Page = $pageOpen');
                   });
                 }
               },
@@ -104,13 +103,28 @@ class ScoreSat1State extends State<ScoreSat1> {
             shape: CircularNotchedRectangle(),
             child: new Row(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: Icon(Icons.delete_forever),
                   color: Colors.white,
                   onPressed: () {
                     showDialogDelete(context);
+                  },
+                ),
+                IconButton(
+                  icon: Icon(
+                    analytics,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      if (analytics == Icons.analytics) {
+                        analytics = Icons.analytics_outlined;
+                      } else if (analytics == Icons.analytics_outlined) {
+                        analytics = Icons.analytics;
+                      }
+                    });
                   },
                 ),
               ],
@@ -168,38 +182,61 @@ class ScoreSat1State extends State<ScoreSat1> {
     } else {
       return real.scoreList.length != 0
           ? RefreshIndicator(
-              child: ListView.builder(
-                itemCount: real.scoreList.length,
-                itemBuilder: (BuildContext context, position) {
-                  position = position;
-                  debugPrint(real.scoreList[position].id.toString() +
-                      ' | ' +
-                      real.scoreList[position].englishScore.toString() +
-                      ' | ' +
-                      real.scoreList[position].mathScore.toString());
-                  return SAT1ListItemReal(
-                    margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
-                    englishScore: real.scoreList[position].englishScore,
-                    mathScore: real.scoreList[position].mathScore,
-                    dateDay: real.getDateDay(real.scoreList[position].date),
-                    dateMonth: real.getDateMonth(real.scoreList[position].date),
-                    dateYear: real.getDateYear(real.scoreList[position].date),
-                    onPressedDelete: () {
-                      setState(() {
-                        real.delete(
-                            context, real.scoreList[position], setState);
-                        real.scoreList.removeAt(position);
-                      });
-                    },
-                    note: real.scoreList[position].note,
-                  );
-                },
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: real.scoreList.length,
+                      itemBuilder: (BuildContext context, position) {
+                        position = position;
+                        return Column(
+                          children: [
+                            getChart(position),
+                            SAT1ListItemReal(
+                              margin: EdgeInsets.only(
+                                  left: 10, right: 10, top: 10, bottom: 10),
+                              englishScore:
+                                  real.scoreList[position].englishScore,
+                              mathScore: real.scoreList[position].mathScore,
+                              dateDay: real
+                                  .getDateDay(real.scoreList[position].date),
+                              dateMonth: real
+                                  .getDateMonth(real.scoreList[position].date),
+                              dateYear: real
+                                  .getDateYear(real.scoreList[position].date),
+                              onPressedDelete: () {
+                                setState(() {
+                                  real.delete(context, real.scoreList[position],
+                                      setState);
+                                  real.scoreList.removeAt(position);
+                                });
+                              },
+                              note: real.scoreList[position].note,
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
               onRefresh: getDataReal,
               displacement: 20,
             )
           : Center(child: CircularProgressIndicator());
     }
+  }
+
+  Widget getChart(int position) {
+    if (position == 0 && analytics == Icons.analytics) {
+      return MyBarChart(
+          scoreList: real.scoreList, itemCount: real.scoreList.length);
+    } else
+      return Divider(
+        height: 0,
+        thickness: 0,
+        color: Colors.transparent,
+      );
   }
 
   Widget getScoreIPractice() {
@@ -218,30 +255,16 @@ class ScoreSat1State extends State<ScoreSat1> {
                 itemCount: practice.scoreList.length,
                 itemBuilder: (BuildContext context, position) {
                   position = position;
-                  debugPrint(position.toString() +
-                      ' | ' +
-                      practice.scoreList[position].id.toString() +
-                      ' | ' +
-                      practice.scoreList[position].readingScore.toString() +
-                      ' | ' +
-                      practice.scoreList[position].writingScore.toString() +
-                      ' | ' +
-                      practice.scoreList[position].mathNoCalcScore.toString() +
-                      ' | ' +
-                      practice.scoreList[position].mathCalcScore.toString() +
-                      ' | ' +
-                      practice.scoreList[position].date.toString() +
-                      ' | ' +
-                      practice.scoreList[position].note.toString());
                   return SAT1ListItemPractice(
-                    margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+                    margin: EdgeInsets.only(
+                        left: 10, right: 10, top: 10, bottom: 10),
                     readingScore: practice.scoreList[position].readingScore,
                     writingScore: practice.scoreList[position].writingScore,
                     mathCalcScore: practice.scoreList[position].mathCalcScore,
                     mathNoCalScore:
-                        practice.scoreList[position].mathNoCalcScore,
+                    practice.scoreList[position].mathNoCalcScore,
                     dateDay:
-                        practice.getDateDay(practice.scoreList[position].date),
+                    practice.getDateDay(practice.scoreList[position].date),
                     dateMonth: practice
                         .getDateMonth(practice.scoreList[position].date),
                     dateYear:
@@ -277,8 +300,9 @@ class ScoreSat1State extends State<ScoreSat1> {
       real.updateListViewSortBy(setState,
           '${scoreReal.dbEnglishScore} ASC,${scoreReal.dbMathScore} ASC');
     } else if (pageOpen == 1) {
-      practice.updateListViewSortBy(setState,
-              '${scorePractice.dbReadingScore} ASC,'
+      practice.updateListViewSortBy(
+          setState,
+          '${scorePractice.dbReadingScore} ASC,'
               '${scorePractice.dbWritingScore} ASC, '
               '${scorePractice.dbMathWithNoCalcScore} ASC, '
               '${scorePractice.dbMathCalcScore} ASC ');
@@ -293,28 +317,34 @@ class ScoreSat1State extends State<ScoreSat1> {
     }
   }
 
-  EdgeInsets getMargin(int length, int id){
-    if (id == length){
+  EdgeInsets getMargin(int length, int id) {
+    if (id == length) {
       return EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 80);
-    }
-    else{
+    } else {
       return EdgeInsets.only(left: 10, right: 10, top: 20);
     }
   }
-  showDialogDelete(BuildContext context) {
 
+  showDialogDelete(BuildContext context) {
     // set up the buttons
     Widget cancelButton = FlatButton(
-      child: Text("Cancel", style: TextStyle(color: Colors.grey),),
-      onPressed:  () { Navigator.pop(context);},
+      child: Text(
+        "Cancel",
+        style: TextStyle(color: Colors.grey),
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+      },
     );
     Widget continueButton = FlatButton(
-      child: Text("Delete", style: TextStyle(color: Colors.red),),
-      onPressed:  () {
-        if(pageOpen == 0){
+      child: Text(
+        "Delete",
+        style: TextStyle(color: Colors.red),
+      ),
+      onPressed: () {
+        if (pageOpen == 0) {
           real.deleteAll(setState);
-        }
-        else if(pageOpen == 1){
+        } else if (pageOpen == 1) {
           practice.deleteAll(setState);
         }
         Navigator.of(context).pop();
@@ -339,5 +369,4 @@ class ScoreSat1State extends State<ScoreSat1> {
       },
     );
   }
-
 }

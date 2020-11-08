@@ -316,7 +316,6 @@ class DataSatIReal{
   void delete(BuildContext context, ScoreIReal score, Function setState) async {
     int result = await databaseHelper.deleteScoreSatIReal(score.id);
     if (result != 0) {
-      debugPrint('Score Deleted Successfully');
       updateListView(setState);
     }
   }
@@ -324,7 +323,6 @@ class DataSatIReal{
   void deleteAll(Function setState) async{
     int result = await databaseHelper.deleteAllFrom(title.dbTableName);
     if (result != 0) {
-      debugPrint('Score Deleted Successfully');
       updateListView(setState);
     }
   }

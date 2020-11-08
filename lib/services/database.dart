@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:score_log_app/model/act/actPractice.dart';
 import 'package:score_log_app/model/act/actReal.dart';
@@ -123,7 +122,6 @@ class DatabaseHelper {
             "${scoreActPractice.dbNote} VARCHAR(34)  NOT NULL DEFAULT 'No note for this test'"
             ")"
     );
-    debugPrint('tables Created');
   }
 
   // Fetch Operation: Get all objects from database
@@ -168,42 +166,36 @@ class DatabaseHelper {
   Future<int> insertScoreSatIReal(ScoreIReal score) async {
     Database db = await this.database;
     var result = await db.insert(scoreIReal.dbTableName, score.toMap());
-    debugPrint('Real I saved');
     return result;
   }
 
   Future<int> insertScoreSatIPractice(ScoreIPractice score) async {
     Database db = await this.database;
     var result = await db.insert(scoreIPractice.dbTableName, score.toMap());
-    debugPrint('Practice I saved');
     return result;
   }
 
   Future<int> insertScoreSatIIReal(ScoreIIReal score) async {
     Database db = await this.database;
     var result = await db.insert(scoreIIReal.dbTableName, score.toMap());
-    debugPrint('Real II saved');
     return result;
   }
 
   Future<int> insertScoreSatIIPractice(ScoreIIPractice score) async {
     Database db = await this.database;
     var result = await db.insert(scoreIIPractice.dbTableName, score.toMap());
-    debugPrint('Practice II saved');
     return result;
   }
 
   Future<int> insertScoreActReal(ActReal score) async {
     Database db = await this.database;
     var result = await db.insert(scoreActReal.dbTableName, score.toMap());
-    debugPrint('Real II saved');
     return result;
   }
 
   Future<int> insertScoreActPractice(ActPractice score) async {
     Database db = await this.database;
     var result = await db.insert(scoreActPractice.dbTableName, score.toMap());
-    debugPrint('Practice II saved');
     return result;
   }
 

@@ -8,7 +8,6 @@ import 'package:score_log_app/screen/act/addActReal.dart';
 import 'package:score_log_app/services/generalVar.dart';
 
 import 'addActPractice.dart';
-
 // ignore: must_be_immutable
 class ActScore extends StatefulWidget {
   @override
@@ -21,7 +20,7 @@ class _ActScoreState extends State<ActScore> {
   DataActReal real = new DataActReal();
   DataActPractice practice = new DataActPractice();
   int pageOpen = 0;
-  IconData analytics = Icons.analytics;
+  IconData analytics = Icons.analytics_outlined;
 
   @override
   Widget build(BuildContext context) {
@@ -72,12 +71,10 @@ class _ActScoreState extends State<ActScore> {
                 if (index == 0) {
                   setState(() {
                     pageOpen = 0;
-                    debugPrint('Current Page = $pageOpen');
                   });
                 } else if (index == 1) {
                   setState(() {
                     pageOpen = 1;
-                    debugPrint('Current Page = $pageOpen');
                   });
                 }
               },
@@ -106,10 +103,10 @@ class _ActScoreState extends State<ActScore> {
             shape: CircularNotchedRectangle(),
             child: new Row(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: Icon(Icons.delete_forever),
                   color: Colors.white,
                   onPressed: () {
                     showDialogDelete(context);
@@ -189,11 +186,6 @@ class _ActScoreState extends State<ActScore> {
           itemCount: real.scoreList.length,
           itemBuilder: (BuildContext context, position) {
             position = position;
-            debugPrint(real.scoreList[position].id.toString() +
-                ' | ' +
-                real.scoreList[position].englishScore.toString() +
-                ' | ' +
-                real.scoreList[position].mathScore.toString());
             return ActListItemReal(
               margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
               englishScore: real.scoreList[position].englishScore,
@@ -237,21 +229,6 @@ class _ActScoreState extends State<ActScore> {
           itemCount: practice.scoreList.length,
           itemBuilder: (BuildContext context, position) {
             position = position;
-            debugPrint(position.toString() +
-                ' | ' +
-                practice.scoreList[position].id.toString() +
-                ' | ' +
-                practice.scoreList[position].englishScore.toString() +
-                ' | ' +
-                practice.scoreList[position].mathScore.toString() +
-                ' | ' +
-                practice.scoreList[position].readingScore.toString() +
-                ' | ' +
-                practice.scoreList[position].scienceScore.toString() +
-                ' | ' +
-                practice.scoreList[position].date.toString() +
-                ' | ' +
-                practice.scoreList[position].note.toString());
             return ActListItemPractice(
               margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
               readingScore: practice.scoreList[position].readingScore,

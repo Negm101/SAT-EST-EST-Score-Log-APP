@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 class Calculators {
   double sat1;
   double sat2;
@@ -46,12 +44,6 @@ class Calculators {
   void _actAverage() {
     this.compositeScore =
         ((this.english + this.math + this.reading) / 3).round().toInt();
-    debugPrint(this.english.toString() +
-        ' ' +
-        this.math.toString() +
-        ' ' +
-        this.reading.toString());
-    debugPrint(compositeScore.toString());
   }
 
   int convertActToSat1() {

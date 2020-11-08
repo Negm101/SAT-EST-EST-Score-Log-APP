@@ -63,7 +63,6 @@ class _ScoresState extends State<Scores> {
   void getSat1Count() async {
     int countR = await databaseHelper.getCountSatIReal();
     int countP = await databaseHelper.getCountSatIPractice();
-    debugPrint((countR + countP).toString());
     if (sat1Count == (countP + countR)) {
       sat1Count = countP + countR;
     }
@@ -77,7 +76,6 @@ class _ScoresState extends State<Scores> {
   void getSat2Count() async {
     int countR = await databaseHelper.getCountSatIIPractice();
     int countP = await databaseHelper.getCountSatIIReal();
-    debugPrint((countR + countP).toString());
     if (sat2Count == (countP + countR)) {
       sat2Count = countP + countR;
     }
@@ -91,7 +89,6 @@ class _ScoresState extends State<Scores> {
   void getActCount() async {
     int countR = await databaseHelper.getCountActReal();
     int countP = await databaseHelper.getCountActPractice();
-    debugPrint((countR + countP).toString());
     if (actCount == (countP + countR)) {
       actCount = countP + countR;
     }

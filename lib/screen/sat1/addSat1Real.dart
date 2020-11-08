@@ -194,15 +194,12 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
   }
   String validateScore(String value) {
     if (value.length == 0){
-      debugPrint('value length: ' + value.length.toString());
       return "Field can\'t be empty";
     }
     else if (int.parse(value.toString()) > 800) {
-      debugPrint('value: ' + value.toString());
       return "At most 800";
     }
     else if (int.parse(value.toString()) < 200) {
-      debugPrint('value: ' + value.toString());
       return "At least 200";
     }
     else {
@@ -210,18 +207,14 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
     }
   }
   String validateDate(String date){
-    debugPrint('date: ' + date.length.toString());
     if(date.length == 0){
-      debugPrint('date.length == 0');
       return "Field can\'t be empty";
     }
-    debugPrint('null');
     return null;
   }
 
   String validateNote(String note) {
     if (note.length > 32) {
-      debugPrint('note length: ' + note.length.toString());
       return "At most 32 characters";
     }
     else {

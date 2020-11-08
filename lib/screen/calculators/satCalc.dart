@@ -127,7 +127,6 @@ class _SatCalcState extends State<SatCalc> {
                           _isPublic = true;
                         });
                         setIsPublic();
-                        debugPrint('is public:  ' + _isPublic.toString());
                       },
                     ),
                     ChoiceChip(
@@ -145,7 +144,6 @@ class _SatCalcState extends State<SatCalc> {
                           _isPublic = false;
                         });
                         setIsPublic();
-                        debugPrint('is public:  ' + _isPublic.toString());
                       },
                     ),
                   ],

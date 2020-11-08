@@ -321,7 +321,6 @@ class DataActPractice{
   void delete(BuildContext context, ActPractice score, Function setState) async {
     int result = await databaseHelper.deleteActPractice(score.id);
     if (result != 0) {
-      debugPrint('Score Deleted Successfully');
       updateListView(setState);
     }
   }
@@ -329,7 +328,6 @@ class DataActPractice{
   void deleteAll(Function setState) async{
     int result = await databaseHelper.deleteAllFrom(title.dbTableName);
     if (result != 0) {
-      debugPrint('Score Deleted Successfully');
       updateListView(setState);
     }
   }

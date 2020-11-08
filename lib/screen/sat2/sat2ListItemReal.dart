@@ -273,8 +273,6 @@ class DataSatIIReal{
   }
 
   int getDateDay(String date) {
-    debugPrint(date);
-    debugPrint(date);
     return DateTime.parse(date).day.toInt();
   }
 
@@ -317,7 +315,6 @@ class DataSatIIReal{
   void delete(BuildContext context, ScoreIIReal score, Function setState) async {
     int result = await databaseHelper.deleteScoreSatIIReal(score.id);
     if (result != 0) {
-      debugPrint('Score Deleted Successfully');
       updateListView(setState);
     }
   }
@@ -325,7 +322,6 @@ class DataSatIIReal{
   void deleteAll(Function setState) async{
     int result = await databaseHelper.deleteAllFrom(title.dbTableName);
     if (result != 0) {
-      debugPrint('Score Deleted Successfully');
       updateListView(setState);
     }
   }

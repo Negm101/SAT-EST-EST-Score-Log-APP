@@ -56,7 +56,7 @@ class _TansikState extends State<Tansik> {
   }
 
   void setLoadingState() {
-    Future.delayed(const Duration(milliseconds: 2000), () {
+    Future.delayed(const Duration(milliseconds: 800), () {
       setState(() {
         _isLoading = false;
       });

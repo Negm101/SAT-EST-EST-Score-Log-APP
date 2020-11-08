@@ -127,7 +127,7 @@ class _ActListItemRealState extends State<ActListItemReal> {
             ),
             Container(
                 //margin: EdgeInsets.only(right: getWidthSize(0.015)),
-                alignment: Alignment.centerRight,
+                alignment: Alignment.centerLeft,
                 child: FlatButton(
                   padding: EdgeInsets.zero,
                   height: MediaQuery.of(context).size.height,
@@ -322,14 +322,12 @@ class DataActReal{
   void deleteAll(Function setState) async{
     int result = await databaseHelper.deleteAllFrom(title.dbTableName);
     if (result != 0) {
-      debugPrint('Score Deleted Successfully');
       updateListView(setState);
     }
   }
   void delete(BuildContext context, ActReal score, Function setState) async {
     int result = await databaseHelper.deleteActReal(score.id);
     if (result != 0) {
-      debugPrint('Score Deleted Successfully');
       updateListView(setState);
     }
   }

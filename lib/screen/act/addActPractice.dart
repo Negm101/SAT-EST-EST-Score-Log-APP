@@ -247,19 +247,15 @@ class _AddActPracticeState extends State<AddActPractice> {
   }
   void setEnglishScore(){
     score.englishScore = int.parse(_englishScoreController.text);
-    debugPrint('reading score: ' + score.englishScore.toString());
   }
   void setMathScore(){
     score.mathScore = int.parse(_mathScoreController.text);
-    debugPrint('writing score: ' + score.mathScore.toString());
   }
   void setReadingScore(){
     score.readingScore = int.parse(_readingScoreController.text);
-    debugPrint('math no calc score: ' + score.readingScore.toString());
   }
   void setScienceScore(){
     score.scienceScore = int.parse(_scienceScoreController.text);
-    debugPrint('math calc score: ' + score.scienceScore.toString());
   }
   void setDate(){
     score.date = _scoreDateController.text;
@@ -269,11 +265,9 @@ class _AddActPracticeState extends State<AddActPractice> {
   }
   String valEnglish(String value) {
     if (value.length == 0){
-      debugPrint('value length: ' + value.length.toString());
       return "Field can\'t be empty";
     }
     else if (int.parse(value.toString()) > 75) {
-      debugPrint('value: ' + value.toString() );
       return "At most 75";
     }
     else {
@@ -282,11 +276,9 @@ class _AddActPracticeState extends State<AddActPractice> {
   }
   String valMath(String value) {
     if (value.length == 0){
-      debugPrint('value length: ' + value.length.toString());
       return "Field can\'t be empty";
     }
     else if (int.parse(value.toString()) > 60) {
-      debugPrint('value: ' + value.toString() );
       return "At most 60";
     }
     else {
@@ -295,11 +287,9 @@ class _AddActPracticeState extends State<AddActPractice> {
   }
   String valReading(String value) {
     if (value.length == 0){
-      debugPrint('value length: ' + value.length.toString());
       return "Field can\'t be empty";
     }
     else if (int.parse(value.toString()) > 40) {
-      debugPrint('value: ' + value.toString() );
       return "At most 40";
     }
     else {
@@ -308,11 +298,9 @@ class _AddActPracticeState extends State<AddActPractice> {
   }
   String valScience(String value) {
     if (value.length == 0){
-      debugPrint('value length: ' + value.length.toString());
       return "Field can\'t be empty";
     }
     else if (int.parse(value.toString()) > 40) {
-      debugPrint('value: ' + value.toString() );
       return "At most 40";
     }
     else {
@@ -320,17 +308,13 @@ class _AddActPracticeState extends State<AddActPractice> {
     }
   }
   String validateDate(String date){
-    debugPrint('date: ' + date.length.toString());
     if(date.length == 0){
-      debugPrint('date.length == ${date.length}');
       return "Field can\'t be empty";
     }
-    debugPrint('null');
     return null;
   }
   String validateNote(String note){
     if (note.length > 32){
-      debugPrint('note length: ' + note.length.toString());
       return "At most 32 characters";
     }
     else {
@@ -342,15 +326,9 @@ class _AddActPracticeState extends State<AddActPractice> {
     if(_formKey.currentState.validate()){
       setDate();
       await databaseHelper.insertScoreActPractice(score);
-      debugPrint('reading: ' + _englishScoreController.text);
-      debugPrint('writing: ' + _mathScoreController.text);
-      debugPrint('math: ' + _readingScoreController.text);
-      debugPrint('math(calc) : ' + _scienceScoreController.text);
-      debugPrint('date: ' + _scoreDateController.text);
       Navigator.pop(context);
     }
     else {
-      debugPrint('error at save practice');
     }
   }
 
