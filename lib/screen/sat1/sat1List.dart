@@ -35,6 +35,7 @@ class ScoreSat1State extends State<ScoreSat1> {
             automaticallyImplyLeading: false,
             leading: IconButton(
               icon: Icon(Icons.arrow_back_outlined),
+              tooltip: null,
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -50,7 +51,8 @@ class ScoreSat1State extends State<ScoreSat1> {
                   }
                 },
                 padding: EdgeInsets.all(0),
-                tooltip: 'Sort',
+                //tooltip: 'Sort',
+
                 itemBuilder: (BuildContext context) {
                   return [
                     PopupMenuItem(

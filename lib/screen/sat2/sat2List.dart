@@ -122,9 +122,9 @@ class ScoreSat2State extends State<ScoreSat2> {
                 IconButton(
                   icon: Icon(
                     analytics,
-                    color: Colors.white,
+                    color: Colors.grey,
                   ),
-                  onPressed: () {
+                  /*onPressed: () {
                     setState(() {
                       if (analytics == Icons.analytics) {
                         analytics = Icons.analytics_outlined;
@@ -132,7 +132,7 @@ class ScoreSat2State extends State<ScoreSat2> {
                         analytics = Icons.analytics;
                       }
                     });
-                  },
+                  },*/
                 ),
               ],
             ),

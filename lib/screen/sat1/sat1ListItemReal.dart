@@ -118,20 +118,20 @@ class _SAT1ListItemRealState extends State<SAT1ListItemReal> {
                 ),
               ],
             ),
-            Container(
-                //margin: EdgeInsets.only(right: getWidthSize(0.015)),
-                alignment: Alignment.centerRight,
-                child: FlatButton(
-                  padding: EdgeInsets.zero,
-                  height: MediaQuery.of(context).size.height,
-                  minWidth: getWidthSize(0.15),
-                  child: Icon(
-                    Icons.delete,
-                    size: getWidthSize(.065),
-                    color: Colors.red,
-                  ),
-                  onPressed: widget.onPressedDelete,
-                )),
+            Expanded(
+                child: Container(
+              child: FlatButton(
+                padding: EdgeInsets.zero,
+                height: MediaQuery.of(context).size.height,
+                minWidth: getWidthSize(0.05),
+                child: Icon(
+                  Icons.delete,
+                  size: getWidthSize(.065),
+                  color: Colors.red,
+                ),
+                onPressed: widget.onPressedDelete,
+              ),
+            )),
           ],
         ),
       ),

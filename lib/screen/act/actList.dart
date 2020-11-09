@@ -115,9 +115,9 @@ class _ActScoreState extends State<ActScore> {
                 IconButton(
                   icon: Icon(
                     analytics,
-                    color: Colors.white,
+                    color: Colors.grey,
                   ),
-                  onPressed: () {
+                  /*onPressed: () {
                     setState(() {
                       if (analytics == Icons.analytics) {
                         analytics = Icons.analytics_outlined;
@@ -125,7 +125,7 @@ class _ActScoreState extends State<ActScore> {
                         analytics = Icons.analytics;
                       }
                     });
-                  },
+                  },*/
                 ),
               ],
             ),

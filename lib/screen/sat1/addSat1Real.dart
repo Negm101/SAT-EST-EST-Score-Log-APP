@@ -35,7 +35,7 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
 
   @override
   Widget build(BuildContext context) {
-      return new Scaffold(
+    return new Scaffold(
       appBar: new AppBar(
           title: Text(
             'Add Score (real)',
