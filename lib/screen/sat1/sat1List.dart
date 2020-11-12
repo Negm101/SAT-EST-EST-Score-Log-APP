@@ -7,6 +7,7 @@ import 'package:score_log_app/screen/sat1/addSat1Real.dart';
 import 'package:score_log_app/screen/sat1/sat1ListItemPractice.dart';
 import 'package:score_log_app/screen/sat1/sat1ListItemReal.dart';
 import 'package:score_log_app/services/generalVar.dart';
+import 'package:score_log_app/services/graphs.dart';
 
 // ignore: must_be_immutable
 class ScoreSat1 extends StatefulWidget {
@@ -21,6 +22,8 @@ class ScoreSat1State extends State<ScoreSat1> {
   DataSatIPractice practice = new DataSatIPractice();
   IconData analytics = Icons.analytics_outlined;
   int pageOpen = 0;
+  GlobalKey keyReal = new GlobalKey();
+  GlobalKey keyPractice = new GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -193,7 +196,7 @@ class ScoreSat1State extends State<ScoreSat1> {
                         position = position;
                         return Column(
                           children: [
-                            getChart(position),
+                            getRealChart(position),
                             SAT1ListItemReal(
                               margin: EdgeInsets.only(
                                   left: 10, right: 10, top: 10, bottom: 10),
@@ -229,10 +232,28 @@ class ScoreSat1State extends State<ScoreSat1> {
     }
   }
 
-  Widget getChart(int position) {
+  Widget getRealChart(int position) {
     if (position == 0 && analytics == Icons.analytics) {
-      return MyBarChart(
-          scoreList: real.scoreList, itemCount: real.scoreList.length);
+      return Sat1RealGraph(
+        scoreList: real.scoreList,
+        itemCount: real.scoreList.length,
+        key: keyReal,
+      );
+    } else
+      return Divider(
+        height: 0,
+        thickness: 0,
+        color: Colors.transparent,
+      );
+  }
+
+  Widget getPracticeChart(int position) {
+    if (position == 0 && analytics == Icons.analytics) {
+      return Sat1PracticeGraph(
+        scoreList: practice.scoreList,
+        itemCount: real.scoreList.length,
+        key: keyPractice,
+      );
     } else
       return Divider(
         height: 0,
@@ -257,28 +278,35 @@ class ScoreSat1State extends State<ScoreSat1> {
                 itemCount: practice.scoreList.length,
                 itemBuilder: (BuildContext context, position) {
                   position = position;
-                  return SAT1ListItemPractice(
-                    margin: EdgeInsets.only(
-                        left: 10, right: 10, top: 10, bottom: 10),
-                    readingScore: practice.scoreList[position].readingScore,
-                    writingScore: practice.scoreList[position].writingScore,
-                    mathCalcScore: practice.scoreList[position].mathCalcScore,
-                    mathNoCalScore:
-                    practice.scoreList[position].mathNoCalcScore,
-                    dateDay:
-                    practice.getDateDay(practice.scoreList[position].date),
-                    dateMonth: practice
-                        .getDateMonth(practice.scoreList[position].date),
-                    dateYear:
+                  return Column(
+                    children: [
+                      getPracticeChart(position),
+                      SAT1ListItemPractice(
+                        margin: EdgeInsets.only(
+                            left: 10, right: 10, top: 10, bottom: 10),
+                        readingScore: practice.scoreList[position].readingScore,
+                        writingScore: practice.scoreList[position].writingScore,
+                        mathCalcScore: practice.scoreList[position]
+                            .mathCalcScore,
+                        mathNoCalScore:
+                        practice.scoreList[position].mathNoCalcScore,
+                        dateDay:
+                        practice.getDateDay(practice.scoreList[position].date),
+                        dateMonth: practice
+                            .getDateMonth(practice.scoreList[position].date),
+                        dateYear:
                         practice.getDateYear(practice.scoreList[position].date),
-                    onPressedDelete: () {
-                      setState(() {
-                        practice.delete(
-                            context, practice.scoreList[position], setState);
-                        practice.scoreList.removeAt(position);
-                      });
-                    },
-                    note: practice.scoreList[position].note,
+                        onPressedDelete: () {
+                          setState(() {
+                            practice.delete(
+                                context, practice.scoreList[position],
+                                setState);
+                            practice.scoreList.removeAt(position);
+                          });
+                        },
+                        note: practice.scoreList[position].note,
+                      ),
+                    ],
                   );
                 },
               ),

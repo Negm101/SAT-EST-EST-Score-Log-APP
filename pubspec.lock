@@ -473,6 +473,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.5"
+  show_more_text_popup:
+    dependency: "direct main"
+    description:
+      name: show_more_text_popup
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   simple_tooltip:
     dependency: "direct main"
     description:

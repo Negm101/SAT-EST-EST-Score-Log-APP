@@ -72,7 +72,7 @@ class _HomeState extends State<Home> {
           IconButton(
             icon: Icon(
               Icons.settings_rounded,
-              color: MyColors.textColorDark(),
+              color: MyColors.white(),
             ),
             onPressed: () {
               Navigator.push(context,
