@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:score_log_app/model/sat1/scoreIPractice.dart';
 import 'package:score_log_app/model/sat1/scoreIReal.dart';
@@ -6,7 +7,9 @@ import 'package:score_log_app/screen/sat1/addSat1Practice.dart';
 import 'package:score_log_app/screen/sat1/addSat1Real.dart';
 import 'package:score_log_app/screen/sat1/sat1ListItemPractice.dart';
 import 'package:score_log_app/screen/sat1/sat1ListItemReal.dart';
+import 'package:score_log_app/screen/settings.dart';
 import 'package:score_log_app/services/generalVar.dart';
+import 'package:score_log_app/services/globalVar.dart' as global;
 import 'package:score_log_app/services/graphs.dart';
 
 // ignore: must_be_immutable
@@ -21,14 +24,22 @@ class ScoreSat1State extends State<ScoreSat1> {
   DataSatIReal real = new DataSatIReal();
   DataSatIPractice practice = new DataSatIPractice();
   IconData analytics = Icons.analytics_outlined;
+  IconData sort = Icons.keyboard_arrow_up_outlined;
+  String sortBy = 'ASC';
   int pageOpen = 0;
   GlobalKey keyReal = new GlobalKey();
   GlobalKey keyPractice = new GlobalKey();
+  DataSettings settings = new DataSettings();
+  int buttonNum = -1;
 
   @override
   Widget build(BuildContext context) {
     practice.autoRefresh(setState);
+
     real.autoRefresh(setState);
+    if (global.isGraph) {
+      analytics = Icons.analytics;
+    }
 
     return Scaffold(
       body: DefaultTabController(
@@ -45,12 +56,52 @@ class ScoreSat1State extends State<ScoreSat1> {
             ),
             title: Text('SAT I'),
             actions: [
+              IconButton(
+                icon: Icon(
+                  sort,
+                  color: MyColors.white(),
+                ),
+                onPressed: () {
+                  debugPrint(buttonNum.toString());
+                  setState(() {
+                    if (sort == Icons.keyboard_arrow_up_outlined) {
+                      sort = Icons.keyboard_arrow_down_outlined;
+                      sortBy = 'DESC';
+                      if (buttonNum == 0) {
+                        debugPrint('sort by score desc');
+                        sortByScore(sortBy);
+                      } else if (buttonNum == 1) {
+                        debugPrint('sort by date desc');
+                        sortByDate(sortBy);
+                      } else {
+                        debugPrint('sort by default desc');
+                        sortByDate(sortBy);
+                      }
+                    } else if (sort == Icons.keyboard_arrow_down_outlined) {
+                      sort = Icons.keyboard_arrow_up_outlined;
+                      sortBy = 'ASC';
+                      if (buttonNum == 0) {
+                        debugPrint('sort by score asc');
+                        sortByScore(sortBy);
+                      } else if (buttonNum == 1) {
+                        debugPrint('sort by date asc');
+                        sortByDate(sortBy);
+                      } else {
+                        debugPrint('sort by default asc');
+                        sortByDate(sortBy);
+                      }
+                    }
+                  });
+                },
+              ),
               PopupMenuButton(
                 onSelected: (button) {
                   if (button == 0) {
-                    sortByScore();
+                    buttonNum = 0;
+                    sortByScore(sortBy);
                   } else if (button == 1) {
-                    sortByDate();
+                    buttonNum = 1;
+                    sortByDate(sortBy);
                   }
                 },
                 padding: EdgeInsets.all(0),
@@ -112,15 +163,16 @@ class ScoreSat1State extends State<ScoreSat1> {
               children: <Widget>[
                 IconButton(
                   icon: Icon(Icons.delete_forever),
-                  color: Colors.white,
+                  color: MyColors.white(),
                   onPressed: () {
                     showDialogDelete(context);
                   },
                 ),
                 IconButton(
+                  enableFeedback: true,
                   icon: Icon(
                     analytics,
-                    color: Colors.white,
+                    color: MyColors.white(),
                   ),
                   onPressed: () {
                     setState(() {
@@ -145,7 +197,7 @@ class ScoreSat1State extends State<ScoreSat1> {
                   backgroundColor: MyColors.primary(),
                   child: Icon(
                     Icons.add,
-                    color: Colors.white,
+                    color: MyColors.white(),
                     size: 35,
                   ),
                 );
@@ -199,7 +251,7 @@ class ScoreSat1State extends State<ScoreSat1> {
                             getRealChart(position),
                             SAT1ListItemReal(
                               margin: EdgeInsets.only(
-                                  left: 10, right: 10, top: 10, bottom: 10),
+                                  left: 10, right: 10, top: 5, bottom: 5),
                               englishScore:
                                   real.scoreList[position].englishScore,
                               mathScore: real.scoreList[position].mathScore,
@@ -233,7 +285,7 @@ class ScoreSat1State extends State<ScoreSat1> {
   }
 
   Widget getRealChart(int position) {
-    if (position == 0 && analytics == Icons.analytics) {
+    if (position == 0 && (analytics == Icons.analytics)) {
       return Sat1RealGraph(
         scoreList: real.scoreList,
         itemCount: real.scoreList.length,
@@ -286,21 +338,20 @@ class ScoreSat1State extends State<ScoreSat1> {
                             left: 10, right: 10, top: 10, bottom: 10),
                         readingScore: practice.scoreList[position].readingScore,
                         writingScore: practice.scoreList[position].writingScore,
-                        mathCalcScore: practice.scoreList[position]
-                            .mathCalcScore,
+                        mathCalcScore:
+                            practice.scoreList[position].mathCalcScore,
                         mathNoCalScore:
-                        practice.scoreList[position].mathNoCalcScore,
-                        dateDay:
-                        practice.getDateDay(practice.scoreList[position].date),
+                            practice.scoreList[position].mathNoCalcScore,
+                        dateDay: practice
+                            .getDateDay(practice.scoreList[position].date),
                         dateMonth: practice
                             .getDateMonth(practice.scoreList[position].date),
-                        dateYear:
-                        practice.getDateYear(practice.scoreList[position].date),
+                        dateYear: practice
+                            .getDateYear(practice.scoreList[position].date),
                         onPressedDelete: () {
                           setState(() {
-                            practice.delete(
-                                context, practice.scoreList[position],
-                                setState);
+                            practice.delete(context,
+                                practice.scoreList[position], setState);
                             practice.scoreList.removeAt(position);
                           });
                         },
@@ -318,6 +369,7 @@ class ScoreSat1State extends State<ScoreSat1> {
   }
 
   Future<void> getDataReal() async {
+    buttonNum = -1;
     real.updateListView(setState);
   }
 
@@ -325,25 +377,26 @@ class ScoreSat1State extends State<ScoreSat1> {
     practice.updateListView(setState);
   }
 
-  Future<void> sortByScore() async {
+  Future<void> sortByScore(String sortBy) async {
     if (pageOpen == 0) {
       real.updateListViewSortBy(setState,
-          '${scoreReal.dbEnglishScore} ASC,${scoreReal.dbMathScore} ASC');
+          '${scoreReal.dbEnglishScore} $sortBy,${scoreReal.dbMathScore} $sortBy');
     } else if (pageOpen == 1) {
       practice.updateListViewSortBy(
           setState,
-          '${scorePractice.dbReadingScore} ASC,'
-              '${scorePractice.dbWritingScore} ASC, '
-              '${scorePractice.dbMathWithNoCalcScore} ASC, '
-              '${scorePractice.dbMathCalcScore} ASC ');
+          '${scorePractice.dbReadingScore} $sortBy,'
+          '${scorePractice.dbWritingScore} $sortBy, '
+          '${scorePractice.dbMathWithNoCalcScore} $sortBy, '
+          '${scorePractice.dbMathCalcScore} $sortBy');
     }
   }
 
-  Future<void> sortByDate() async {
+  Future<void> sortByDate(String sortBy) async {
     if (pageOpen == 0) {
-      real.updateListViewSortBy(setState, scoreReal.dbDate);
+      real.updateListViewSortBy(setState, '${scoreReal.dbDate} $sortBy');
     } else if (pageOpen == 1) {
-      practice.updateListViewSortBy(setState, scorePractice.dbDate);
+      practice.updateListViewSortBy(
+          setState, '${scorePractice.dbDate} $sortBy');
     }
   }
 

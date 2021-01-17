@@ -48,7 +48,7 @@ class _TansikState extends State<Tansik> {
               backgroundColor: MyColors.primary(),
               child: Icon(
                 Icons.search,
-                color: Colors.white,
+                color: MyColors.white(),
               ),
             )
           : null,*/
@@ -101,6 +101,7 @@ class _TansikState extends State<Tansik> {
             child: ChoiceChip(
               label: Text('2020'),
               selected: _is20Selected,
+              pressElevation: 0,
               onSelected: (value) {
                 setState(() {
                   setAllChoiceChipsFalse();
@@ -115,6 +116,7 @@ class _TansikState extends State<Tansik> {
             child: ChoiceChip(
               label: Text('2019'),
               selected: _is19Selected,
+              pressElevation: 0,
               onSelected: (value) {
                 setState(() {
                   setAllChoiceChipsFalse();
@@ -129,6 +131,7 @@ class _TansikState extends State<Tansik> {
             child: ChoiceChip(
               label: Text('2018'),
               selected: _is18Selected,
+              pressElevation: 0,
               onSelected: (value) {
                 setState(() {
                   setAllChoiceChipsFalse();
@@ -143,6 +146,7 @@ class _TansikState extends State<Tansik> {
             child: ChoiceChip(
               label: Text('2017'),
               selected: _is17Selected,
+              pressElevation: 0,
               onSelected: (value) {
                 setState(() {
                   setAllChoiceChipsFalse();
@@ -157,6 +161,7 @@ class _TansikState extends State<Tansik> {
             child: ChoiceChip(
               label: Text('2016'),
               selected: _is16Selected,
+              pressElevation: 0,
               onSelected: (value) {
                 setState(() {
                   setAllChoiceChipsFalse();
@@ -171,6 +176,7 @@ class _TansikState extends State<Tansik> {
             child: ChoiceChip(
               label: Text('2015'),
               selected: _is15Selected,
+              pressElevation: 0,
               onSelected: (value) {
                 setState(() {
                   setAllChoiceChipsFalse();
@@ -185,6 +191,7 @@ class _TansikState extends State<Tansik> {
             child: ChoiceChip(
               label: Text('2014'),
               selected: _is14Selected,
+              pressElevation: 0,
               onSelected: (value) {
                 setState(() {
                   setAllChoiceChipsFalse();
@@ -199,6 +206,7 @@ class _TansikState extends State<Tansik> {
             child: ChoiceChip(
               label: Text('2013'),
               selected: _is13Selected,
+              pressElevation: 0,
               onSelected: (value) {
                 setState(() {
                   setAllChoiceChipsFalse();

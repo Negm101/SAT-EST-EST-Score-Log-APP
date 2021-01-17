@@ -50,7 +50,7 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
     'Latin',
     'Chinese',
     'Japanese',
-    'Korean'
+    'Korean',
   ];
   @override
   Widget build(BuildContext context) {
@@ -177,8 +177,7 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
     if (_state == 0) {
       return new Text(
         "ADD",
-        style:
-            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        style: TextStyle(color: MyColors.white(), fontWeight: FontWeight.bold),
       );
     } else if (_state == 1) {
       return SizedBox(
@@ -186,19 +185,19 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
         width: 20,
         child: CircularProgressIndicator(
           strokeWidth: 4,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          valueColor: AlwaysStoppedAnimation<Color>(MyColors.white()),
         ),
       );
     } else if (_state == 2) {
       return Icon(
         Icons.error,
-        color: Colors.white,
+        color: MyColors.white(),
         size: 30,
       );
     } else {
       return Icon(
         Icons.check,
-        color: Colors.white,
+        color: MyColors.white(),
         size: 30,
       );
     }
@@ -286,9 +285,9 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
         hideHeader: false,
         headercolor: MyColors.primary(),
         cancelTextStyle:
-        TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            TextStyle(color: MyColors.white(), fontWeight: FontWeight.bold),
         confirmTextStyle:
-        TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            TextStyle(color: MyColors.white(), fontWeight: FontWeight.bold),
         onConfirm: (Picker picker, List value) {
           setState(() {
             _subjectNameController.text = picker.adapter.text
@@ -308,10 +307,10 @@ class _AddSAT2RealState extends State<AddSAT2Real> {
           maxValue: DateTime.now(),
         ),
         headercolor: MyColors.primary(),
-        cancelTextStyle: TextStyle(
-            color: Colors.white, fontWeight: FontWeight.bold),
-        confirmTextStyle: TextStyle(
-            color: Colors.white, fontWeight: FontWeight.bold),
+        cancelTextStyle:
+            TextStyle(color: MyColors.white(), fontWeight: FontWeight.bold),
+        confirmTextStyle:
+            TextStyle(color: MyColors.white(), fontWeight: FontWeight.bold),
         selectedTextStyle: TextStyle(color: MyColors.primary()),
         onConfirm: (Picker picker, List value) {
           var date = (picker.adapter as DateTimePickerAdapter).value;

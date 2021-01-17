@@ -202,10 +202,7 @@ class _AddActRealState extends State<AddActReal> {
     if (_state == 0) {
       return new Text(
         "ADD",
-        style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold
-        ),
+        style: TextStyle(color: MyColors.white(), fontWeight: FontWeight.bold),
       );
     } else if (_state == 1) {
       return SizedBox(
@@ -213,13 +210,13 @@ class _AddActRealState extends State<AddActReal> {
         width: 20,
         child: CircularProgressIndicator(
           strokeWidth: 4,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          valueColor: AlwaysStoppedAnimation<Color>(MyColors.white()),
         ),
       );
     } else {
       return Icon(
         Icons.check,
-        color: Colors.white,
+        color: MyColors.white(),
         size: 30,
       );
     }
@@ -307,10 +304,10 @@ class _AddActRealState extends State<AddActReal> {
           maxValue: DateTime.now(),
         ),
         headercolor: MyColors.primary(),
-        cancelTextStyle: TextStyle(
-            color: Colors.white, fontWeight: FontWeight.bold),
-        confirmTextStyle: TextStyle(
-            color: Colors.white, fontWeight: FontWeight.bold),
+        cancelTextStyle:
+            TextStyle(color: MyColors.white(), fontWeight: FontWeight.bold),
+        confirmTextStyle:
+            TextStyle(color: MyColors.white(), fontWeight: FontWeight.bold),
         selectedTextStyle: TextStyle(color: MyColors.primary()),
         onConfirm: (Picker picker, List value) {
           var date = (picker.adapter as DateTimePickerAdapter).value;

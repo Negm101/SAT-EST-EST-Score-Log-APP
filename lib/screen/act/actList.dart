@@ -107,7 +107,7 @@ class _ActScoreState extends State<ActScore> {
               children: <Widget>[
                 IconButton(
                   icon: Icon(Icons.delete_forever),
-                  color: Colors.white,
+                  color: MyColors.white(),
                   onPressed: () {
                     showDialogDelete(context);
                   },
@@ -140,7 +140,7 @@ class _ActScoreState extends State<ActScore> {
                   backgroundColor: MyColors.primary(),
                   child: Icon(
                     Icons.add,
-                    color: Colors.white,
+                    color: MyColors.white(),
                     size: 35,
                   ),
                 );

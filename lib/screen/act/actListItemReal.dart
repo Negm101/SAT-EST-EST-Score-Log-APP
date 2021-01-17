@@ -42,12 +42,12 @@ class _ActListItemRealState extends State<ActListItemReal> {
     double average = (widget.englishScore + widget.mathScore + widget.readingScore + widget.scienceScore).toDouble()/4;
     int composite =  average.toInt();
     return Container(
-      height: MediaQuery.of(context).size.height / 7,
+      height: MediaQuery.of(context).size.height / 9,
       width: MediaQuery.of(context).size.width,
       margin: widget.margin,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
-        color: Colors.white,
+        color: MyColors.white(),
         boxShadow: [
           BoxShadow(
             color: Colors.grey,

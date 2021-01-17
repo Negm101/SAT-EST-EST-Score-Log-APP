@@ -245,8 +245,8 @@ class _ActCalcState extends State<ActCalc> {
             child: FlatButton(
               child: Text(
                 "CALCULATE",
-                style: const TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: MyColors.white(), fontWeight: FontWeight.bold),
               ),
               onPressed: () {
                 setState(() {

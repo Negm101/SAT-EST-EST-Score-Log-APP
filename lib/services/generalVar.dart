@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class MyColors extends Color {
@@ -24,4 +23,5 @@ class MyColors extends Color {
     return int.parse(hexColor, radix: 16);
   }
 }
+
 

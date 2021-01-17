@@ -64,10 +64,10 @@ class _CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: RaisedButton(
+      child: FlatButton(
           padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-          color: Colors.white,
-          elevation: widget.elevation,
+          color: MyColors.white(),
+          //elevation: widget.elevation,
           onPressed: widget.onPressed,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,8 +81,8 @@ class _CustomButtonState extends State<CustomButton> {
                     margin: EdgeInsets.only(left: 30),
                     child: Text(
                       widget.title,
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],

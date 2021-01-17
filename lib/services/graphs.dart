@@ -47,7 +47,7 @@ class _Sat1RealGraphState extends State<Sat1RealGraph> {
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: Colors.white,
+          color: MyColors.white(),
           boxShadow: [
             BoxShadow(
               color: Colors.grey,
@@ -57,18 +57,18 @@ class _Sat1RealGraphState extends State<Sat1RealGraph> {
           ],
         ),
         child: Text(
-          'No Enough Scores\n( At-least 3 scores ) ',
+          'No Enough Scores\n( At-least 2 scores ) ',
           textAlign: TextAlign.center,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       );
     } else {
       return Container(
-        margin: const EdgeInsets.only(bottom: 5),
-        padding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
+        margin: const EdgeInsets.all(10),
+        padding: const EdgeInsets.fromLTRB(5, 10, 5, 10),
         decoration: BoxDecoration(
-          //borderRadius: BorderRadius.circular(5),
-          color: MyColors.primary(),
+          borderRadius: BorderRadius.circular(5),
+          color: MyColors.white(),
           boxShadow: [
             BoxShadow(
               color: Colors.grey,
@@ -79,9 +79,58 @@ class _Sat1RealGraphState extends State<Sat1RealGraph> {
         ),
         child: Column(
           children: [
+            AspectRatio(
+              aspectRatio: 21 / 9,
+              child: Container(
+                  height: _deviceHeight / 5.5,
+                  width: _deviceWidth,
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      ListView.builder(
+                          itemCount: widget.scoreList.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (BuildContext context, position) {
+                            position = position;
+                            double _getScore() {
+                              if (_selection == 0) {
+                                _setTotalDivideBy(1600);
+                                return (widget
+                                            .scoreList[position].englishScore +
+                                        widget.scoreList[position].mathScore)
+                                    .toDouble();
+                              }
+                              if (_selection == 1) {
+                                _setTotalDivideBy(800);
+                                return widget.scoreList[position].englishScore
+                                    .toDouble();
+                              }
+                              if (_selection == 2) {
+                                _setTotalDivideBy(800);
+                                return widget.scoreList[position].mathScore
+                                    .toDouble();
+                              } else {
+                                debugPrint('error at selection');
+                                return -1;
+                              }
+                            }
+
+                            return _bar(
+                                _getDateDay(widget.scoreList[position].date),
+                                _getDateMonth(widget.scoreList[position].date),
+                                _getScore(),
+                                widget.scoreList[position].date);
+                          }),
+                    ],
+                  )),
+            ),
+            Divider(
+              color: Colors.grey,
+              thickness: .8,
+            ),
             Container(
               width: _deviceWidth,
-              height: _deviceHeight / 10,
+              height: _deviceHeight / 20,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -139,48 +188,6 @@ class _Sat1RealGraphState extends State<Sat1RealGraph> {
                 ],
               ),
             ),
-            //Divider(color: MyColors.primary(),),
-            Container(
-                height: _deviceHeight / 3.75,
-                width: _deviceWidth,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    ListView.builder(
-                        itemCount: widget.scoreList.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (BuildContext context, position) {
-                          position = position;
-                          double _getScore() {
-                            if (_selection == 0) {
-                              _setTotalDivideBy(1600);
-                              return (widget.scoreList[position].englishScore +
-                                      widget.scoreList[position].mathScore)
-                                  .toDouble();
-                            }
-                            if (_selection == 1) {
-                              _setTotalDivideBy(800);
-                              return widget.scoreList[position].englishScore
-                                  .toDouble();
-                            }
-                            if (_selection == 2) {
-                              _setTotalDivideBy(800);
-                              return widget.scoreList[position].mathScore
-                                  .toDouble();
-                            } else {
-                              debugPrint('error at selection');
-                              return -1;
-                            }
-                          }
-
-                          return _bar(
-                              _getDateDay(widget.scoreList[position].date),
-                              _getDateMonth(widget.scoreList[position].date),
-                              _getScore(),
-                              widget.scoreList[position].date);
-                        }),
-                  ],
-                )),
           ],
         ),
       );
@@ -213,7 +220,7 @@ class _Sat1RealGraphState extends State<Sat1RealGraph> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Tooltip(
-              isTapOn: true,
+              //isTapOn: true,
               verticalOffset: -(_height / 1.3) * (score / _totalDivideBy),
               message:
                   '$score : ${DateFormat.yMMMMd('en_US').format(DateTime.parse(fullDate))}',
@@ -227,7 +234,7 @@ class _Sat1RealGraphState extends State<Sat1RealGraph> {
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(20)),
-                      color: Colors.grey[200],
+                      color: Colors.grey[300],
                     ),
                     height: (_height / 1.3),
                     width: _height / 7,
@@ -254,7 +261,7 @@ class _Sat1RealGraphState extends State<Sat1RealGraph> {
             Text(
               '$day/$month',
               style: TextStyle(
-                  color: MyColors.white(), fontWeight: FontWeight.bold),
+                  color: MyColors.black(), fontWeight: FontWeight.bold),
             )
           ],
         );
@@ -282,7 +289,6 @@ class _Sat1PracticeGraphState extends State<Sat1PracticeGraph> {
   final Color _color = MyColors.yellow();
   final int minScoreForChart = 2;
 
-  //bool _isAverageSelected = true;
   bool _isReadingSelected = true;
   bool _isWritingSelected = false;
   bool _isMathSelected = false;
@@ -306,6 +312,7 @@ class _Sat1PracticeGraphState extends State<Sat1PracticeGraph> {
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
+          color: MyColors.white(),
           boxShadow: [
             BoxShadow(
               color: Colors.grey,
@@ -315,18 +322,18 @@ class _Sat1PracticeGraphState extends State<Sat1PracticeGraph> {
           ],
         ),
         child: Text(
-          'No Enough Scores\n( At-least 3 scores ) ',
+          'No Enough Scores\n( At-least 2 scores ) ',
           textAlign: TextAlign.center,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       );
     } else {
       return Container(
-        margin: const EdgeInsets.only(bottom: 5),
-        padding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
+        margin: const EdgeInsets.all(10),
+        padding: const EdgeInsets.fromLTRB(5, 10, 5, 10),
         decoration: BoxDecoration(
-          //borderRadius: BorderRadius.circular(5),
-          color: MyColors.primary(),
+          borderRadius: BorderRadius.circular(5),
+          color: MyColors.white(),
           boxShadow: [
             BoxShadow(
               color: Colors.grey,
@@ -337,9 +344,82 @@ class _Sat1PracticeGraphState extends State<Sat1PracticeGraph> {
         ),
         child: Column(
           children: [
+            //Divider(color: MyColors.primary(),),
+            AspectRatio(
+              aspectRatio: 21 / 9,
+              child: Container(
+                  //height: _deviceHeight / 5.5,
+                  width: _deviceWidth,
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      ListView.builder(
+                          itemCount: widget.scoreList.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (BuildContext context, position) {
+                            position = position;
+                            int _getTotal() {
+                              return (widget.scoreList[position].readingScore +
+                                  widget.scoreList[position].writingScore +
+                                  widget.scoreList[position].mathCalcScore +
+                                  widget.scoreList[position].mathNoCalcScore);
+                            }
+
+                            double _getScore() {
+                              if (_selection == 0) {
+                                _setTotalDivideBy(154);
+                                return _getTotal().toDouble();
+                              }
+                              if (_selection == 1) {
+                                _setTotalDivideBy(52);
+                                return widget.scoreList[position].readingScore
+                                    .toDouble();
+                              }
+                              if (_selection == 2) {
+                                _setTotalDivideBy(44);
+                                return widget.scoreList[position].writingScore
+                                    .toDouble();
+                              }
+                              if (_selection == 3) {
+                                _setTotalDivideBy(20);
+                                return widget
+                                    .scoreList[position].mathNoCalcScore
+                                    .toDouble();
+                              }
+                              if (_selection == 4) {
+                                _setTotalDivideBy(38);
+                                return widget.scoreList[position].mathCalcScore
+                                    .toDouble();
+                              } else {
+                                debugPrint('error at selection');
+                                return -1;
+                              }
+                            }
+
+                            return _bar(
+                                _getDateDay(widget.scoreList[position].date),
+                                _getDateMonth(widget.scoreList[position].date),
+                                _getScore(),
+                                widget.scoreList[position].date);
+                          }),
+                      /*Container(
+                      margin: EdgeInsets.only(
+                          top: 5,
+                          bottom: _deviceHeight / 28),
+                      height: 1,
+                      width: _deviceWidth,
+                      color: Colors.grey,
+                    ),*/
+                    ],
+                  )),
+            ),
+            Divider(
+              color: Colors.grey,
+              thickness: .8,
+            ),
             Container(
               width: _deviceWidth,
-              height: _deviceHeight / 10,
+              height: _deviceHeight / 20,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
@@ -414,71 +494,6 @@ class _Sat1PracticeGraphState extends State<Sat1PracticeGraph> {
                 ],
               ),
             ),
-            //Divider(color: MyColors.primary(),),
-            Container(
-                height: _deviceHeight / 3.75,
-                width: _deviceWidth,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    ListView.builder(
-                        itemCount: widget.scoreList.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (BuildContext context, position) {
-                          position = position;
-                          int _getTotal() {
-                            return (widget.scoreList[position].readingScore +
-                                widget.scoreList[position].writingScore +
-                                widget.scoreList[position].mathCalcScore +
-                                widget.scoreList[position].mathNoCalcScore);
-                          }
-
-                          double _getScore() {
-                            if (_selection == 0) {
-                              _setTotalDivideBy(154);
-                              return _getTotal().toDouble();
-                            }
-                            if (_selection == 1) {
-                              _setTotalDivideBy(52);
-                              return widget.scoreList[position].readingScore
-                                  .toDouble();
-                            }
-                            if (_selection == 2) {
-                              _setTotalDivideBy(44);
-                              return widget.scoreList[position].writingScore
-                                  .toDouble();
-                            }
-                            if (_selection == 3) {
-                              _setTotalDivideBy(20);
-                              return widget.scoreList[position].mathNoCalcScore
-                                  .toDouble();
-                            }
-                            if (_selection == 4) {
-                              _setTotalDivideBy(38);
-                              return widget.scoreList[position].mathCalcScore
-                                  .toDouble();
-                            } else {
-                              debugPrint('error at selection');
-                              return -1;
-                            }
-                          }
-
-                          return _bar(
-                              _getDateDay(widget.scoreList[position].date),
-                              _getDateMonth(widget.scoreList[position].date),
-                              _getScore(),
-                              widget.scoreList[position].date);
-                        }),
-                    /*Container(
-                      margin: EdgeInsets.only(
-                          top: 5,
-                          bottom: _deviceHeight / 28),
-                      height: 1,
-                      width: _deviceWidth,
-                      color: Colors.grey,
-                    ),*/
-                  ],
-                )),
           ],
         ),
       );
@@ -513,7 +528,7 @@ class _Sat1PracticeGraphState extends State<Sat1PracticeGraph> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Tooltip(
-                isTapOn: true,
+              //isTapOn: true,
                 verticalOffset: -(_height / 1.3) * (score / _totalDivideBy),
                 message:
                     '$score : ${DateFormat.yMMMMd('en_US').format(DateTime.parse(fullDate))}',
@@ -528,7 +543,7 @@ class _Sat1PracticeGraphState extends State<Sat1PracticeGraph> {
                       decoration: BoxDecoration(
                         borderRadius:
                             const BorderRadius.all(Radius.circular(20)),
-                        color: Colors.grey[200],
+                        color: Colors.grey[300],
                       ),
                       height: (_height / 1.3),
                       width: _height / 7,
@@ -555,7 +570,7 @@ class _Sat1PracticeGraphState extends State<Sat1PracticeGraph> {
             Text(
               '$day/$month',
               style: TextStyle(
-                  color: MyColors.white(), fontWeight: FontWeight.bold),
+                  color: MyColors.black(), fontWeight: FontWeight.bold),
             )
           ],
         );

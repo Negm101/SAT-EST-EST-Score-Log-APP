@@ -35,102 +35,108 @@ class SAT2ListItemPractice extends StatefulWidget {
 class _SAT2ListItemPracticeState extends State<SAT2ListItemPractice> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height / 7,
-      width: MediaQuery.of(context).size.width,
-      margin: widget.margin,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5.0),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey,
-            offset: Offset(0.0, 1.0), //(x,y)
-            blurRadius: 4.0,
-          ),
-        ],
-      ),
+    return AspectRatio(
+      aspectRatio: 3.5 / 1,
       child: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.fromLTRB(getWidthSize(0.04), 0, 0, 0),
-                      child: Text(
-                        widget.dateYear.toString(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(getWidthSize(0.04), 1, 0, 2),
-                      child: Text(
-                        widget.dateDay.toString(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: MyColors.primary(),
-                            fontSize: getWidthSize(.059)),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(getWidthSize(0.04), 0, 0, 0),
-                      child: Text(
-                        getMonth(widget.dateMonth),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                      left: getWidthSize(0.04), right: getWidthSize(0.04)),
-                  width: 1.5,
-                  height: MediaQuery.of(context).size.height,
-                  color: Colors.black,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        scoreText(widget.subject, widget.score),
-                        //scoreText('Total', widget.readingScore + widget.writingScore),
-                      ],
-                    ),
-                    Container(
-                      child: Text(
-                        widget.note,
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
-                      ),
-                    )
-                  ],
-                ),
-              ],
+        //height: MediaQuery.of(context).size.height / 7,
+        width: MediaQuery.of(context).size.width,
+        margin: widget.margin,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5.0),
+          color: MyColors.white(),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              offset: Offset(0.0, 1.0), //(x,y)
+              blurRadius: 4.0,
             ),
-            Container(
-                //margin: EdgeInsets.only(right: getWidthSize(0.015)),
-                alignment: Alignment.centerRight,
-                child: FlatButton(
-                  padding: EdgeInsets.zero,
-                  height: MediaQuery.of(context).size.height,
-                  minWidth: getWidthSize(0.15),
-                  child: Icon(
-                    Icons.delete,
-                    size: getWidthSize(.065),
-                    color: Colors.red,
-                  ),
-                  onPressed: widget.onPressedDelete,
-                )),
           ],
+        ),
+        child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin:
+                            EdgeInsets.fromLTRB(getWidthSize(0.04), 0, 0, 0),
+                        child: Text(
+                          widget.dateYear.toString(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                        ),
+                      ),
+                      Container(
+                        margin:
+                            EdgeInsets.fromLTRB(getWidthSize(0.04), 1, 0, 2),
+                        child: Text(
+                          widget.dateDay.toString(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.primary(),
+                              fontSize: getWidthSize(.059)),
+                        ),
+                      ),
+                      Container(
+                        margin:
+                            EdgeInsets.fromLTRB(getWidthSize(0.04), 0, 0, 0),
+                        child: Text(
+                          getMonth(widget.dateMonth),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: getWidthSize(0.04), right: getWidthSize(0.04)),
+                    width: 1.5,
+                    height: MediaQuery.of(context).size.height,
+                    color: Colors.black,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          scoreText(widget.subject, widget.score),
+                          //scoreText('Total', widget.readingScore + widget.writingScore),
+                        ],
+                      ),
+                      Container(
+                        child: Text(
+                          widget.note,
+                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+              Container(
+                  //margin: EdgeInsets.only(right: getWidthSize(0.015)),
+                  alignment: Alignment.centerRight,
+                  child: FlatButton(
+                    padding: EdgeInsets.zero,
+                    height: MediaQuery.of(context).size.height,
+                    minWidth: getWidthSize(0.15),
+                    child: Icon(
+                      Icons.delete,
+                      size: getWidthSize(.065),
+                      color: Colors.red,
+                    ),
+                    onPressed: widget.onPressedDelete,
+                  )),
+            ],
+          ),
         ),
       ),
     );

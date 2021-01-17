@@ -120,6 +120,7 @@ class _SatCalcState extends State<SatCalc> {
                           top: 10,
                           bottom: 10),
                       selected: isPublicSelected,
+                      pressElevation: 0,
                       onSelected: (bool value) {
                         setState(() {
                           isPrivateSelected = false;
@@ -137,6 +138,7 @@ class _SatCalcState extends State<SatCalc> {
                           top: 10,
                           bottom: 10),
                       selected: isPrivateSelected,
+                      pressElevation: 0,
                       onSelected: (bool value) {
                         setState(() {
                           isPublicSelected = false;
@@ -190,8 +192,8 @@ class _SatCalcState extends State<SatCalc> {
             child: FlatButton(
               child: Text(
                 "CALCULATE",
-                style: const TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: MyColors.white(), fontWeight: FontWeight.bold),
               ),
               onPressed: () {
                 setState(() {

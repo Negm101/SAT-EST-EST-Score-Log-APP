@@ -13,8 +13,8 @@ class SAT1ListItemReal extends StatefulWidget {
   final int dateMonth;
   final String note;
   final EdgeInsets margin;
+  final VoidCallback onPressedEdit;
   final VoidCallback onPressedDelete;
-
 
   SAT1ListItemReal({
     Key key,
@@ -25,6 +25,7 @@ class SAT1ListItemReal extends StatefulWidget {
     @required this.dateYear,
     @required this.margin,
     this.onPressedDelete,
+    this.onPressedEdit,
     this.note,
   });
 
@@ -35,104 +36,115 @@ class SAT1ListItemReal extends StatefulWidget {
 class _SAT1ListItemRealState extends State<SAT1ListItemReal> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height / 7,
-      width: MediaQuery.of(context).size.width,
-      margin: widget.margin,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5.0),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey,
-            offset: Offset(0.0, 1.0), //(x,y)
-            blurRadius: 4.0,
-          ),
-        ],
-      ),
+    return AspectRatio(
+      aspectRatio: 3.5 / 1,
       child: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.fromLTRB(getWidthSize(0.04), 0, 0, 0),
-                      child: Text(
-                        widget.dateYear.toString(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(getWidthSize(0.04), 1, 0, 2),
-                      child: Text(
-                        widget.dateDay.toString(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: MyColors.primary(),
-                            fontSize: getWidthSize(.059)),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(getWidthSize(0.04), 0, 0, 0),
-                      child: Text(
-                        getMonth(widget.dateMonth),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                      left: getWidthSize(0.04), right: getWidthSize(0.04)),
-                  width: 1.5,
-                  height: MediaQuery.of(context).size.height,
-                  color: Colors.black,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        scoreText('English', widget.englishScore),
-                        scoreText('Math', widget.mathScore),
-                        scoreText(
-                            'Total', widget.englishScore + widget.mathScore),
-                      ],
-                    ),
-                    Container(
-                      child: Text(
-                        widget.note,
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
-                      ),
-                    )
-                  ],
-                ),
-              ],
+        //height: MediaQuery.of(context).size.height / 7,
+        width: MediaQuery.of(context).size.width,
+        margin: widget.margin,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5.0),
+          color: MyColors.white(),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              offset: Offset(0.0, 1.0), //(x,y)
+              blurRadius: 4.0,
             ),
-            Expanded(
-                child: Container(
-              child: FlatButton(
-                padding: EdgeInsets.zero,
-                height: MediaQuery.of(context).size.height,
-                minWidth: getWidthSize(0.05),
-                child: Icon(
-                  Icons.delete,
-                  size: getWidthSize(.065),
-                  color: Colors.red,
-                ),
-                onPressed: widget.onPressedDelete,
-              ),
-            )),
           ],
+        ),
+        child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin:
+                            EdgeInsets.fromLTRB(getWidthSize(0.04), 0, 0, 0),
+                        child: Text(
+                          widget.dateYear.toString(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                        ),
+                      ),
+                      Container(
+                        margin:
+                            EdgeInsets.fromLTRB(getWidthSize(0.04), 1, 0, 2),
+                        child: Text(
+                          widget.dateDay.toString(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: MyColors.primary(),
+                              fontSize: getWidthSize(.059)),
+                        ),
+                      ),
+                      Container(
+                        margin:
+                            EdgeInsets.fromLTRB(getWidthSize(0.04), 0, 0, 0),
+                        child: Text(
+                          getMonth(widget.dateMonth),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: getWidthSize(0.04), right: getWidthSize(0.04)),
+                    width: 1.5,
+                    height: MediaQuery.of(context).size.height,
+                    color: Colors.black,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          scoreText('English', widget.englishScore),
+                          scoreText('Math', widget.mathScore),
+                          scoreText(
+                              'Total', widget.englishScore + widget.mathScore),
+                        ],
+                      ),
+                      Container(
+                        child: Text(
+                          widget.note,
+                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+              Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    /*IconButton(
+
+                      icon: Icon(Icons.edit,),
+                      onPressed: widget.onPressedEdit,
+                    ),*/
+                    IconButton(
+                      icon: Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                      onPressed: widget.onPressedDelete,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -254,20 +266,21 @@ class _SAT1ListItemRealState extends State<SAT1ListItemReal> {
     }
   }
 }
-class DataSatIReal{
+
+class DataSatIReal {
   DatabaseHelper databaseHelper = DatabaseHelper();
   ScoreIReal title = new ScoreIReal.db();
   List<ScoreIReal> scoreList;
   int count = 0;
 
   //ScoreSat1State sat1state = ScoreSat1State();
-  void autoRefresh(Function setState){
+  void autoRefresh(Function setState) {
     if (scoreList == null) {
       scoreList = List<ScoreIReal>();
       updateListView(setState);
     }
-
   }
+
   // when calling this function wrap it in a setState
   Future<void> getDataReal(Function setState) async {
     updateListView(setState);
@@ -276,7 +289,6 @@ class DataSatIReal{
   int getDateDay(String date) {
     return DateTime.parse(date).day.toInt();
   }
-
 
   int getDateYear(String date) {
     return DateTime.parse(date).year.toInt();
@@ -290,12 +302,13 @@ class DataSatIReal{
   void updateListView(Function setState) {
     final Future<Database> dbFuture = databaseHelper.initializeDatabase();
     dbFuture.then((database) {
-      Future<List<ScoreIReal>> noteListFuture = databaseHelper.getScoreIListReal();
+      Future<List<ScoreIReal>> noteListFuture =
+          databaseHelper.getScoreIListReal();
       noteListFuture.then((scoreIList) {
-            setState(() {
-              this.scoreList = scoreIList;
-              this.count = scoreIList.length;
-            });
+        setState(() {
+          this.scoreList = scoreIList;
+          this.count = scoreIList.length;
+        });
       });
     });
   }
@@ -303,7 +316,8 @@ class DataSatIReal{
   void updateListViewSortBy(Function setState, String sortBy) {
     final Future<Database> dbFuture = databaseHelper.initializeDatabase();
     dbFuture.then((database) {
-      Future<List<ScoreIReal>> noteListFuture = databaseHelper.getScoreIListRealSortBy(sortBy);
+      Future<List<ScoreIReal>> noteListFuture =
+          databaseHelper.getScoreIListRealSortBy(sortBy);
       noteListFuture.then((scoreIList) {
         setState(() {
           this.scoreList = scoreIList;
@@ -320,7 +334,7 @@ class DataSatIReal{
     }
   }
 
-  void deleteAll(Function setState) async{
+  void deleteAll(Function setState) async {
     int result = await databaseHelper.deleteAllFrom(title.dbTableName);
     if (result != 0) {
       updateListView(setState);

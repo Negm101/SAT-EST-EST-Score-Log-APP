@@ -1,42 +1,38 @@
 class SettingsModel {
   final String dbTableName = 'Settings';
+  final String dbId = 'id';
   final String dbIsSatEnabled = 'isSatEnabled';
   final String dbISat2Enabled = 'isSat2Enabled';
   final String dbIsActEnabled = 'isActEnabled';
   final String dbIsDarkModeEnabled = 'isDarkModeEnabled';
-  final String dbDate = 'date';
-  final String dbNote = 'note';
+  final String dbIsGraphsEnabled = 'isGraphsEnabled';
   int id;
-  int englishScore;
-  int mathScore;
-  int readingScore;
-  int scienceScore;
-  String date;
-  String note;
+  int isSatEnabled;
+  int isSat2Enabled;
+  int isActEnabled;
+  int isDarkModeEnabled;
+  int isGraphsEnabled;
 
   SettingsModel.db();
 
-  SettingsModel(this.englishScore, this.mathScore, this.date, this.readingScore,
-      this.scienceScore, this.note);
+  SettingsModel(this.id, this.isSatEnabled, this.isSat2Enabled,
+      this.isActEnabled, this.isDarkModeEnabled, this.isGraphsEnabled);
 
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
-    map[dbIsSatEnabled] = englishScore;
-    map[dbISat2Enabled] = mathScore;
-    map[dbIsActEnabled] = readingScore;
-    map[dbIsDarkModeEnabled] = scienceScore;
-    map[dbDate] = date;
-    map[dbNote] = note;
+    map[dbIsSatEnabled] = isSatEnabled;
+    map[dbISat2Enabled] = isSat2Enabled;
+    map[dbIsActEnabled] = isActEnabled;
+    map[dbIsDarkModeEnabled] = isDarkModeEnabled;
+    map[dbIsGraphsEnabled] = isGraphsEnabled;
     return map;
   }
 
-  // Extract a Note object from a Map object
   SettingsModel.fromMapObject(Map<String, dynamic> map) {
-    this.englishScore = map[dbIsSatEnabled];
-    this.mathScore = map[dbISat2Enabled];
-    this.readingScore = map[dbIsActEnabled];
-    this.scienceScore = map[dbIsDarkModeEnabled];
-    this.date = map[dbDate];
-    this.note = map[dbNote];
+    this.isSatEnabled = map[dbIsSatEnabled];
+    this.isSat2Enabled = map[dbISat2Enabled];
+    this.isActEnabled = map[dbIsActEnabled];
+    this.isDarkModeEnabled = map[dbIsDarkModeEnabled];
+    this.isGraphsEnabled = map[dbIsGraphsEnabled];
   }
 }

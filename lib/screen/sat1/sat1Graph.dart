@@ -90,7 +90,7 @@ class BarChartSample1State extends State<BarChartSample1> {
                 child: IconButton(
                   icon: Icon(
                     isPlaying ? Icons.pause : Icons.play_arrow,
-                    color:  Colors.white,
+                    color:  MyColors.white(),
                   ),
                   onPressed: () {
                     setState(() {
@@ -169,7 +169,7 @@ class BarChartSample1State extends State<BarChartSample1> {
                   break;
               }
               return BarTooltipItem(weekDay + '\n' + (rod.y - 1).toString(),
-                  TextStyle(color: Colors.white));
+                  TextStyle(color: MyColors.white()));
             }),
         touchCallback: (barTouchResponse) {
           setState(() {
@@ -187,7 +187,7 @@ class BarChartSample1State extends State<BarChartSample1> {
         show: true,
         bottomTitles: SideTitles(
           showTitles: true,
-          //getTextStyles: (value) => const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+          //getTextStyles: (value) => const TextStyle(color: MyColors.white(), fontWeight: FontWeight.bold, fontSize: 14),
           margin: 16,
           getTitles: (double value) {
             switch (value.toInt()) {
@@ -230,7 +230,7 @@ class BarChartSample1State extends State<BarChartSample1> {
         show: true,
         bottomTitles: SideTitles(
           showTitles: true,
-          //getTextStyles: (value) => const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+          //getTextStyles: (value) => const TextStyle(color: MyColors.white(), fontWeight: FontWeight.bold, fontSize: 14),
           margin: 16,
           getTitles: (double value) {
             switch (value.toInt()) {

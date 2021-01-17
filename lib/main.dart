@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:score_log_app/model/settingsModel.dart';
 import 'package:score_log_app/screen/calculator.dart';
 import 'package:score_log_app/screen/scores.dart';
 import 'package:score_log_app/screen/settings.dart';
 import 'package:score_log_app/screen/tansik.dart';
 import 'package:score_log_app/services/generalVar.dart';
+import 'package:score_log_app/services/globalVar.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,6 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    updateSettings();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: _title,
@@ -41,6 +44,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final MyColors colors = new MyColors.primary();
   int _selectedIndex = 1;
+  GlobalKey globalKey = new GlobalKey(debugLabel: 'btm_app_bar');
+
   static List<Widget> _widgetOptions = <Widget>[
     Scores(),
     Calculator(),
@@ -56,7 +61,9 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     const String title = 'Egy Score';
+    final BottomNavigationBar navigationBar = globalKey.currentWidget;
     return Scaffold(
+      backgroundColor: Colors.grey[900],
       appBar: AppBar(
         leading: Container(
           alignment: Alignment.centerLeft,
@@ -75,8 +82,13 @@ class _HomeState extends State<Home> {
               color: MyColors.white(),
             ),
             onPressed: () {
-              Navigator.push(context,
-                  new MaterialPageRoute(builder: (context) => new Setting()));
+              _selectedIndex = 1;
+              navigationBar.onTap(1);
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) =>
+                          new Setting(SettingsModel(1, 1, 1, 1, 0, 0))));
             },
           ),
         ],
@@ -85,6 +97,7 @@ class _HomeState extends State<Home> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        key: globalKey,
         backgroundColor: MyColors.primary(),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -104,9 +117,8 @@ class _HomeState extends State<Home> {
         selectedFontSize: 12,
         unselectedFontSize: 12,
         unselectedItemColor: Colors.grey[300],
-        selectedItemColor: Colors.white,
+        selectedItemColor: MyColors.white(),
         onTap: _onItemTapped,
-
       ),
     );
   }

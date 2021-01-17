@@ -55,8 +55,8 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
           child: FlatButton(
             child: Text(
               'ADD',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: MyColors.white(), fontWeight: FontWeight.bold),
             ),
             onPressed: () {
               setState(() {
@@ -230,10 +230,10 @@ class _AddSAT1RealState extends State<AddSAT1Real> {
           maxValue: DateTime.now(),
         ),
         headercolor: MyColors.primary(),
-        cancelTextStyle: TextStyle(
-            color: Colors.white, fontWeight: FontWeight.bold),
-        confirmTextStyle: TextStyle(
-            color: Colors.white, fontWeight: FontWeight.bold),
+        cancelTextStyle:
+            TextStyle(color: MyColors.white(), fontWeight: FontWeight.bold),
+        confirmTextStyle:
+            TextStyle(color: MyColors.white(), fontWeight: FontWeight.bold),
         selectedTextStyle: TextStyle(color: MyColors.primary()),
         onConfirm: (Picker picker, List value) {
           var date = (picker.adapter as DateTimePickerAdapter).value;
