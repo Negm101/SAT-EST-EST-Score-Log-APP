@@ -1,5 +1,6 @@
 # SAT, EST & EST Score Log APP
-
+This app allows you save you practice test scores and visualize it with a graph for tracking your progress.
+Also you can calculate the final percentage to know which egyption university you may get accepted in. 
 ## Features
   * Calculate your tansik percent
   * Convert ACT to SAT score
